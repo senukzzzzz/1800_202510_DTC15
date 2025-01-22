@@ -1,6 +1,6 @@
 
 # Project Name
-
+        
 ## Overview
 Summarize your project's purpose, problem solved, key features, user benefits, development context, and main technologies used.
 
@@ -58,7 +58,7 @@ project-name/
 ---
 
 ## Contributors
-- **Your Name** - BCIT CST Student with a passion for creating user-friendly applications. Fun fact: Loves solving Rubik's Cubes in under a minute.
+- Senuk - BCIT CST Student with a passion for creating user-friendly applications. Fun fact: Loves playing FPS games.
 - **Teammate Name** - BCIT CST Student, Frontend enthusiast with a knack for creative design. Fun fact: Has a collection of over 50 houseplants.
 
 ---
