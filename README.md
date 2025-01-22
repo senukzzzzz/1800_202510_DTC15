@@ -1,6 +1,6 @@
 
 # Project Name
-
+        
 ## Overview
 Summarize your project's purpose, problem solved, key features, user benefits, development context, and main technologies used.
 
@@ -60,6 +60,9 @@ project-name/
 ## Contributors
 - **Nathan Hong** - BCIT CST Student with experience in html, css, javascript, lua, and python. Plays the guitar as a hobby.
 - **Senuk** - BCIT CST Student, Valorant player, was immortal.
+- Senuk - BCIT CST Student with a passion for creating user-friendly applications. Fun fact: Loves playing FPS games.
+- **Teammate Name** - BCIT CST Student, Frontend enthusiast with a knack for creative design. Fun fact: Has a collection of over 50 houseplants.
+
 ---
 
 ## Acknowledgments
