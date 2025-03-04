@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slap News - Your 10-Minute News Digest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="main-styles.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <nav class="main-nav">
+            <div class="logo-container">
+                <div class="logo">
+                    <div class="logo-wrapper">
+                        <span class="logo-text">SLAP</span>
+                        <span class="logo-divider"></span>
+                        <span class="logo-news">NEWS</span>
+                    </div>
+                </div>
+            </div>
+            <div class="desktop-nav">
+                <a href="#" class="desktop-nav-item active">Home</a>
+                <a href="#" class="desktop-nav-item">Categories</a>
+                <a href="#" class="desktop-nav-item">Bookmarks</a>
+                <a href="#" class="desktop-nav-item">Profile</a>
+            </div>
+            <div class="nav-actions">
+                <div class="search-bar">
+                    <input type="search" placeholder="Search news">
+                    <button class="filter-btn">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M7 10l5 5 5-5z" />
+                        </svg>
+                    </button>
+                </div>
+                <button class="profile-btn">
+                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop"
+                        alt="Profile" class="profile-img">
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Quick Stats -->
+        <div class="quick-stats">
+            <div class="stat-card">
+                <span class="stat-number">10</span>
+                <span class="stat-label">Minutes Daily Digest</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">5</span>
+                <span class="stat-label">Your Categories</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">15</span>
+                <span class="stat-label">Saved Articles</span>
+            </div>
+        </div>
+
+        <!-- News Feed -->
+        <div class="news-feed">
+            <!-- Featured News -->
+            <article class="news-card featured">
+                <div class="news-content">
+                    <h2>Luka Doncic Gets Traded to the Lakers</h2>
+                    <p>In one of the most stunning trades ever reported, the NBA landscape has been altered mightily in
+                        a blink of an eye...</p>
+                    <div class="news-meta">
+                        <span class="time">Just Now</span>
+                        <div class="actions">
+                            <button class="bookmark-btn">
+                                <svg class="icon" viewBox="0 0 24 24">
+                                    <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z" />
+                                </svg>
+                            </button>
+                            <button class="share-btn">
+                                <svg class="icon" viewBox="0 0 24 24">
+                                    <path
+                                        d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92zM18 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM6 13c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm12 7.02c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="news-image">
+                    <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?w=800&h=600&fit=crop"
+                        alt="Basketball game">
+                </div>
+            </article>
+
+            <!-- Regular News Cards -->
+            <div class="news-grid">
+                <article class="news-card">
+                    <span class="category-tag">Technology</span>
+                    <h3>Apple Announces Revolutionary AI Features</h3>
+                    <p>New iOS update brings groundbreaking AI capabilities to all users...</p>
+                    <div class="news-meta">
+                        <span class="time">2h ago</span>
+                        <div class="actions">
+                            <button class="bookmark-btn">
+                                <svg class="icon" viewBox="0 0 24 24">
+                                    <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z" />
+                                </svg>
+                            </button>
+                            <button class="share-btn">
+                                <svg class="icon" viewBox="0 0 24 24">
+                                    <path
+                                        d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92zM18 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM6 13c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm12 7.02c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="news-card">
+                    <span class="category-tag">Sports</span>
+                    <h3>Champions League Quarter-Finals Set</h3>
+                    <p>Draw reveals exciting matchups for the next round...</p>
+                    <div class="news-meta">
+                        <span class="time">3h ago</span>
+                        <div class="actions">
+                            <button class="bookmark-btn">
+                                <svg class="icon" viewBox="0 0 24 24">
+                                    <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z" />
+                                </svg>
+                            </button>
+                            <button class="share-btn">
+                                <svg class="icon" viewBox="0 0 24 24">
+                                    <path
+                                        d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92zM18 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM6 13c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm12 7.02c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-item active">
+            <svg class="icon" viewBox="0 0 24 24">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+            </svg>
+        </button>
+        <button class="nav-item">
+            <svg class="icon" viewBox="0 0 24 24">
+                <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z" />
+            </svg>
+        </button>
+        <button class="nav-item">
+            <svg class="icon" viewBox="0 0 24 24">
+                <path
+                    d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+            </svg>
+        </button>
+    </nav>
+</body>
+
+</html>
