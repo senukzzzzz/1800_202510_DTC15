@@ -11,6 +11,13 @@
         rel="stylesheet">
     <link rel="stylesheet" href="styles/styles.css">
     <link rel="stylesheet" href="styles/main-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="./scripts/firebaseAPI_DTC15.js"></script>
+    <script src="./scripts/authentication.js"></script>
 </head>
 
 <body>
@@ -30,7 +37,6 @@
                 <a href="#" class="desktop-nav-item active">Home</a>
                 <a href="#" class="desktop-nav-item">Categories</a>
                 <a href="#" class="desktop-nav-item">Bookmarks</a>
-                <a href="#" class="desktop-nav-item">Profile</a>
             </div>
             <div class="nav-actions">
                 <div class="search-bar">
@@ -41,10 +47,23 @@
                         </svg>
                     </button>
                 </div>
-                <button class="profile-btn">
-                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop"
-                        alt="Profile" class="profile-img">
-                </button>
+                <div class="profile-container">
+                    <button class="profile-btn" id="profileBtn">
+                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop"
+                            alt="Profile" class="profile-img">
+                    </button>
+                    <div class="dropdown-menu" id="dropdownMenu">
+                        <a href="settings.html" class="dropdown-item">
+                            <i class="fas fa-cog"></i> Settings
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                        <a href="#" class="dropdown-item" id="signOutBtn">
+                            <i class="fas fa-sign-out-alt"></i> Sign Out
+                        </a>
+                    </div>
+                </div>
             </div>
         </nav>
     </header>
@@ -166,6 +185,41 @@
             </svg>
         </button>
     </nav>
+
+    <script>
+        // Profile dropdown functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            const profileBtn = document.getElementById('profileBtn');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            const signOutBtn = document.getElementById('signOutBtn');
+
+            profileBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                dropdownMenu.classList.toggle('show');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function (e) {
+                if (!dropdownMenu.contains(e.target) && !profileBtn.contains(e.target)) {
+                    dropdownMenu.classList.remove('show');
+                }
+            });
+
+            // Sign out functionality
+            signOutBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                firebase.auth().signOut().then(() => {
+                    window.location.href = 'index.html';
+                }).catch((error) => {
+                    console.error('Error signing out:', error);
+                });
+            });
+        });
+    </script>
+
+    <!-- Add this line before the closing </body> tag -->
+    <script src="./scripts/settings.js"></script>
+    <script src="./scripts/profile.js"></script>
 </body>
 
 </html>

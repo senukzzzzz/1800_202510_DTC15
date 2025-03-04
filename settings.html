@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Slap News</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/settings-styles.css">
+    <link rel="stylesheet" href="styles/main-styles.css">
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="./scripts/firebaseAPI_DTC15.js"></script>
+    <script src="./scripts/authentication.js"></script>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <nav class="main-nav">
+            <div class="logo-container">
+                <div class="logo">
+                    <div class="logo-wrapper">
+                        <span class="logo-text">SLAP</span>
+                        <span class="logo-divider"></span>
+                        <span class="logo-news">NEWS</span>
+                    </div>
+                </div>
+            </div>
+            <div class="desktop-nav">
+                <a href="main.html" class="desktop-nav-item active">Home</a>
+                <a href="#" class="desktop-nav-item">Categories</a>
+                <a href="#" class="desktop-nav-item">Bookmarks</a>
+            </div>
+            <div class="nav-actions">
+                <div class="search-bar">
+                    <input type="search" placeholder="Search news">
+                    <button class="filter-btn">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M7 10l5 5 5-5z" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="profile-container">
+                    <button class="profile-btn" id="profileBtn">
+                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop"
+                            alt="Profile" class="profile-img">
+                    </button>
+                    <div class="dropdown-menu" id="dropdownMenu">
+                        <a href="settings.html" class="dropdown-item">
+                            <i class="fas fa-cog"></i> Settings
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                        <a href="#" class="dropdown-item" id="signOutBtn">
+                            <i class="fas fa-sign-out-alt"></i> Sign Out
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="settings-container">
+        <div class="settings-section">
+            <h2>Display Settings</h2>
+            <div class="setting-item">
+                <label>Dark Mode</label>
+                <label class="toggle-switch">
+                    <input type="checkbox">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="setting-item">
+                <label>Font Size</label>
+                <select>
+                    <option>Small</option>
+                    <option selected>Medium</option>
+                    <option>Large</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h2>Notification Settings</h2>
+            <div class="setting-item">
+                <label>Push Notifications</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="setting-item">
+                <label>Email Notifications</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h2>Account Settings</h2>
+            <div class="setting-item">
+                <label>Change Password</label>
+                <button class="btn-secondary">Change</button>
+            </div>
+            <div class="setting-item">
+                <label>Delete Account</label>
+                <button class="btn-danger">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <nav>
+            <a href="#">About</a>
+            <a href="#">Help</a>
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Mobile App</a>
+            <a href="#">Contact</a>
+        </nav>
+        <div class="language-copyright">
+            <select>
+                <option value="en">English</option>
+            </select>
+            <span>© 2024 Slap News</span>
+        </div>
+    </footer>
+    <script>
+        // Profile dropdown functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            const profileBtn = document.getElementById('profileBtn');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            const signOutBtn = document.getElementById('signOutBtn');
+
+            profileBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                dropdownMenu.classList.toggle('show');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function (e) {
+                if (!dropdownMenu.contains(e.target) && !profileBtn.contains(e.target)) {
+                    dropdownMenu.classList.remove('show');
+                }
+            });
+
+            // Sign out functionality
+            signOutBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                firebase.auth().signOut().then(() => {
+                    window.location.href = 'index.html';
+                }).catch((error) => {
+                    console.error('Error signing out:', error);
+                });
+            });
+        });
+    </script>
+
+    <!-- Add this line before the closing </body> tag -->
+    <script src="./scripts/settings.js"></script>
+    <script src="./scripts/profile.js"></script>
+</body>
+
+</html>
