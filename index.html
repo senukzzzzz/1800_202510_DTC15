@@ -10,6 +10,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="styles/styles.css">
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <!-- Firebase UI -->
+    <script src="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.css" />
+    <!-- Your Firebase configuration -->
+    <script src="./scripts/firebaseAPI_DTC15.js"></script>
+    <script src="./scripts/authentication.js"></script>
 </head>
 
 <body>
@@ -26,11 +37,11 @@
     <div class="welcome-banner">
         <div class="welcome-content">
             <span class="welcome-text">Welcome to Slap News</span>
-            <p class="welcome-subtext">Your daily dose of updates</p>
+            <p class="welcome-subtext">Your daily dose of sports updates</p>
         </div>
     </div>
 
-    <!-- SENUK - MAIN CONTENT SECTION -->
+    <!-- SENUK/NATHAN - LOGIN SECTION -->
     <div class="container">
         <div class="phone-mockup">
             <img src="images/pic2.png" alt="Slap News App Preview" class="mockup-image">
@@ -38,23 +49,36 @@
         <div class="login-container">
             <div class="login-box">
                 <h1 class="logo">Slap News</h1>
-                <form>
-                    <input type="text" placeholder="Phone number, username, or email">
-                    <input type="password" placeholder="Password">
-                    <button type="submit" class="login-button">Log in</button>
-                </form>
-                <div class="divider">
-                    <span>OR</span>
-                </div>
-                <a href="#" class="forgot-password">Forgot password?</a>
+                <div id="firebaseui-auth-container"></div>
+                <div id="loader">Loading...</div>
             </div>
-            <div class="signup-box">
-                <p>Don't have an account? <a href="#">Sign up</a></p>
-            </div>
-
         </div>
     </div>
-    </div>
+
+    <script>
+        // Initialize Firebase UI
+        const ui = new firebaseui.auth.AuthUI(firebase.auth());
+        const uiConfig = {
+            signInOptions: [
+                firebase.auth.EmailAuthProvider.PROVIDER_ID
+            ],
+            callbacks: {
+                signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+                    // User successfully signed in
+                    window.location.href = 'news.html'; // Redirect to news page after login
+                    return false;
+                },
+                uiShown: function() {
+                    // The widget is rendered
+                    document.getElementById('loader').style.display = 'none';
+                }
+            }
+        };
+
+        // Start Firebase UI
+        ui.start('#firebaseui-auth-container', uiConfig);
+    </script>
+
     <!-- NATHAN - FOOTER SECTION -->
     <footer>
         <nav>
