@@ -22,50 +22,131 @@
 
 <body>
     <!-- Header -->
-    <header class="main-header">
-        <nav class="main-nav">
-            <div class="logo-container">
+    <header>
+        <nav class="navbar"
+            style="max-width: 1300px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 2rem; position: fixed; width: 100%; top: 0; z-index: 1000; backdrop-filter: blur(8px); background: rgba(18, 18, 24, 0.7); border-bottom: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);">
+            <!-- Logo Section with improved styling -->
+            <div class="logo-container" style="transition: transform 0.3s ease;">
                 <div class="logo">
-                    <div class="logo-wrapper">
-                        <span class="logo-text">SLAP</span>
-                        <span class="logo-divider"></span>
-                        <span class="logo-news">NEWS</span>
+                    <div class="logo-wrapper" style="display: flex; align-items: center; gap: 10px;">
+                        <span class="logo-text"
+                            style="font-family: 'Poppins', sans-serif; font-size: 26px; font-weight: 800; background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px;">SLAP</span>
+                        <span class="logo-divider"
+                            style="width: 3px; height: 22px; background: linear-gradient(to bottom, #00c6ff, #0072ff); border-radius: 2px;"></span>
+                        <span class="logo-news"
+                            style="font-family: 'Poppins', sans-serif; font-size: 22px; font-weight: 600; color: rgba(255, 255, 255, 0.95); letter-spacing: 1px;">NEWS</span>
                     </div>
                 </div>
             </div>
-            <div class="desktop-nav">
-                <a href="#" class="desktop-nav-item active">Home</a>
-                <a href="#" class="desktop-nav-item">Categories</a>
-                <a href="#" class="desktop-nav-item">Bookmarks</a>
+
+            <!-- Mobile menu toggle button - Only visible on small screens -->
+            <button id="mobileMenuToggle" class="mobile-menu-toggle"
+                style="display: none; background: rgba(40, 40, 45, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 8px; cursor: pointer; color: white; transition: all 0.3s ease;">
+                <i class="fas fa-bars" style="font-size: 20px;"></i>
+            </button>
+
+            <!-- Navigation Section with improved styling -->
+            <div class="desktop-nav"
+                style="background: rgba(40, 40, 45, 0.5); border-radius: 12px; padding: 5px; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); margin-right: auto; margin-left: 40px; transition: all 0.3s ease;">
+                <a href="#" class="desktop-nav-item active"
+                    style="display: flex; align-items: center; gap: 8px; color: #fff; text-decoration: none; font-size: 15px; font-weight: 500; transition: all 0.2s ease; padding: 10px 18px; border-radius: 8px; background: rgba(0, 198, 255, 0.15);">
+                    <i class="fas fa-home" style="font-size: 14px;"></i>
+                    <span>Home</span>
+                </a>
+                <a href="#" class="desktop-nav-item"
+                    style="display: flex; align-items: center; gap: 8px; color: rgba(255, 255, 255, 0.8); text-decoration: none; font-size: 15px; font-weight: 500; transition: all 0.2s ease; padding: 10px 18px; border-radius: 8px;">
+                    <i class="fas fa-th-large" style="font-size: 14px;"></i>
+                    <span>Categories</span>
+                </a>
+                <a href="#" class="desktop-nav-item"
+                    style="display: flex; align-items: center; gap: 8px; color: rgba(255, 255, 255, 0.8); text-decoration: none; font-size: 15px; font-weight: 500; transition: all 0.2s ease; padding: 10px 18px; border-radius: 8px;">
+                    <i class="fas fa-bookmark" style="font-size: 14px;"></i>
+                    <span>Bookmarks</span>
+                </a>
             </div>
-            <div class="nav-actions">
-                <div class="search-bar">
-                    <input type="search" placeholder="Search news">
-                    <button class="filter-btn">
-                        <svg class="icon" viewBox="0 0 24 24">
-                            <path d="M7 10l5 5 5-5z" />
-                        </svg>
+
+            <!-- Actions Section with improved styling -->
+            <div class="nav-actions" style="display: flex; align-items: center; gap: 16px;">
+                <!-- Search Bar with improved styling -->
+                <div class="search-bar"
+                    style="display: flex; align-items: center; background: rgba(30, 30, 35, 0.5); border-radius: 14px; padding: 8px 16px; border: 1px solid rgba(255, 255, 255, 0.12); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); position: relative; overflow: hidden; min-width: 220px;">
+                    <div class="search-icon-wrapper"
+                        style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 8px; transition: all 0.3s ease;">
+                        <i class="fas fa-search"
+                            style="color: rgba(0, 198, 255, 0.7); font-size: 15px; transition: all 0.3s ease;"></i>
+                    </div>
+                    <input type="search" placeholder="Search articles..."
+                        style="background: none; border: none; color: white; width: 180px; font-size: 14px; padding: 8px 12px; outline: none; font-weight: 500; letter-spacing: 0.3px; transition: all 0.3s ease;">
+                    <div class="search-divider"
+                        style="width: 1px; height: 20px; background: rgba(255, 255, 255, 0.15); margin: 0 8px;"></div>
+                    <button class="filter-btn"
+                        style="background: rgba(0, 114, 255, 0.25); border: none; color: rgba(255, 255, 255, 0.9); padding: 8px 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 8px; transition: all 0.3s ease; min-width: 36px; min-height: 36px; margin-left: 4px;">
+                        <i class="fas fa-sliders-h" style="font-size: 15px;"></i>
                     </button>
+                    <!-- Add subtle gradient highlight at bottom of search bar -->
+                    <div class="search-highlight"
+                        style="position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(to right, rgba(0, 198, 255, 0), rgba(0, 198, 255, 0.5), rgba(0, 198, 255, 0)); opacity: 0; transition: opacity 0.3s ease;">
+                    </div>
                 </div>
-                <div class="profile-container">
-                    <button class="profile-btn" id="profileBtn">
+
+                <!-- Profile Button with improved styling -->
+                <div class="profile-container" style="position: relative;">
+                    <button class="profile-btn" id="profileBtn"
+                        style="background: rgba(30, 30, 35, 0.7); border: 2px solid rgba(255, 255, 255, 0.15); border-radius: 50%; cursor: pointer; padding: 0; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); transition: all 0.3s ease; position: relative; overflow: hidden; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;">
                         <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop"
-                            alt="Profile" class="profile-img">
+                            alt="Profile" class="profile-img"
+                            style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; transition: all 0.3s ease;">
                     </button>
-                    <div class="dropdown-menu" id="dropdownMenu">
-                        <a href="settings.html" class="dropdown-item">
-                            <i class="fas fa-cog"></i> Settings
+                    <div class="dropdown-menu" id="dropdownMenu"
+                        style="position: absolute; right: 0; top: 120%; background: rgba(25, 25, 30, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2); padding: 8px; min-width: 180px; display: none; z-index: 1001; transform-origin: top right; transition: all 0.3s ease;">
+                        <a href="settings.html" class="dropdown-item"
+                            style="display: flex; align-items: center; gap: 10px; padding: 12px 16px; color: rgba(255, 255, 255, 0.9); text-decoration: none; font-size: 14px; border-radius: 8px; transition: all 0.2s ease;">
+                            <i class="fas fa-cog" style="font-size: 14px; color: rgba(0, 198, 255, 0.9);"></i> Settings
                         </a>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-user"></i> Profile
+                        <a href="#" class="dropdown-item"
+                            style="display: flex; align-items: center; gap: 10px; padding: 12px 16px; color: rgba(255, 255, 255, 0.9); text-decoration: none; font-size: 14px; border-radius: 8px; transition: all 0.2s ease;">
+                            <i class="fas fa-user" style="font-size: 14px; color: rgba(0, 198, 255, 0.9);"></i> Profile
                         </a>
-                        <a href="#" class="dropdown-item" id="signOutBtn">
-                            <i class="fas fa-sign-out-alt"></i> Sign Out
+                        <a href="#" class="dropdown-item" id="signOutBtn"
+                            style="display: flex; align-items: center; gap: 10px; padding: 12px 16px; color: rgba(255, 255, 255, 0.9); text-decoration: none; font-size: 14px; border-radius: 8px; transition: all 0.2s ease;">
+                            <i class="fas fa-sign-out-alt" style="font-size: 14px; color: rgba(0, 198, 255, 0.9);"></i>
+                            Sign Out
                         </a>
                     </div>
                 </div>
             </div>
         </nav>
+
+        <!-- Mobile Navigation Menu - Hidden by default -->
+        <div id="mobileMenu" class="mobile-menu"
+            style="display: none; position: fixed; top: 70px; left: 0; right: 0; background: rgba(18, 18, 24, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); padding: 20px; z-index: 999; transform: translateY(-10px); opacity: 0; transition: all 0.3s ease;">
+            <div class="mobile-nav-items" style="display: flex; flex-direction: column; gap: 10px;">
+                <a href="#" class="mobile-nav-item active"
+                    style="display: flex; align-items: center; gap: 12px; color: #fff; text-decoration: none; font-size: 16px; font-weight: 500; padding: 14px 20px; border-radius: 10px; background: rgba(0, 198, 255, 0.15);">
+                    <i class="fas fa-home" style="font-size: 16px; width: 20px;"></i>
+                    <span>Home</span>
+                </a>
+                <a href="#" class="mobile-nav-item"
+                    style="display: flex; align-items: center; gap: 12px; color: rgba(255, 255, 255, 0.8); text-decoration: none; font-size: 16px; font-weight: 500; padding: 14px 20px; border-radius: 10px;">
+                    <i class="fas fa-th-large" style="font-size: 16px; width: 20px;"></i>
+                    <span>Categories</span>
+                </a>
+                <a href="#" class="mobile-nav-item"
+                    style="display: flex; align-items: center; gap: 12px; color: rgba(255, 255, 255, 0.8); text-decoration: none; font-size: 16px; font-weight: 500; padding: 14px 20px; border-radius: 10px;">
+                    <i class="fas fa-bookmark" style="font-size: 16px; width: 20px;"></i>
+                    <span>Bookmarks</span>
+                </a>
+            </div>
+            <div class="mobile-search" style="margin-top: 16px;">
+                <div class="search-bar-mobile"
+                    style="display: flex; align-items: center; background: rgba(30, 30, 35, 0.7); border-radius: 12px; padding: 12px 16px; border: 1px solid rgba(255, 255, 255, 0.12); width: 100%;">
+                    <i class="fas fa-search"
+                        style="color: rgba(0, 198, 255, 0.7); margin-right: 12px; font-size: 16px;"></i>
+                    <input type="search" placeholder="Search articles..."
+                        style="background: none; border: none; color: white; width: 100%; font-size: 16px; padding: 4px 0;">
+                </div>
+            </div>
+        </div>
     </header>
 
     <!-- Main Content -->
@@ -192,7 +273,10 @@
             const profileBtn = document.getElementById('profileBtn');
             const dropdownMenu = document.getElementById('dropdownMenu');
             const signOutBtn = document.getElementById('signOutBtn');
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
 
+            // Profile dropdown
             profileBtn.addEventListener('click', function (e) {
                 e.stopPropagation();
                 dropdownMenu.classList.toggle('show');
@@ -204,6 +288,25 @@
                     dropdownMenu.classList.remove('show');
                 }
             });
+
+            // Mobile menu toggle
+            if (mobileMenuToggle) {
+                mobileMenuToggle.addEventListener('click', function () {
+                    if (mobileMenu.style.display === 'block') {
+                        mobileMenu.style.opacity = '0';
+                        mobileMenu.style.transform = 'translateY(-10px)';
+                        setTimeout(() => {
+                            mobileMenu.style.display = 'none';
+                        }, 300);
+                    } else {
+                        mobileMenu.style.display = 'block';
+                        setTimeout(() => {
+                            mobileMenu.style.opacity = '1';
+                            mobileMenu.style.transform = 'translateY(0)';
+                        }, 10);
+                    }
+                });
+            }
 
             // Sign out functionality
             signOutBtn.addEventListener('click', function (e) {
@@ -220,6 +323,224 @@
     <!-- Add this line before the closing </body> tag -->
     <script src="./scripts/settings.js"></script>
     <script src="./scripts/profile.js"></script>
+
+    <!-- Add CSS to handle hover and active states -->
+    <style>
+        .desktop-nav-item:hover,
+        .mobile-nav-item:hover {
+            color: #fff !important;
+            background: rgba(255, 255, 255, 0.1) !important;
+            transform: translateY(-2px);
+        }
+
+        .desktop-nav-item.active,
+        .mobile-nav-item.active {
+            font-weight: 600 !important;
+            box-shadow: 0 4px 10px rgba(0, 114, 255, 0.2);
+        }
+
+        .search-bar:hover,
+        .search-bar:focus-within,
+        .search-bar-mobile:focus-within {
+            border-color: rgba(0, 198, 255, 0.4) !important;
+            background: rgba(35, 35, 40, 0.7) !important;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15) !important;
+            transform: translateY(-1px);
+        }
+
+        .search-bar:focus-within .search-icon-wrapper {
+            background: rgba(0, 198, 255, 0.15);
+        }
+
+        .search-bar:focus-within .search-icon-wrapper i {
+            color: rgba(0, 198, 255, 1);
+        }
+
+        .search-bar:focus-within .search-highlight {
+            opacity: 1;
+            animation: glow 1.5s infinite alternate;
+        }
+
+        .search-bar input::placeholder,
+        .search-bar-mobile input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+            transition: color 0.3s ease;
+        }
+
+        .search-bar:focus-within input::placeholder,
+        .search-bar-mobile:focus-within input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .filter-btn:hover {
+            background: rgba(0, 114, 255, 0.4) !important;
+            color: #fff !important;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 114, 255, 0.2);
+        }
+
+        @keyframes glow {
+            from {
+                opacity: 0.5;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .profile-btn:hover {
+            transform: translateY(-2px) !important;
+            border-color: rgba(0, 198, 255, 0.4) !important;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(0, 198, 255, 0.1) !important;
+        }
+
+        .dropdown-menu.show {
+            display: block !important;
+            animation: dropdown-fade 0.2s ease forwards;
+        }
+
+        @keyframes dropdown-fade {
+            from {
+                opacity: 0;
+                transform: translateY(-10px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .logo-container:hover {
+            transform: translateY(-2px);
+        }
+
+        .mobile-menu-toggle:hover {
+            background: rgba(45, 45, 50, 0.7) !important;
+        }
+
+        /* Media queries for responsive design */
+        @media (max-width: 1024px) {
+            .navbar {
+                padding: 0.8rem 1.5rem !important;
+            }
+
+            .desktop-nav {
+                margin-left: 20px !important;
+            }
+
+            .search-bar {
+                min-width: 180px !important;
+            }
+
+            .search-bar input {
+                width: 140px !important;
+            }
+
+            .logo-text {
+                font-size: 24px !important;
+            }
+
+            .logo-news {
+                font-size: 20px !important;
+            }
+
+            .desktop-nav-item {
+                padding: 10px 14px !important;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .desktop-nav {
+                display: none !important;
+            }
+
+            .mobile-menu-toggle {
+                display: flex !important;
+                margin-left: auto;
+                margin-right: 16px;
+            }
+
+            .news-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .search-bar {
+                display: none !important;
+            }
+
+            .navbar {
+                padding: 0.8rem 1rem !important;
+            }
+
+            .news-card.featured {
+                flex-direction: column !important;
+            }
+
+            .news-image {
+                width: 100% !important;
+                margin-top: 16px !important;
+            }
+
+            .stat-card {
+                min-width: 140px !important;
+            }
+
+            .mobile-menu-toggle {
+                margin-right: 10px !important;
+            }
+
+            .quick-stats {
+                gap: 12px !important;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .news-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .logo-text {
+                font-size: 20px !important;
+            }
+
+            .logo-news {
+                font-size: 18px !important;
+            }
+
+            .logo-divider {
+                height: 18px !important;
+            }
+
+            .profile-btn {
+                width: 40px !important;
+                height: 40px !important;
+            }
+
+            .profile-img {
+                width: 36px !important;
+                height: 36px !important;
+            }
+
+            .main-content {
+                padding: 15px !important;
+            }
+
+            .quick-stats {
+                flex-direction: column !important;
+            }
+
+            .stat-card {
+                width: 100% !important;
+            }
+        }
+    </style>
 </body>
 
 </html>
