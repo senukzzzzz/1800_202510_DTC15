@@ -1,0 +1,246 @@
+/* Categories page styles */
+
+/* Categories Header */
+.categories-header {
+    text-align: center;
+    margin: 2rem 0 3rem;
+    padding: 0 1rem;
+}
+
+.categories-header h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.5rem;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.categories-header p {
+    color: var(--text-color-secondary);
+    font-size: 1.1rem;
+}
+
+/* Categories Section */
+.categories-section {
+    margin-bottom: 4rem;
+    padding: 0 1rem;
+}
+
+.section-header {
+    max-width: 1200px;
+    margin: 0 auto 2rem;
+    padding: 0 1rem;
+}
+
+.section-header h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5rem;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+}
+
+.section-header p {
+    color: var(--text-color-secondary);
+    font-size: 1rem;
+}
+
+/* Categories Grid */
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    padding: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Category Cards */
+.category-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.category-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--accent-bg) 0%, rgba(0, 114, 255, 0.1) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px var(--shadow-color);
+}
+
+.category-card:hover::before {
+    opacity: 1;
+}
+
+/* Category Icons */
+.category-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--accent-color);
+    transition: transform 0.3s ease;
+}
+
+.category-card:hover .category-icon {
+    transform: scale(1.1);
+}
+
+/* Category Text */
+.category-card h3 {
+    color: var(--text-color);
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.category-card p {
+    color: var(--text-color-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Follow Button */
+.follow-btn {
+    background: transparent;
+    border: 1px solid var(--accent-color);
+    color: var(--accent-color);
+    padding: 0.5rem 1.5rem;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.follow-btn i {
+    font-size: 0.8rem;
+    transition: transform 0.3s ease;
+}
+
+.follow-btn:hover {
+    background: var(--accent-color);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Active State for Follow Button */
+.follow-btn.active {
+    background: var(--accent-color);
+    color: white;
+}
+
+.follow-btn.active i {
+    transform: rotate(0deg);
+}
+
+/* Followed Category Card Styles */
+.category-card.followed {
+    background: linear-gradient(135deg, var(--accent-bg) 0%, rgba(0, 114, 255, 0.05) 100%);
+    border-color: var(--accent-color);
+}
+
+.category-card.followed::before {
+    background: linear-gradient(135deg, var(--accent-bg) 0%, rgba(0, 114, 255, 0.15) 100%);
+}
+
+/* More Categories Section */
+.more-categories {
+    position: relative;
+}
+
+.more-categories::before {
+    content: '';
+    position: absolute;
+    top: -2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 4rem);
+    max-width: 1200px;
+    height: 1px;
+    background: var(--card-border);
+}
+
+/* Light Mode Specific Styles */
+body.light-mode .category-card {
+    background: var(--card-bg);
+    border-color: var(--card-border);
+}
+
+body.light-mode .category-icon {
+    color: var(--accent-color);
+}
+
+body.light-mode .follow-btn {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+body.light-mode .follow-btn:hover,
+body.light-mode .follow-btn.active {
+    background: var(--accent-color);
+    color: white;
+}
+
+body.light-mode .category-card.followed {
+    background: linear-gradient(135deg, var(--accent-bg) 0%, rgba(0, 114, 255, 0.05) 100%);
+    border-color: var(--accent-color);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .categories-header h1 {
+        font-size: 2rem;
+    }
+
+    .categories-header p {
+        font-size: 1rem;
+    }
+
+    .section-header h2 {
+        font-size: 1.25rem;
+    }
+
+    .categories-grid {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1.5rem;
+        padding: 1rem;
+    }
+
+    .category-card {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .categories-header h1 {
+        font-size: 1.75rem;
+    }
+
+    .categories-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .more-categories::before {
+        width: calc(100% - 2rem);
+    }
+}

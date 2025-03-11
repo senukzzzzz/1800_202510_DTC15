@@ -42,10 +42,10 @@
   padding: 0;
   box-sizing: border-box;
   transition: background var(--transition-speed) ease,
-              background-color var(--transition-speed) ease,
-              border-color var(--transition-speed) ease,
-              color var(--transition-speed) ease,
-              box-shadow var(--transition-speed) ease;
+    background-color var(--transition-speed) ease,
+    border-color var(--transition-speed) ease,
+    color var(--transition-speed) ease,
+    box-shadow var(--transition-speed) ease;
 }
 
 body {
@@ -529,7 +529,7 @@ body {
 }
 
 .time {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-color-tertiary);
   font-size: 12px;
 }
 
@@ -1249,6 +1249,7 @@ button:hover .icon {
     opacity: 0;
     transform: translateY(-10px) scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);

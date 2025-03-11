@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories - Slap News</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/main-styles.css">
+    <link rel="stylesheet" href="styles/categories-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Firebase SDK and Authentication -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="./scripts/firebaseAPI_DTC15.js"></script>
+    <script src="./scripts/authentication.js"></script>
+    <script src="./scripts/theme.js"></script>
+</head>
+
+<body>
+    <!-- Header Section - Contains navigation and search -->
+    <header>
+        <nav class="navbar">
+            <div class="navbar-container">
+                <!-- Logo Section -->
+                <div class="logo-container">
+                    <div class="logo">
+                        <div class="logo-wrapper">
+                            <span class="logo-text">SLAP</span>
+                            <span class="logo-divider"></span>
+                            <span class="logo-news">NEWS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Toggle Button - Only visible on small screens -->
+                <button id="mobileMenuToggle" class="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <!-- Desktop Navigation Links -->
+                <div class="desktop-nav">
+                    <a href="main.html" class="desktop-nav-item">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="categories.html" class="desktop-nav-item active">
+                        <i class="fas fa-th-large"></i>
+                        <span>Categories</span>
+                    </a>
+                    <a href="#" class="desktop-nav-item">
+                        <i class="fas fa-bookmark"></i>
+                        <span>Bookmarks</span>
+                    </a>
+                </div>
+
+                <!-- Navigation Actions (Search and Profile) -->
+                <div class="nav-actions">
+                    <!-- Search Bar -->
+                    <div class="search-bar">
+                        <div class="search-icon-wrapper">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <input type="search" placeholder="Search articles...">
+                        <div class="search-divider"></div>
+                        <button class="filter-btn">
+                            <i class="fas fa-sliders-h"></i>
+                        </button>
+                    </div>
+
+                    <!-- Profile Button and Dropdown -->
+                    <div class="profile-container">
+                        <button class="profile-btn" id="profileBtn">
+                            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop"
+                                alt="Profile" class="profile-img">
+                        </button>
+                        <div class="dropdown-menu" id="dropdownMenu">
+                            <a href="settings.html" class="dropdown-item">
+                                <i class="fas fa-cog"></i>
+                                Settings
+                            </a>
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-user"></i>
+                                Profile
+                            </a>
+                            <a href="#" class="dropdown-item" id="signOutBtn">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Sign Out
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Mobile Navigation Menu - Hidden by default -->
+        <div id="mobileMenu" class="mobile-menu">
+            <div class="mobile-nav-items">
+                <a href="main.html" class="mobile-nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="categories.html" class="mobile-nav-item active">
+                    <i class="fas fa-th-large"></i>
+                    <span>Categories</span>
+                </a>
+                <a href="#" class="mobile-nav-item">
+                    <i class="fas fa-bookmark"></i>
+                    <span>Bookmarks</span>
+                </a>
+            </div>
+            <!-- Mobile Search Bar -->
+            <div class="mobile-search">
+                <div class="search-bar-mobile">
+                    <i class="fas fa-search"></i>
+                    <input type="search" placeholder="Search articles...">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Section -->
+    <main class="main-content">
+        <!-- Categories Header -->
+        <div class="categories-header">
+            <h1>Your Categories</h1>
+            <p>Customize your news feed by following your favorite topics</p>
+        </div>
+
+        <!-- Your Categories Section -->
+        <section class="categories-section followed-categories">
+            <div class="section-header">
+                <h2>Following (5)</h2>
+            </div>
+            <div class="categories-grid">
+                <div class="category-card followed" data-category="technology">
+                    <div class="category-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3>Technology</h3>
+                    <p>AI, Gadgets, Software & More</p>
+                    <button class="follow-btn active">
+                        <i class="fas fa-check"></i>
+                        <span>Following</span>
+                    </button>
+                </div>
+
+                <div class="category-card followed" data-category="business">
+                    <div class="category-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Business</h3>
+                    <p>Markets, Companies, Economy</p>
+                    <button class="follow-btn active">
+                        <i class="fas fa-check"></i>
+                        <span>Following</span>
+                    </button>
+                </div>
+
+                <div class="category-card followed" data-category="science">
+                    <div class="category-icon">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <h3>Science</h3>
+                    <p>Research, Space, Environment</p>
+                    <button class="follow-btn active">
+                        <i class="fas fa-check"></i>
+                        <span>Following</span>
+                    </button>
+                </div>
+
+                <div class="category-card followed" data-category="health">
+                    <div class="category-icon">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <h3>Health</h3>
+                    <p>Medicine, Wellness, Fitness</p>
+                    <button class="follow-btn active">
+                        <i class="fas fa-check"></i>
+                        <span>Following</span>
+                    </button>
+                </div>
+
+                <div class="category-card followed" data-category="entertainment">
+                    <div class="category-icon">
+                        <i class="fas fa-film"></i>
+                    </div>
+                    <h3>Entertainment</h3>
+                    <p>Movies, Music, TV Shows</p>
+                    <button class="follow-btn active">
+                        <i class="fas fa-check"></i>
+                        <span>Following</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- More Categories Section -->
+        <section class="categories-section more-categories">
+            <div class="section-header">
+                <h2>More Categories</h2>
+                <p>Explore more topics to expand your feed</p>
+            </div>
+            <div class="categories-grid">
+                <div class="category-card" data-category="sports">
+                    <div class="category-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3>Sports</h3>
+                    <p>Games, Teams, Athletes</p>
+                    <button class="follow-btn">
+                        <i class="fas fa-plus"></i>
+                        <span>Follow</span>
+                    </button>
+                </div>
+
+                <div class="category-card" data-category="politics">
+                    <div class="category-icon">
+                        <i class="fas fa-landmark"></i>
+                    </div>
+                    <h3>Politics</h3>
+                    <p>Government, Policy, Elections</p>
+                    <button class="follow-btn">
+                        <i class="fas fa-plus"></i>
+                        <span>Follow</span>
+                    </button>
+                </div>
+
+                <div class="category-card" data-category="education">
+                    <div class="category-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3>Education</h3>
+                    <p>Learning, Schools, Research</p>
+                    <button class="follow-btn">
+                        <i class="fas fa-plus"></i>
+                        <span>Follow</span>
+                    </button>
+                </div>
+
+                <div class="category-card" data-category="lifestyle">
+                    <div class="category-icon">
+                        <i class="fas fa-coffee"></i>
+                    </div>
+                    <h3>Lifestyle</h3>
+                    <p>Food, Travel, Fashion</p>
+                    <button class="follow-btn">
+                        <i class="fas fa-plus"></i>
+                        <span>Follow</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- JavaScript for Mobile Menu Toggle -->
+    <script>
+        // Initialize mobile menu functionality when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function () {
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+
+            // Add click event listener to mobile menu toggle button
+            if (mobileMenuToggle) {
+                mobileMenuToggle.addEventListener('click', function () {
+                    // Toggle mobile menu with animation
+                    if (mobileMenu.style.display === 'block') {
+                        // Hide menu with fade-out animation
+                        mobileMenu.style.opacity = '0';
+                        mobileMenu.style.transform = 'translateY(-10px)';
+                        setTimeout(() => {
+                            mobileMenu.style.display = 'none';
+                        }, 300);
+                    } else {
+                        // Show menu with fade-in animation
+                        mobileMenu.style.display = 'block';
+                        setTimeout(() => {
+                            mobileMenu.style.opacity = '1';
+                            mobileMenu.style.transform = 'translateY(0)';
+                        }, 10);
+                    }
+                });
+            }
+        });
+    </script>
+
+    <!-- Profile Dropdown Script -->
+    <script src="./scripts/profile.js"></script>
+</body>
+
+</html>

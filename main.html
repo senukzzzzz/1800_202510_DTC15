@@ -1,18 +1,26 @@
+<!-- Main HTML file for the news application -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+    <!-- Meta tags for proper rendering and viewport settings -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Slap News - Your 10-Minute News Digest</title>
+
+    <!-- Google Fonts - Inter for body text and Poppins for headings -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@700&display=swap"
         rel="stylesheet">
+
+    <!-- Application stylesheets -->
     <link rel="stylesheet" href="styles/styles.css">
     <link rel="stylesheet" href="styles/main-styles.css">
+    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <!-- Firebase App (the core Firebase SDK) -->
+
+    <!-- Firebase SDK and Authentication -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
@@ -22,11 +30,11 @@
 </head>
 
 <body>
-    <!-- Header -->
+    <!-- Header Section - Contains navigation and search -->
     <header>
         <nav class="navbar">
             <div class="navbar-container">
-                <!-- Logo Section with improved styling -->
+                <!-- Logo Section -->
                 <div class="logo-container">
                     <div class="logo">
                         <div class="logo-wrapper">
@@ -37,18 +45,18 @@
                     </div>
                 </div>
 
-                <!-- Mobile menu toggle button - Only visible on small screens -->
+                <!-- Mobile Menu Toggle Button - Only visible on small screens -->
                 <button id="mobileMenuToggle" class="mobile-menu-toggle">
                     <i class="fas fa-bars"></i>
                 </button>
 
-                <!-- Navigation Section with improved styling -->
+                <!-- Desktop Navigation Links -->
                 <div class="desktop-nav">
                     <a href="#" class="desktop-nav-item active">
                         <i class="fas fa-home"></i>
                         <span>Home</span>
                     </a>
-                    <a href="#" class="desktop-nav-item">
+                    <a href="categories.html" class="desktop-nav-item">
                         <i class="fas fa-th-large"></i>
                         <span>Categories</span>
                     </a>
@@ -58,9 +66,9 @@
                     </a>
                 </div>
 
-                <!-- Actions Section with improved styling -->
+                <!-- Navigation Actions (Search and Profile) -->
                 <div class="nav-actions">
-                    <!-- Search Bar with improved styling -->
+                    <!-- Search Bar -->
                     <div class="search-bar">
                         <div class="search-icon-wrapper">
                             <i class="fas fa-search"></i>
@@ -72,7 +80,7 @@
                         </button>
                     </div>
 
-                    <!-- Profile Button with improved styling -->
+                    <!-- Profile Button and Dropdown -->
                     <div class="profile-container">
                         <button class="profile-btn" id="profileBtn">
                             <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop"
@@ -104,7 +112,7 @@
                     <i class="fas fa-home"></i>
                     <span>Home</span>
                 </a>
-                <a href="#" class="mobile-nav-item">
+                <a href="categories.html" class="mobile-nav-item">
                     <i class="fas fa-th-large"></i>
                     <span>Categories</span>
                 </a>
@@ -113,6 +121,7 @@
                     <span>Bookmarks</span>
                 </a>
             </div>
+            <!-- Mobile Search Bar -->
             <div class="mobile-search">
                 <div class="search-bar-mobile">
                     <i class="fas fa-search"></i>
@@ -122,9 +131,9 @@
         </div>
     </header>
 
-    <!-- Main Content -->
+    <!-- Main Content Section -->
     <main class="main-content">
-        <!-- Quick Stats -->
+        <!-- Quick Stats Section - Shows user activity summary -->
         <div class="quick-stats">
             <div class="stat-card">
                 <span class="stat-number">10</span>
@@ -140,9 +149,9 @@
             </div>
         </div>
 
-        <!-- News Feed -->
+        <!-- News Feed Section -->
         <div class="news-feed">
-            <!-- Featured News -->
+            <!-- Featured News Article - Larger display -->
             <article class="news-card featured">
                 <div class="news-content">
                     <h2>Luka Doncic Gets Traded to the Lakers</h2>
@@ -151,6 +160,7 @@
                     <div class="news-meta">
                         <span class="time">Just Now</span>
                         <div class="actions">
+                            <!-- Bookmark and Share buttons -->
                             <button class="bookmark-btn">
                                 <svg class="icon" viewBox="0 0 24 24">
                                     <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z" />
@@ -171,8 +181,9 @@
                 </div>
             </article>
 
-            <!-- Regular News Cards -->
+            <!-- Regular News Cards Grid -->
             <div class="news-grid">
+                <!-- Technology News Card -->
                 <article class="news-card">
                     <span class="category-tag">Technology</span>
                     <h3>Apple Announces Revolutionary AI Features</h3>
@@ -195,6 +206,7 @@
                     </div>
                 </article>
 
+                <!-- Sports News Card -->
                 <article class="news-card">
                     <span class="category-tag">Sports</span>
                     <h3>Champions League Quarter-Finals Set</h3>
@@ -346,6 +358,7 @@
     </div>
 
     <script>
+        // Initialize mobile menu functionality when DOM is loaded
         document.addEventListener('DOMContentLoaded', function () {
             const mobileMenuToggle = document.getElementById('mobileMenuToggle');
             const mobileMenu = document.getElementById('mobileMenu');
@@ -395,6 +408,9 @@
                 localStorage.setItem('userCategories', JSON.stringify(selectedCategories));
                 localStorage.setItem('hasVisitedBefore', 'true');
 
+                // Also save to Firebase if user is authenticated
+                saveCategoriesToFirebase(selectedCategories);
+
                 // Close the popup with animation
                 categoryPopup.classList.add('hide');
                 setTimeout(() => {
@@ -405,6 +421,32 @@
                 // Update the UI based on selected categories
                 updateCategoriesDisplay(selectedCategories);
             });
+
+            // Function to save categories to Firebase
+            function saveCategoriesToFirebase(categories) {
+                // Check if user is logged in
+                firebase.auth().onAuthStateChanged(user => {
+                    if (user) {
+                        // User is signed in, get reference to Firestore
+                        const db = firebase.firestore();
+
+                        // Save to Firestore in a 'userPreferences' collection
+                        db.collection('userPreferences').doc(user.uid).set({
+                            categories: categories,
+                            lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+                        }, { merge: true }) // Using merge to preserve other fields if they exist
+                            .then(() => {
+                                console.log("User preferences saved to Firebase");
+                            })
+                            .catch((error) => {
+                                console.error("Error saving preferences to Firebase:", error);
+                            });
+                    } else {
+                        // User is not signed in, we already saved to localStorage
+                        console.log("User not signed in, preferences saved only locally");
+                    }
+                });
+            }
 
             // Skip category selection for now
             skipCategories.addEventListener('click', function () {
@@ -434,13 +476,16 @@
             // Mobile menu toggle
             if (mobileMenuToggle) {
                 mobileMenuToggle.addEventListener('click', function () {
+                    // Toggle mobile menu with animation
                     if (mobileMenu.style.display === 'block') {
+                        // Hide menu with fade-out animation
                         mobileMenu.style.opacity = '0';
                         mobileMenu.style.transform = 'translateY(-10px)';
                         setTimeout(() => {
                             mobileMenu.style.display = 'none';
                         }, 300);
                     } else {
+                        // Show menu with fade-in animation
                         mobileMenu.style.display = 'block';
                         setTimeout(() => {
                             mobileMenu.style.opacity = '1';
@@ -454,6 +499,40 @@
             const savedCategories = localStorage.getItem('userCategories');
             if (savedCategories) {
                 updateCategoriesDisplay(JSON.parse(savedCategories));
+            } else {
+                // If no local categories, try to fetch from Firebase
+                fetchCategoriesFromFirebase();
+            }
+
+            // Function to fetch categories from Firebase
+            function fetchCategoriesFromFirebase() {
+                firebase.auth().onAuthStateChanged(user => {
+                    if (user) {
+                        // User is signed in, get their preferences from Firestore
+                        const db = firebase.firestore();
+                        db.collection('userPreferences').doc(user.uid).get()
+                            .then((doc) => {
+                                if (doc.exists && doc.data().categories) {
+                                    const firebaseCategories = doc.data().categories;
+
+                                    // Save to localStorage for future quick access
+                                    localStorage.setItem('userCategories', JSON.stringify(firebaseCategories));
+
+                                    // Update the UI
+                                    updateCategoriesDisplay(firebaseCategories);
+
+                                    // Pre-select checkboxes in popup
+                                    firebaseCategories.forEach(category => {
+                                        const checkbox = document.getElementById(`category-${category}`);
+                                        if (checkbox) checkbox.checked = true;
+                                    });
+                                }
+                            })
+                            .catch((error) => {
+                                console.error("Error getting preferences from Firebase:", error);
+                            });
+                    }
+                });
             }
         });
     </script>
