@@ -19,54 +19,108 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script src="./scripts/firebaseAPI_DTC15.js"></script>
     <script src="./scripts/authentication.js"></script>
+    <script src="./scripts/theme.js"></script>
 </head>
 
 <body>
     <!-- Header -->
-    <header class="main-header">
-        <nav class="main-nav">
-            <div class="logo-container">
-                <div class="logo">
-                    <div class="logo-wrapper">
-                        <span class="logo-text">SLAP</span>
-                        <span class="logo-divider"></span>
-                        <span class="logo-news">NEWS</span>
+    <header>
+        <nav class="navbar">
+            <div class="navbar-container">
+                <!-- Logo Section with improved styling -->
+                <div class="logo-container">
+                    <div class="logo">
+                        <div class="logo-wrapper">
+                            <span class="logo-text">SLAP</span>
+                            <span class="logo-divider"></span>
+                            <span class="logo-news">NEWS</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="desktop-nav">
-                <a href="main.html" class="desktop-nav-item active">Home</a>
-                <a href="#" class="desktop-nav-item">Categories</a>
-                <a href="#" class="desktop-nav-item">Bookmarks</a>
-            </div>
-            <div class="nav-actions">
-                <div class="search-bar">
-                    <input type="search" placeholder="Search news">
-                    <button class="filter-btn">
-                        <svg class="icon" viewBox="0 0 24 24">
-                            <path d="M7 10l5 5 5-5z" />
-                        </svg>
-                    </button>
+
+                <!-- Mobile menu toggle button - Only visible on small screens -->
+                <button id="mobileMenuToggle" class="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <!-- Navigation Section with improved styling -->
+                <div class="desktop-nav">
+                    <a href="main.html" class="desktop-nav-item">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="#" class="desktop-nav-item">
+                        <i class="fas fa-th-large"></i>
+                        <span>Categories</span>
+                    </a>
+                    <a href="#" class="desktop-nav-item">
+                        <i class="fas fa-bookmark"></i>
+                        <span>Bookmarks</span>
+                    </a>
                 </div>
-                <div class="profile-container">
-                    <button class="profile-btn" id="profileBtn">
-                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop"
-                            alt="Profile" class="profile-img">
-                    </button>
-                    <div class="dropdown-menu" id="dropdownMenu">
-                        <a href="settings.html" class="dropdown-item">
-                            <i class="fas fa-cog"></i> Settings
-                        </a>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-user"></i> Profile
-                        </a>
-                        <a href="#" class="dropdown-item" id="signOutBtn">
-                            <i class="fas fa-sign-out-alt"></i> Sign Out
-                        </a>
+
+                <!-- Actions Section with improved styling -->
+                <div class="nav-actions">
+                    <!-- Search Bar with improved styling -->
+                    <div class="search-bar">
+                        <div class="search-icon-wrapper">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <input type="search" placeholder="Search articles...">
+                        <div class="search-divider"></div>
+                        <button class="filter-btn">
+                            <i class="fas fa-sliders-h"></i>
+                        </button>
+                    </div>
+
+                    <!-- Profile Button with improved styling -->
+                    <div class="profile-container">
+                        <button class="profile-btn" id="profileBtn">
+                            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop"
+                                alt="Profile" class="profile-img">
+                        </button>
+                        <div class="dropdown-menu" id="dropdownMenu">
+                            <a href="settings.html" class="dropdown-item active">
+                                <i class="fas fa-cog"></i>
+                                Settings
+                            </a>
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-user"></i>
+                                Profile
+                            </a>
+                            <a href="#" class="dropdown-item" id="signOutBtn">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Sign Out
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </nav>
+
+        <!-- Mobile Navigation Menu - Hidden by default -->
+        <div id="mobileMenu" class="mobile-menu">
+            <div class="mobile-nav-items">
+                <a href="main.html" class="mobile-nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="#" class="mobile-nav-item">
+                    <i class="fas fa-th-large"></i>
+                    <span>Categories</span>
+                </a>
+                <a href="#" class="mobile-nav-item">
+                    <i class="fas fa-bookmark"></i>
+                    <span>Bookmarks</span>
+                </a>
+            </div>
+            <div class="mobile-search">
+                <div class="search-bar-mobile">
+                    <i class="fas fa-search"></i>
+                    <input type="search" placeholder="Search articles...">
+                </div>
+            </div>
+        </div>
     </header>
 
     <div class="settings-container">
@@ -136,40 +190,8 @@
             <span>© 2024 Slap News</span>
         </div>
     </footer>
-    <script>
-        // Profile dropdown functionality
-        document.addEventListener('DOMContentLoaded', function () {
-            const profileBtn = document.getElementById('profileBtn');
-            const dropdownMenu = document.getElementById('dropdownMenu');
-            const signOutBtn = document.getElementById('signOutBtn');
-
-            profileBtn.addEventListener('click', function (e) {
-                e.stopPropagation();
-                dropdownMenu.classList.toggle('show');
-            });
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function (e) {
-                if (!dropdownMenu.contains(e.target) && !profileBtn.contains(e.target)) {
-                    dropdownMenu.classList.remove('show');
-                }
-            });
-
-            // Sign out functionality
-            signOutBtn.addEventListener('click', function (e) {
-                e.preventDefault();
-                firebase.auth().signOut().then(() => {
-                    window.location.href = 'index.html';
-                }).catch((error) => {
-                    console.error('Error signing out:', error);
-                });
-            });
-        });
-    </script>
-
-    <!-- Add this line before the closing </body> tag -->
-    <script src="./scripts/settings.js"></script>
     <script src="./scripts/profile.js"></script>
+    <script src="./scripts/settings.js"></script>
 </body>
 
 </html>

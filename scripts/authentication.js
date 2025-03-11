@@ -19,7 +19,8 @@ var uiConfig = {
           email: user.email,
           name: displayName,
           country: country,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+          darkMode: true  // Default to dark mode
         }, { merge: true })  // merge: true will update existing doc or create new one
         .then(() => {
           console.log("User document created/updated in Firestore");
