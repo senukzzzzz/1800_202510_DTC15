@@ -377,11 +377,6 @@
                 });
             });
 
-            // FOR TESTING: Always show the popup regardless of whether it's first visit or not
-            categoryPopup.classList.add('show');
-            document.body.classList.add('popup-open');
-
-            /* Original first-visit check code (commented out for testing)
             // Check if first visit
             const hasVisited = localStorage.getItem('hasVisitedBefore');
 
@@ -390,7 +385,6 @@
                 categoryPopup.classList.add('show');
                 document.body.classList.add('popup-open');
             }
-            */
 
             // Make sure all checkboxes in categories are unchecked on load (for testing)
             document.querySelectorAll('.category-checkbox').forEach(checkbox => {
