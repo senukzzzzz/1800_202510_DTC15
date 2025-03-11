@@ -127,103 +127,136 @@
 
     <!-- Main Content Section -->
     <main class="main-content">
-        <!-- Quick Stats Section - Shows user activity summary -->
-        <div class="quick-stats">
-            <div class="stat-card">
-                <span class="stat-number">10</span>
-                <span class="stat-label">Minutes Daily Digest</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-number">5</span>
-                <span class="stat-label">Your Categories</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-number">15</span>
-                <span class="stat-label">Saved Articles</span>
-            </div>
+        <!-- Categories Header -->
+        <div class="categories-header">
+            <h1>Your Categories</h1>
+            <p>Customize your news feed by following your favorite topics</p>
         </div>
 
-        <!-- News Feed Section -->
-        <div class="news-feed">
-            <!-- Featured News Article - Larger display -->
-            <article class="news-card featured">
-                <div class="news-content">
-                    <h2>Luka Doncic Gets Traded to the Lakers</h2>
-                    <p>In one of the most stunning trades ever reported, the NBA landscape has been altered mightily in
-                        a blink of an eye...</p>
-                    <div class="news-meta">
-                        <span class="time">Just Now</span>
-                        <div class="actions">
-                            <!-- Bookmark and Share buttons -->
-                            <button class="bookmark-btn">
-                                <svg class="icon" viewBox="0 0 24 24">
-                                    <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z" />
-                                </svg>
-                            </button>
-                            <button class="share-btn">
-                                <svg class="icon" viewBox="0 0 24 24">
-                                    <path
-                                        d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92zM18 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM6 13c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm12 7.02c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z" />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="news-image">
-                    <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?w=800&h=600&fit=crop"
-                        alt="Basketball game">
-                </div>
-            </article>
-
-            <!-- Regular News Cards Grid -->
-            <div class="news-grid">
-                <!-- Technology News Card -->
-                <article class="news-card">
-                    <span class="category-tag">Technology</span>
-                    <h3>Apple Announces Revolutionary AI Features</h3>
-                    <p>New iOS update brings groundbreaking AI capabilities to all users...</p>
-                    <div class="news-meta">
-                        <span class="time">2h ago</span>
-                        <div class="actions">
-                            <button class="bookmark-btn">
-                                <svg class="icon" viewBox="0 0 24 24">
-                                    <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z" />
-                                </svg>
-                            </button>
-                            <button class="share-btn">
-                                <svg class="icon" viewBox="0 0 24 24">
-                                    <path
-                                        d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92zM18 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM6 13c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm12 7.02c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z" />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- Sports News Card -->
-                <article class="news-card">
-                    <span class="category-tag">Sports</span>
-                    <h3>Champions League Quarter-Finals Set</h3>
-                    <p>Draw reveals exciting matchups for the next round...</p>
-                    <div class="news-meta">
-                        <span class="time">3h ago</span>
-                        <div class="actions">
-                            <button class="bookmark-btn">
-                                <svg class="icon" viewBox="0 0 24 24">
-                                    <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z" />
-                                </svg>
-                            </button>
-                            <button class="share-btn">
-                                <svg class="icon" viewBox="0 0 24 24">
-                                    <path
-                                        d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92zM18 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM6 13c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm12 7.02c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z" />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </article>
+        <!-- Your Categories Section -->
+        <section class="categories-section followed-categories">
+            <div class="section-header">
+                <h2>Following (5)</h2>
             </div>
-        </div>
+            <div class="categories-grid">
+                <div class="category-card followed" data-category="technology">
+                    <div class="category-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3>Technology</h3>
+                    <p>AI, Gadgets, Software & More</p>
+                    <button class="follow-btn active">
+                        <i class="fas fa-check"></i>
+                        <span>Following</span>
+                    </button>
+                </div>
+
+                <div class="category-card followed" data-category="business">
+                    <div class="category-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Business</h3>
+                    <p>Markets, Companies, Economy</p>
+                    <button class="follow-btn active">
+                        <i class="fas fa-check"></i>
+                        <span>Following</span>
+                    </button>
+                </div>
+
+                <div class="category-card followed" data-category="science">
+                    <div class="category-icon">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <h3>Science</h3>
+                    <p>Research, Space, Environment</p>
+                    <button class="follow-btn active">
+                        <i class="fas fa-check"></i>
+                        <span>Following</span>
+                    </button>
+                </div>
+
+                <div class="category-card followed" data-category="health">
+                    <div class="category-icon">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <h3>Health</h3>
+                    <p>Medicine, Wellness, Fitness</p>
+                    <button class="follow-btn active">
+                        <i class="fas fa-check"></i>
+                        <span>Following</span>
+                    </button>
+                </div>
+
+                <div class="category-card followed" data-category="entertainment">
+                    <div class="category-icon">
+                        <i class="fas fa-film"></i>
+                    </div>
+                    <h3>Entertainment</h3>
+                    <p>Movies, Music, TV Shows</p>
+                    <button class="follow-btn active">
+                        <i class="fas fa-check"></i>
+                        <span>Following</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- More Categories Section -->
+        <section class="categories-section more-categories">
+            <div class="section-header">
+                <h2>More Categories</h2>
+                <p>Explore more topics to expand your feed</p>
+            </div>
+            <div class="categories-grid">
+                <div class="category-card" data-category="sports">
+                    <div class="category-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3>Sports</h3>
+                    <p>Games, Teams, Athletes</p>
+                    <button class="follow-btn">
+                        <i class="fas fa-plus"></i>
+                        <span>Follow</span>
+                    </button>
+                </div>
+
+                <div class="category-card" data-category="politics">
+                    <div class="category-icon">
+                        <i class="fas fa-landmark"></i>
+                    </div>
+                    <h3>Politics</h3>
+                    <p>Government, Policy, Elections</p>
+                    <button class="follow-btn">
+                        <i class="fas fa-plus"></i>
+                        <span>Follow</span>
+                    </button>
+                </div>
+
+                <div class="category-card" data-category="education">
+                    <div class="category-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3>Education</h3>
+                    <p>Learning, Schools, Research</p>
+                    <button class="follow-btn">
+                        <i class="fas fa-plus"></i>
+                        <span>Follow</span>
+                    </button>
+                </div>
+
+                <div class="category-card" data-category="lifestyle">
+                    <div class="category-icon">
+                        <i class="fas fa-coffee"></i>
+                    </div>
+                    <h3>Lifestyle</h3>
+                    <p>Food, Travel, Fashion</p>
+                    <button class="follow-btn">
+                        <i class="fas fa-plus"></i>
+                        <span>Follow</span>
+                    </button>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- JavaScript for Mobile Menu Toggle -->
