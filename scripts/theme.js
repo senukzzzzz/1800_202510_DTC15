@@ -13,7 +13,7 @@
 function initializeTheme() {
     // Check localStorage first for theme preference
     // Default to dark mode if no preference is stored
-    const isDarkMode = localStorage.getItem('darkMode') !== 'light';
+    const isDarkMode = localStorage.getItem('darkMode') === 'light' ? false : true;
     applyTheme(!isDarkMode);
 
     // Set up theme toggle switch if on settings page
@@ -22,7 +22,7 @@ function initializeTheme() {
         // Set initial state of toggle
         darkModeToggle.checked = isDarkMode;
         // Add change listener for theme toggle
-        darkModeToggle.addEventListener('change', function() {
+        darkModeToggle.addEventListener('change', function () {
             const isLightMode = !this.checked;
             updateTheme(isLightMode);
         });
@@ -38,10 +38,10 @@ function initializeTheme() {
             db.collection("Users").doc(user.uid).get().then((doc) => {
                 if (doc.exists && doc.data().hasOwnProperty('darkMode')) {
                     const isDarkMode = doc.data().darkMode;
-                    
+
                     // Apply theme from Firestore
                     applyTheme(!isDarkMode);
-                    
+
                     // Update toggle switch if on settings page
                     if (darkModeToggle) {
                         darkModeToggle.checked = isDarkMode;
@@ -80,10 +80,10 @@ function applyTheme(isLightMode) {
 function updateTheme(isLightMode) {
     // Apply theme to document
     applyTheme(isLightMode);
-    
+
     // Save preference to localStorage
     localStorage.setItem('darkMode', isLightMode ? 'light' : 'dark');
-    
+
     // Update Firestore if user is authenticated
     const user = firebase.auth().currentUser;
     if (user) {
