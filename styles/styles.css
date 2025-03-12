@@ -672,3 +672,35 @@ select.firebaseui-input {
 .firebaseui-form-actions .firebaseui-button {
   margin: 0 !important;
 }
+
+/* Hide the ugly static top-right button */
+button.firebaseui-input-toggle-visibility[data-toggle-type="toggle"] {
+    display: none !important;
+}
+
+/* Ensure the dynamic password toggle button is visible and properly styled */
+.mdl-textfield__label + .mdl-button.firebaseui-input-toggle-visibility {
+    display: block !important;
+    position: absolute !important;
+    right: 12px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    padding: 8px !important;
+    min-width: auto !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+    z-index: 1 !important;
+}
+
+.mdl-textfield__label + .mdl-button.firebaseui-input-toggle-visibility:hover {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Hide the floating button for password toggle */
+.firebaseui-input-floating-button {
+    display: none !important;
+}
+
+/* Additional specificity to ensure it's hidden */
+a.firebaseui-input-toggle-on.firebaseui-input-toggle-blur {
+    display: none !important;
+}
