@@ -382,7 +382,7 @@
                     // User is logged in, check if they've seen the popup before
                     const db = firebase.firestore();
 
-                    db.collection('users').doc(user.uid).get()
+                    db.collection('userPreferences').doc(user.uid).get()
                         .then((doc) => {
                             // If the document doesn't exist or hasSeenCategoryPopup is false or undefined, show popup
                             if (!doc.exists || !doc.data().hasSeenCategoryPopup) {
@@ -436,7 +436,7 @@
                 localStorage.setItem('userCategories', JSON.stringify(selectedCategories));
                 localStorage.setItem('hasVisitedBefore', 'true');
 
-                // Save to Firebase if user is authenticated
+                // Also save to Firebase if user is authenticated
                 saveCategoriesToFirebase(selectedCategories);
 
                 // Close the popup with animation
@@ -458,21 +458,21 @@
                         // User is signed in, get reference to Firestore
                         const db = firebase.firestore();
 
-                        // Save to Firestore in the user's document
-                        db.collection('users').doc(user.uid).set({
+                        // Save to Firestore in a 'userPreferences' collection
+                        db.collection('userPreferences').doc(user.uid).set({
                             categories: categories,
-                            hasSeenCategoryPopup: true,
+                            hasSeenCategoryPopup: true, // Mark that user has seen the popup
                             lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
                         }, { merge: true }) // Using merge to preserve other fields if they exist
                             .then(() => {
-                                console.log("User categories saved to Firebase");
+                                console.log("User preferences saved to Firebase");
                             })
                             .catch((error) => {
-                                console.error("Error saving categories to Firebase:", error);
+                                console.error("Error saving preferences to Firebase:", error);
                             });
                     } else {
                         // User is not signed in, we already saved to localStorage
-                        console.log("User not signed in, categories saved only locally");
+                        console.log("User not signed in, preferences saved only locally");
                     }
                 });
             }
@@ -485,7 +485,7 @@
                 firebase.auth().onAuthStateChanged(user => {
                     if (user) {
                         const db = firebase.firestore();
-                        db.collection('users').doc(user.uid).set({
+                        db.collection('userPreferences').doc(user.uid).set({
                             hasSeenCategoryPopup: true,
                             lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
                         }, { merge: true });
@@ -758,7 +758,6 @@
     </style>
 
     <script src="./scripts/profile.js"></script>
-    <script src="./scripts/categories.js"></script>
 </body>
 
 </html>
