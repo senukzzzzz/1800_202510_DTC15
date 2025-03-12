@@ -464,6 +464,16 @@ body {
   display: block;
 }
 
+.catagory-number {
+  font-size: 32px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: block;
+}
+
 .stat-label {
   color: var(--text-color-secondary);
   font-size: 14px;
