@@ -358,7 +358,6 @@
     </div>
 
     <script>
-        // Initialize mobile menu functionality when DOM is loaded
         document.addEventListener('DOMContentLoaded', function () {
             const mobileMenuToggle = document.getElementById('mobileMenuToggle');
             const mobileMenu = document.getElementById('mobileMenu');
@@ -377,24 +376,53 @@
                 });
             });
 
-            // FOR TESTING: Always show the popup regardless of whether it's first visit or not
-            categoryPopup.classList.add('show');
-            document.body.classList.add('popup-open');
+            // Check if user is logged in and if they've seen the popup before
+            firebase.auth().onAuthStateChanged(user => {
+                if (user) {
+                    // User is logged in, check if they've seen the popup before
+                    const db = firebase.firestore();
 
-            /* Original first-visit check code (commented out for testing)
-            // Check if first visit
-            const hasVisited = localStorage.getItem('hasVisitedBefore');
+                    db.collection('userPreferences').doc(user.uid).get()
+                        .then((doc) => {
+                            // If the document doesn't exist or hasSeenCategoryPopup is false or undefined, show popup
+                            if (!doc.exists || !doc.data().hasSeenCategoryPopup) {
+                                // Show the popup
+                                categoryPopup.classList.add('show');
+                                document.body.classList.add('popup-open');
 
-            // Show the category popup if it's the first visit
-            if (!hasVisited) {
-                categoryPopup.classList.add('show');
-                document.body.classList.add('popup-open');
-            }
-            */
+                                // Pre-select checkboxes if user has previously selected categories
+                                if (doc.exists && doc.data().categories) {
+                                    const userCategories = doc.data().categories;
+                                    userCategories.forEach(category => {
+                                        const checkbox = document.getElementById(`category-${category}`);
+                                        if (checkbox) checkbox.checked = true;
+                                    });
+                                }
+                            } else {
+                                // User has seen popup before, just load their categories if available
+                                if (doc.data().categories) {
+                                    updateCategoriesDisplay(doc.data().categories);
+                                }
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error checking user preferences:", error);
+                        });
+                } else {
+                    // User is not logged in, check localStorage
+                    const hasVisited = localStorage.getItem('hasVisitedBefore');
 
-            // Make sure all checkboxes in categories are unchecked on load (for testing)
-            document.querySelectorAll('.category-checkbox').forEach(checkbox => {
-                checkbox.checked = false;
+                    if (!hasVisited) {
+                        categoryPopup.classList.add('show');
+                        document.body.classList.add('popup-open');
+                    } else {
+                        // Load saved categories from localStorage
+                        const savedCategories = localStorage.getItem('userCategories');
+                        if (savedCategories) {
+                            updateCategoriesDisplay(JSON.parse(savedCategories));
+                        }
+                    }
+                }
             });
 
             // Save category preferences and close popup
@@ -433,6 +461,7 @@
                         // Save to Firestore in a 'userPreferences' collection
                         db.collection('userPreferences').doc(user.uid).set({
                             categories: categories,
+                            hasSeenCategoryPopup: true, // Mark that user has seen the popup
                             lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
                         }, { merge: true }) // Using merge to preserve other fields if they exist
                             .then(() => {
@@ -451,6 +480,17 @@
             // Skip category selection for now
             skipCategories.addEventListener('click', function () {
                 localStorage.setItem('hasVisitedBefore', 'true');
+
+                // If user is logged in, mark that they've seen the popup
+                firebase.auth().onAuthStateChanged(user => {
+                    if (user) {
+                        const db = firebase.firestore();
+                        db.collection('userPreferences').doc(user.uid).set({
+                            hasSeenCategoryPopup: true,
+                            lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+                        }, { merge: true });
+                    }
+                });
 
                 // Close the popup with animation
                 categoryPopup.classList.add('hide');
@@ -491,46 +531,6 @@
                             mobileMenu.style.opacity = '1';
                             mobileMenu.style.transform = 'translateY(0)';
                         }, 10);
-                    }
-                });
-            }
-
-            // Check for previously selected categories on page load
-            const savedCategories = localStorage.getItem('userCategories');
-            if (savedCategories) {
-                updateCategoriesDisplay(JSON.parse(savedCategories));
-            } else {
-                // If no local categories, try to fetch from Firebase
-                fetchCategoriesFromFirebase();
-            }
-
-            // Function to fetch categories from Firebase
-            function fetchCategoriesFromFirebase() {
-                firebase.auth().onAuthStateChanged(user => {
-                    if (user) {
-                        // User is signed in, get their preferences from Firestore
-                        const db = firebase.firestore();
-                        db.collection('userPreferences').doc(user.uid).get()
-                            .then((doc) => {
-                                if (doc.exists && doc.data().categories) {
-                                    const firebaseCategories = doc.data().categories;
-
-                                    // Save to localStorage for future quick access
-                                    localStorage.setItem('userCategories', JSON.stringify(firebaseCategories));
-
-                                    // Update the UI
-                                    updateCategoriesDisplay(firebaseCategories);
-
-                                    // Pre-select checkboxes in popup
-                                    firebaseCategories.forEach(category => {
-                                        const checkbox = document.getElementById(`category-${category}`);
-                                        if (checkbox) checkbox.checked = true;
-                                    });
-                                }
-                            })
-                            .catch((error) => {
-                                console.error("Error getting preferences from Firebase:", error);
-                            });
                     }
                 });
             }
