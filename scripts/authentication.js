@@ -16,18 +16,18 @@ var uiConfig = {
          * @param {string} redirectUrl - URL to redirect to after sign-in
          * @returns {boolean} false to prevent default redirect
          */
-        signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+        signInSuccessWithAuthResult: function (authResult, redirectUrl) {
             // Get the user object and set display name
             const user = authResult.user;
             const displayName = user.displayName || 'Anonymous';
-            
+
             // Get country selection for new users
             let country = 'Unknown';
             if (authResult.additionalUserInfo.isNewUser) {
-                country = document.querySelector('select[name="country"]') ? 
-                        document.querySelector('select[name="country"]').value : 'Unknown';
+                country = document.querySelector('select[name="country"]') ?
+                    document.querySelector('select[name="country"]').value : 'Unknown';
             }
-            
+
             // Create or update user document in Firestore
             db.collection("Users").doc(user.uid).set({
                 email: user.email,
@@ -37,13 +37,13 @@ var uiConfig = {
                 darkMode: true,  // Default theme preference
                 Categories: []   // Initialize empty categories array
             }, { merge: true })  // Update existing or create new document
-            .then(() => {
-                console.log("User document created/updated in Firestore");
-                window.location.href = "main.html";
-            })
-            .catch((error) => {
-                console.error("Error creating user document:", error);
-            });
+                .then(() => {
+                    console.log("User document created/updated in Firestore");
+                    window.location.href = "main.html";
+                })
+                .catch((error) => {
+                    console.error("Error creating user document:", error);
+                });
 
             return false; // Prevent default redirect behavior
         },
@@ -52,10 +52,10 @@ var uiConfig = {
          * Callback fired when the auth UI widget is rendered
          * Adds country selector for new account creation
          */
-        uiShown: function() {
+        uiShown: function () {
             // Hide loading indicator
             document.getElementById('loader').style.display = 'none';
-            
+
             // Set up mutation observer to add country selector
             const observer = new MutationObserver((mutations, obs) => {
                 const nameInput = document.querySelector('input[name="name"]');
@@ -65,13 +65,13 @@ var uiConfig = {
                     countryDiv.className = 'firebaseui-textfield mdl-textfield mdl-js-textfield mdl-textfield--floating-label';
                     countryDiv.style.width = '100%';
                     countryDiv.style.marginBottom = '24px';
-                    
+
                     // Create and configure country dropdown
                     const countrySelect = document.createElement('select');
                     countrySelect.name = 'country';
                     countrySelect.className = 'firebaseui-input mdl-textfield__input';
                     countrySelect.required = true;
-                    
+
                     // Define available countries
                     const countries = [
                         { value: '', label: 'Select your country' },
@@ -90,7 +90,7 @@ var uiConfig = {
                         { value: 'KR', label: 'South Korea' },
                         { value: 'Other', label: 'Other' }
                     ];
-                    
+
                     // Add country options to select element
                     countries.forEach(country => {
                         const option = document.createElement('option');
@@ -98,17 +98,11 @@ var uiConfig = {
                         option.textContent = country.label;
                         countrySelect.appendChild(option);
                     });
-                    
-                    // Create and add label
-                    const label = document.createElement('label');
-                    label.className = 'mdl-textfield__label';
-                    label.textContent = 'Country';
-                    
+
                     // Assemble and insert the country selector
                     countryDiv.appendChild(countrySelect);
-                    countryDiv.appendChild(label);
                     nameInput.parentElement.parentElement.insertAdjacentElement('afterend', countryDiv);
-                    
+
                     // Stop observing once country selector is added
                     obs.disconnect();
                 }
