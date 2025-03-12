@@ -373,23 +373,61 @@
                     e.preventDefault();
                     const checkbox = document.getElementById(this.getAttribute('for'));
                     checkbox.checked = !checkbox.checked;
-                    e.stopPropagation();
+                e.stopPropagation();
                 });
             });
 
-            // Check if first visit
-            const hasVisited = localStorage.getItem('hasVisitedBefore');
-
-            // Show the category popup if it's the first visit
-            if (!hasVisited) {
-                categoryPopup.classList.add('show');
-                document.body.classList.add('popup-open');
+            // Check for previously selected categories on page load
+            const savedCategories = localStorage.getItem('userCategories');
+            if (savedCategories) {
+                updateCategoriesDisplay(JSON.parse(savedCategories));
+            } else {
+                // If no local categories, try to fetch from Firebase
+                fetchCategoriesFromFirebase();
             }
 
-            // Make sure all checkboxes in categories are unchecked on load (for testing)
-            document.querySelectorAll('.category-checkbox').forEach(checkbox => {
-                checkbox.checked = false;
-            });
+            // Function to fetch categories from Firebase and show popup if needed
+            function fetchCategoriesFromFirebase() {
+                firebase.auth().onAuthStateChanged(user => {
+                    if (user) {
+                        // Get categories from Users collection
+                        db.collection('Users').doc(user.uid).get()
+                            .then((doc) => {
+                                if (doc.exists && doc.data().Categories) {
+                                    const firebaseCategories = doc.data().Categories;
+
+                                    // Save to localStorage for future quick access
+                                    localStorage.setItem('userCategories', JSON.stringify(firebaseCategories));
+
+                                    // Update the UI
+                                    updateCategoriesDisplay(firebaseCategories);
+
+                                    // Pre-select checkboxes in popup
+                                    firebaseCategories.forEach(category => {
+                                        const checkbox = document.getElementById(`category-${category}`);
+                                        if (checkbox) checkbox.checked = true;
+                                    });
+
+                                    // If user has no categories, show the popup
+                                    if (firebaseCategories.length === 0) {
+                                        categoryPopup.classList.add('show');
+                                        document.body.classList.add('popup-open');
+                                    }
+                                } else {
+                                    // If no categories document exists or Categories array is empty, show popup
+                                    categoryPopup.classList.add('show');
+                                    document.body.classList.add('popup-open');
+                                }
+                            })
+                            .catch((error) => {
+                                console.error("Error getting categories from Users collection:", error);
+                            });
+                    }
+                });
+            }
+
+            // Remove the initial hasVisited check since we'll handle it in fetchCategoriesFromFirebase
+            fetchCategoriesFromFirebase();
 
             // Save category preferences and close popup
             saveCategories.addEventListener('click', function () {
@@ -400,7 +438,6 @@
 
                 // Save the selected categories to local storage
                 localStorage.setItem('userCategories', JSON.stringify(selectedCategories));
-                localStorage.setItem('hasVisitedBefore', 'true');
 
                 // Also save to Firebase if user is authenticated
                 saveCategoriesToFirebase(selectedCategories);
@@ -421,23 +458,20 @@
                 // Check if user is logged in
                 firebase.auth().onAuthStateChanged(user => {
                     if (user) {
-                        // User is signed in, get reference to Firestore
-                        const db = firebase.firestore();
-
-                        // Save to Firestore in a 'userPreferences' collection
-                        db.collection('userPreferences').doc(user.uid).set({
-                            categories: categories,
+                        // Save to Users collection under the user's document
+                        db.collection('Users').doc(user.uid).update({
+                            Categories: categories,  // Store categories as an array in the Categories field
                             lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
-                        }, { merge: true }) // Using merge to preserve other fields if they exist
-                            .then(() => {
-                                console.log("User preferences saved to Firebase");
-                            })
-                            .catch((error) => {
-                                console.error("Error saving preferences to Firebase:", error);
-                            });
+                        })
+                        .then(() => {
+                            console.log("Categories saved to Users collection");
+                        })
+                        .catch((error) => {
+                            console.error("Error saving categories:", error);
+                        });
                     } else {
                         // User is not signed in, we already saved to localStorage
-                        console.log("User not signed in, preferences saved only locally");
+                        console.log("User not signed in, categories saved only locally");
                     }
                 });
             }
@@ -485,46 +519,6 @@
                             mobileMenu.style.opacity = '1';
                             mobileMenu.style.transform = 'translateY(0)';
                         }, 10);
-                    }
-                });
-            }
-
-            // Check for previously selected categories on page load
-            const savedCategories = localStorage.getItem('userCategories');
-            if (savedCategories) {
-                updateCategoriesDisplay(JSON.parse(savedCategories));
-            } else {
-                // If no local categories, try to fetch from Firebase
-                fetchCategoriesFromFirebase();
-            }
-
-            // Function to fetch categories from Firebase
-            function fetchCategoriesFromFirebase() {
-                firebase.auth().onAuthStateChanged(user => {
-                    if (user) {
-                        // User is signed in, get their preferences from Firestore
-                        const db = firebase.firestore();
-                        db.collection('userPreferences').doc(user.uid).get()
-                            .then((doc) => {
-                                if (doc.exists && doc.data().categories) {
-                                    const firebaseCategories = doc.data().categories;
-
-                                    // Save to localStorage for future quick access
-                                    localStorage.setItem('userCategories', JSON.stringify(firebaseCategories));
-
-                                    // Update the UI
-                                    updateCategoriesDisplay(firebaseCategories);
-
-                                    // Pre-select checkboxes in popup
-                                    firebaseCategories.forEach(category => {
-                                        const checkbox = document.getElementById(`category-${category}`);
-                                        if (checkbox) checkbox.checked = true;
-                                    });
-                                }
-                            })
-                            .catch((error) => {
-                                console.error("Error getting preferences from Firebase:", error);
-                            });
                     }
                 });
             }

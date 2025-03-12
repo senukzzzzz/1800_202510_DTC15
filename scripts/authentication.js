@@ -34,7 +34,8 @@ var uiConfig = {
                 name: displayName,
                 country: country,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                darkMode: true  // Default theme preference
+                darkMode: true,  // Default theme preference
+                Categories: []   // Initialize empty categories array
             }, { merge: true })  // Update existing or create new document
             .then(() => {
                 console.log("User document created/updated in Firestore");

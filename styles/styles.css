@@ -34,7 +34,7 @@ body.light-mode {
 
 body {
   font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-  background: var(--nav-bg);
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
   color: var(--text-color);
   min-height: 100vh;
   line-height: 1.6;
@@ -47,7 +47,7 @@ body.light-mode {
 
 /* ================ ALON - HEADER STYLES ================ */
 .main-header {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(18, 18, 24, 0.7);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding: 1rem 2rem;
@@ -55,6 +55,7 @@ body.light-mode {
   width: 100%;
   top: 0;
   z-index: 1000;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .main-nav {
@@ -142,14 +143,14 @@ body.light-mode {
 
 .firebaseui-title {
   font-family: "Poppins", sans-serif !important;
-  font-size: 32px !important;
+  font-size: 24px !important;
   font-weight: 700 !important;
   background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%) !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   letter-spacing: -1px !important;
-  margin-bottom: 24px !important;
+  margin-bottom: 20px !important;
   text-align: center !important;
 }
 
@@ -409,7 +410,7 @@ body.light-mode select.firebaseui-input option {
   }
 
   .firebaseui-title {
-    font-size: 28px !important;
+    font-size: 20px !important;
   }
 
   .firebaseui-subtitle {

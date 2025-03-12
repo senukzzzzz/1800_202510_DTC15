@@ -1,14 +1,12 @@
 /* ================ Nathan - Welcome Banner ================ */
 
 .welcome-banner {
-    background: linear-gradient(to right,
-            rgba(0, 198, 255, 0.05),
-            rgba(0, 114, 255, 0.05));
+    background: rgba(18, 18, 24, 0.7);
     backdrop-filter: blur(10px);
     padding: 1rem;
     margin-top: 100px;
-
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
 .welcome-content {
@@ -31,4 +29,64 @@
     font-size: 0.9rem;
     color: rgba(255, 255, 255, 0.6);
     margin-top: 0.25rem;
+}
+
+/* Add styles for the login box */
+.login-box {
+    background: rgba(30, 30, 35, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+/* Update Firebase UI specific styles */
+.firebaseui-container {
+    background: transparent !important;
+}
+
+.firebaseui-title,
+.firebaseui-subtitle,
+.firebaseui-text {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.firebaseui-input,
+.firebaseui-input-field {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #fff !important;
+}
+
+.firebaseui-input:focus,
+.firebaseui-input-field:focus {
+    border-color: #00c6ff !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+}
+
+.firebaseui-input::placeholder,
+.firebaseui-input-field::placeholder {
+    color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Update footer styles for dark mode */
+footer {
+    background: rgba(18, 18, 24, 0.7);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+footer a {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+footer a:hover {
+    color: #00c6ff;
+}
+
+.language-copyright select {
+    background: rgba(30, 30, 35, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.6);
 }
