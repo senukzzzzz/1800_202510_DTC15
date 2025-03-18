@@ -133,61 +133,68 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="profile-container">
-            <div class="profile-header">
-                <h1>Profile Settings</h1>
-                <p>Manage your account information</p>
-                <button id="editProfile" class="edit-profile-btn">
-                    <i class="fas fa-edit"></i>
-                    Edit Profile
-                </button>
-            </div>
-
-            <div class="profile-form">
-                <div class="form-group">
-                    <label for="displayName">Name</label>
-                    <input type="text" id="displayName" placeholder="Your name" disabled>
-                </div>
-
-                <div class="form-group">
-                    <label for="country">Country</label>
-                    <select id="country" disabled>
-                        <option value="CA">Canada</option>
-                        <option value="US">United States</option>
-                        <option value="UK">United Kingdom</option>
-                        <option value="AU">Australia</option>
-                        <option value="FR">France</option>
-                        <option value="DE">Germany</option>
-                        <option value="IT">Italy</option>
-                        <option value="ES">Spain</option>
-                        <option value="BR">Brazil</option>
-                        <option value="IN">India</option>
-                        <option value="CN">China</option>
-                        <option value="JP">Japan</option>
-                        <option value="KR">South Korea</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-
-                <div class="form-group categories-group">
-                    <div class="categories-info">
-                        <span id="categoriesCount" class="categories-count">0</span>
-                        <span class="categories-label">Categories Selected</span>
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="profile-info">
+                        <h1>Profile Settings</h1>
+                        <p>Manage your account information and preferences</p>
                     </div>
-                    <a href="categories.html" class="edit-btn">
-                        <i class="fas fa-th-large"></i>
-                        Manage Categories
-                    </a>
+                    <button id="editProfile" class="edit-profile-btn">
+                        <i class="fas fa-edit"></i>
+                        Edit Profile
+                    </button>
                 </div>
 
-                <div class="action-buttons" style="display: none;">
-                    <button id="saveChanges" class="save-btn">
-                        <i class="fas fa-save"></i>
-                        Save Changes
-                    </button>
-                    <button id="cancelChanges" class="cancel-btn">
-                        <i class="fas fa-times"></i>
-                        Cancel
-                    </button>
+                <div class="profile-form">
+                    <div class="form-group">
+                        <label for="displayName">Display Name</label>
+                        <input type="text" id="displayName" placeholder="Your name" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="country">Location</label>
+                        <select id="country" disabled>
+                            <option value="CA">Canada</option>
+                            <option value="US">United States</option>
+                            <option value="UK">United Kingdom</option>
+                            <option value="AU">Australia</option>
+                            <option value="FR">France</option>
+                            <option value="DE">Germany</option>
+                            <option value="IT">Italy</option>
+                            <option value="ES">Spain</option>
+                            <option value="BR">Brazil</option>
+                            <option value="IN">India</option>
+                            <option value="CN">China</option>
+                            <option value="JP">Japan</option>
+                            <option value="KR">South Korea</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="categories-group">
+                        <div class="categories-info">
+                            <div class="categories-header">
+                                <span class="categories-label">Your Interests</span>
+                                <span id="categoriesCount" class="categories-count">0</span>
+                            </div>
+                            <p class="categories-description">Categories you follow for personalized news</p>
+                        </div>
+                        <a href="categories.html" class="edit-btn">
+                            <i class="fas fa-th-large"></i>
+                            Manage Categories
+                        </a>
+                    </div>
+
+                    <div class="action-buttons" style="display: none;">
+                        <button id="saveChanges" class="save-btn">
+                            <i class="fas fa-save"></i>
+                            Save Changes
+                        </button>
+                        <button id="cancelChanges" class="cancel-btn">
+                            <i class="fas fa-times"></i>
+                            Cancel
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
