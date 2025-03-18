@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - Slap News</title>
+    <title>Bookmarks - Slap News</title>
 
     <!-- Google Fonts - Inter for body text and Poppins for headings -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,10 +12,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@700&display=swap"
         rel="stylesheet">
 
-    <!-- Application stylesheets - EXACT SAME ORDER AS MAIN.HTML -->
+    <!-- Application stylesheets -->
     <link rel="stylesheet" href="styles/styles.css">
     <link rel="stylesheet" href="styles/main-styles.css">
-    <link rel="stylesheet" href="styles/profile-styles.css">
+    <link rel="stylesheet" href="styles/bookmarks-styles.css">
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
@@ -59,7 +59,7 @@
                         <i class="fas fa-th-large"></i>
                         <span>Categories</span>
                     </a>
-                    <a href="bookmarks.html" class="desktop-nav-item">
+                    <a href="bookmarks.html" class="desktop-nav-item active">
                         <i class="fas fa-bookmark"></i>
                         <span>Bookmarks</span>
                     </a>
@@ -90,7 +90,7 @@
                                 <i class="fas fa-cog"></i>
                                 Settings
                             </a>
-                            <a href="profile.html" class="dropdown-item active">
+                            <a href="profile.html" class="dropdown-item">
                                 <i class="fas fa-user"></i>
                                 Profile
                             </a>
@@ -115,7 +115,7 @@
                     <i class="fas fa-th-large"></i>
                     <span>Categories</span>
                 </a>
-                <a href="bookmarks.html" class="mobile-nav-item">
+                <a href="bookmarks.html" class="mobile-nav-item active">
                     <i class="fas fa-bookmark"></i>
                     <span>Bookmarks</span>
                 </a>
@@ -132,122 +132,115 @@
 
     <!-- Main Content -->
     <main class="main-content">
-        <div class="profile-container">
-            <div class="profile-card">
-                <div class="profile-header">
-                    <div class="profile-info">
-                        <h1>Profile Settings</h1>
-                        <p>Manage your account information and preferences</p>
+        <div class="bookmarks-container">
+            <!-- Bookmarks Header -->
+            <div class="bookmarks-header">
+                <h1>Your Bookmarks</h1>
+                <p>Articles you've saved for later</p>
+
+                <div class="bookmarks-actions">
+                    <div class="bookmarks-filter">
+                        <select id="categoryFilter" class="filter-select">
+                            <option value="all">All Categories</option>
+                            <option value="sports">Sports</option>
+                            <option value="tech">Technology</option>
+                            <option value="politics">Politics</option>
+                            <option value="health">Health</option>
+                        </select>
+                        <select id="dateFilter" class="filter-select">
+                            <option value="recent">Most Recent</option>
+                            <option value="oldest">Oldest First</option>
+                        </select>
                     </div>
-                    <button id="editProfile" class="edit-profile-btn">
-                        <i class="fas fa-edit"></i>
-                        Edit Profile
+                    <button id="clearBookmarks" class="clear-btn">
+                        <i class="fas fa-trash-alt"></i>
+                        Clear All
                     </button>
                 </div>
+            </div>
 
-                <div class="profile-form">
-                    <div class="form-section">
-                        <div class="form-group">
-                            <label for="displayName">Display Name</label>
-                            <input type="text" id="displayName" placeholder="Your name" disabled>
+            <!-- Bookmarked Articles -->
+            <div class="bookmarks-content">
+                <div id="bookmarksList" class="bookmarks-list">
+                    <!-- Sample bookmarked articles (will be replaced by dynamic content) -->
+                    <div class="bookmark-item">
+                        <div class="bookmark-image">
+                            <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?w=800&h=600&fit=crop"
+                                alt="Basketball game">
+                            <span class="bookmark-category">Sports</span>
                         </div>
-
-                        <div class="form-group">
-                            <label for="country">Location</label>
-                            <select id="country" disabled>
-                                <option value="CA">Canada</option>
-                                <option value="US">United States</option>
-                                <option value="UK">United Kingdom</option>
-                                <option value="AU">Australia</option>
-                                <option value="FR">France</option>
-                                <option value="DE">Germany</option>
-                                <option value="IT">Italy</option>
-                                <option value="ES">Spain</option>
-                                <option value="BR">Brazil</option>
-                                <option value="IN">India</option>
-                                <option value="CN">China</option>
-                                <option value="JP">Japan</option>
-                                <option value="KR">South Korea</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="categories-section">
-                        <div class="categories-group">
-                            <div class="categories-info">
-                                <div class="categories-header">
-                                    <h3>Your Interests</h3>
-                                    <span id="categoriesCount" class="categories-count">0</span>
+                        <div class="bookmark-content">
+                            <h3>Luka Doncic Gets Traded to the Lakers</h3>
+                            <p>In one of the most stunning trades ever reported, the NBA landscape has been altered
+                                mightily in a blink of an eye...</p>
+                            <div class="bookmark-meta">
+                                <span class="bookmark-date">Saved 2 days ago</span>
+                                <div class="bookmark-actions">
+                                    <button class="action-btn read-btn">
+                                        <i class="fas fa-book-open"></i>
+                                        Read
+                                    </button>
+                                    <button class="action-btn remove-btn">
+                                        <i class="fas fa-trash"></i>
+                                        Remove
+                                    </button>
                                 </div>
-                                <p class="categories-description">Categories you follow for personalized news</p>
                             </div>
-                            <a href="categories.html" class="edit-btn">
-                                <i class="fas fa-th-large"></i>
-                                Manage Categories
-                            </a>
                         </div>
                     </div>
 
-                    <div class="action-buttons" style="display: none;">
-                        <button id="saveChanges" class="save-btn">
-                            <i class="fas fa-save"></i>
-                            Save Changes
-                        </button>
-                        <button id="cancelChanges" class="cancel-btn">
-                            <i class="fas fa-times"></i>
-                            Cancel
-                        </button>
+                    <div class="bookmark-item">
+                        <div class="bookmark-image">
+                            <img src="https://images.unsplash.com/photo-1535223289827-42f1e9919769?w=800&h=600&fit=crop"
+                                alt="Tech devices">
+                            <span class="bookmark-category">Technology</span>
+                        </div>
+                        <div class="bookmark-content">
+                            <h3>Apple Announces Revolutionary AI Features</h3>
+                            <p>New iOS update brings groundbreaking AI capabilities to all users, transforming how we
+                                interact with our devices...</p>
+                            <div class="bookmark-meta">
+                                <span class="bookmark-date">Saved yesterday</span>
+                                <div class="bookmark-actions">
+                                    <button class="action-btn read-btn">
+                                        <i class="fas fa-book-open"></i>
+                                        Read
+                                    </button>
+                                    <button class="action-btn remove-btn">
+                                        <i class="fas fa-trash"></i>
+                                        Remove
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirm Deletion</h3>
+                <button class="close-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to remove all your bookmarks? This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelDelete" class="cancel-modal-btn">Cancel</button>
+                <button id="confirmDelete" class="confirm-modal-btn">Delete All</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="./scripts/bookmarkUtils.js"></script>
     <script src="./scripts/profile.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Mobile menu toggle
-            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-            const mobileMenu = document.getElementById('mobileMenu');
-
-            if (mobileMenuToggle) {
-                mobileMenuToggle.addEventListener('click', function () {
-                    if (mobileMenu.style.display === 'block') {
-                        mobileMenu.style.opacity = '0';
-                        mobileMenu.style.transform = 'translateY(-10px)';
-                        setTimeout(() => {
-                            mobileMenu.style.display = 'none';
-                        }, 300);
-                    } else {
-                        mobileMenu.style.display = 'block';
-                        setTimeout(() => {
-                            mobileMenu.style.opacity = '1';
-                            mobileMenu.style.transform = 'translateY(0)';
-                        }, 10);
-                    }
-                });
-            }
-
-            // Profile dropdown toggle
-            const profileBtn = document.getElementById('profileBtn');
-            const dropdownMenu = document.getElementById('dropdownMenu');
-
-            if (profileBtn && dropdownMenu) {
-                profileBtn.addEventListener('click', function (e) {
-                    e.stopPropagation();
-                    dropdownMenu.classList.toggle('show');
-                });
-
-                // Close dropdown when clicking outside
-                document.addEventListener('click', function (e) {
-                    if (!profileBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
-                        dropdownMenu.classList.remove('show');
-                    }
-                });
-            }
-        });
-    </script>
+    <script src="./scripts/bookmarks.js"></script>
 </body>
 
 </html>

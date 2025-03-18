@@ -60,7 +60,7 @@
                         <i class="fas fa-th-large"></i>
                         <span>Categories</span>
                     </a>
-                    <a href="#" class="desktop-nav-item">
+                    <a href="bookmarks.html" class="desktop-nav-item">
                         <i class="fas fa-bookmark"></i>
                         <span>Bookmarks</span>
                     </a>
@@ -116,7 +116,7 @@
                     <i class="fas fa-th-large"></i>
                     <span>Categories</span>
                 </a>
-                <a href="#" class="mobile-nav-item">
+                <a href="bookmarks.html" class="mobile-nav-item">
                     <i class="fas fa-bookmark"></i>
                     <span>Bookmarks</span>
                 </a>
@@ -755,9 +755,85 @@
                 width: 100%;
             }
         }
+
+        .bookmark-btn.active .icon {
+            fill: #0072ff !important;
+        }
+
+        .bookmark-btn.active {
+            color: #0072ff !important;
+        }
     </style>
 
     <script src="./scripts/profile.js"></script>
+    <script src="./scripts/bookmarkUtils.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Set up bookmark buttons
+            setupBookmarks();
+
+            function setupBookmarks() {
+                // Get all bookmark buttons
+                const buttons = document.querySelectorAll('.bookmark-btn');
+
+                buttons.forEach(btn => {
+                    const article = btn.closest('.news-card');
+                    // Use a consistent ID pattern with the article title as a slug
+                    const title = article.querySelector('h2, h3').textContent;
+                    const id = article.dataset.id || 'article_' + title.toLowerCase().replace(/[^a-z0-9]+/g, '_').slice(0, 30);
+
+                    // Set ID if it doesn't exist
+                    if (!article.dataset.id) {
+                        article.dataset.id = id;
+                    }
+
+                    // IMPORTANT: Check if already bookmarked and set active state
+                    if (bookmarkStore.isBookmarked(id)) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+
+                    // Handle bookmark toggle with improved logic
+                    btn.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        // Get updated article data
+                        const articleData = {
+                            id: id,
+                            title: article.querySelector('h2, h3').textContent,
+                            description: article.querySelector('p').textContent,
+                            image: article.querySelector('img')?.src || '',
+                            category: article.querySelector('.category-tag')?.textContent || 'General'
+                        };
+
+                        // Toggle bookmark state
+                        const result = bookmarkStore.toggleBookmark(articleData);
+
+                        // Update button state based on result
+                        if (result.action === 'added' && result.success) {
+                            btn.classList.add('active');
+                        } else if (result.action === 'removed' && result.success) {
+                            btn.classList.remove('active');
+                        }
+                    });
+                });
+
+                // Update the bookmark count in the stats section
+                updateBookmarkCount();
+            }
+
+            // Update the bookmark count in stats
+            function updateBookmarkCount() {
+                const bookmarkCount = document.querySelector('.stat-number:last-child');
+                if (bookmarkCount) {
+                    const count = bookmarkStore.getBookmarks().length;
+                    bookmarkCount.textContent = count;
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>
