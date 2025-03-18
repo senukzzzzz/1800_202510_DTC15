@@ -4,14 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Categories - Slap News</title>
+    <title>Profile - Slap News</title>
+
+    <!-- Google Fonts - Inter for body text and Poppins for headings -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@700&display=swap"
         rel="stylesheet">
+
+    <!-- Application stylesheets - EXACT SAME ORDER AS MAIN.HTML -->
     <link rel="stylesheet" href="styles/styles.css">
     <link rel="stylesheet" href="styles/main-styles.css">
-    <link rel="stylesheet" href="styles/categories-styles.css">
+    <link rel="stylesheet" href="styles/profile-styles.css">
+    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <!-- Firebase SDK and Authentication -->
@@ -50,7 +55,7 @@
                         <i class="fas fa-home"></i>
                         <span>Home</span>
                     </a>
-                    <a href="categories.html" class="desktop-nav-item active">
+                    <a href="categories.html" class="desktop-nav-item">
                         <i class="fas fa-th-large"></i>
                         <span>Categories</span>
                     </a>
@@ -85,7 +90,7 @@
                                 <i class="fas fa-cog"></i>
                                 Settings
                             </a>
-                            <a href="profile.html" class="dropdown-item">
+                            <a href="profile.html" class="dropdown-item active">
                                 <i class="fas fa-user"></i>
                                 Profile
                             </a>
@@ -106,7 +111,7 @@
                     <i class="fas fa-home"></i>
                     <span>Home</span>
                 </a>
-                <a href="categories.html" class="mobile-nav-item active">
+                <a href="categories.html" class="mobile-nav-item">
                     <i class="fas fa-th-large"></i>
                     <span>Categories</span>
                 </a>
@@ -125,56 +130,86 @@
         </div>
     </header>
 
-    <!-- Main Content Section -->
+    <!-- Main Content -->
     <main class="main-content">
-        <!-- Categories Header -->
-        <div class="categories-header">
-            <h1>Your Categories</h1>
-            <p>Customize your news feed by following your favorite topics</p>
+        <div class="profile-container">
+            <div class="profile-header">
+                <h1>Profile Settings</h1>
+                <p>Manage your account information</p>
+                <button id="editProfile" class="edit-profile-btn">
+                    <i class="fas fa-edit"></i>
+                    Edit Profile
+                </button>
+            </div>
+
+            <div class="profile-form">
+                <div class="form-group">
+                    <label for="displayName">Name</label>
+                    <input type="text" id="displayName" placeholder="Your name" disabled>
+                </div>
+
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <select id="country" disabled>
+                        <option value="">Select your country</option>
+                        <option value="CA">Canada</option>
+                        <option value="US">United States</option>
+                        <option value="UK">United Kingdom</option>
+                        <option value="AU">Australia</option>
+                        <option value="FR">France</option>
+                        <option value="DE">Germany</option>
+                        <option value="IT">Italy</option>
+                        <option value="ES">Spain</option>
+                        <option value="BR">Brazil</option>
+                        <option value="IN">India</option>
+                        <option value="CN">China</option>
+                        <option value="JP">Japan</option>
+                        <option value="KR">South Korea</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group categories-group">
+                    <div class="categories-info">
+                        <span id="categoriesCount" class="categories-count">0</span>
+                        <span class="categories-label">Categories Selected</span>
+                    </div>
+                    <a href="categories.html" class="edit-btn">
+                        <i class="fas fa-th-large"></i>
+                        Manage Categories
+                    </a>
+                </div>
+
+                <div class="action-buttons" style="display: none;">
+                    <button id="saveChanges" class="save-btn">
+                        <i class="fas fa-save"></i>
+                        Save Changes
+                    </button>
+                    <button id="cancelChanges" class="cancel-btn">
+                        <i class="fas fa-times"></i>
+                        Cancel
+                    </button>
+                </div>
+            </div>
         </div>
-
-        <!-- Your Categories Section -->
-        <section class="categories-section followed-categories">
-            <div class="section-header">
-                <h2>Following (0)</h2>
-            </div>
-            <div class="categories-grid" id="following-grid">
-                <!-- Will be filled dynamically -->
-            </div>
-        </section>
-
-        <!-- More Categories Section -->
-        <section class="categories-section more-categories">
-            <div class="section-header">
-                <h2>More Categories</h2>
-                <p>Explore more topics to expand your feed</p>
-            </div>
-            <div class="categories-grid" id="more-categories-grid">
-                <!-- Will be filled dynamically -->
-            </div>
-        </section>
     </main>
 
-    <!-- JavaScript for Mobile Menu Toggle -->
+    <script src="./scripts/profile.js"></script>
     <script>
-        // Initialize mobile menu functionality when DOM is loaded
         document.addEventListener('DOMContentLoaded', function () {
+            // Mobile menu toggle
             const mobileMenuToggle = document.getElementById('mobileMenuToggle');
             const mobileMenu = document.getElementById('mobileMenu');
 
-            // Add click event listener to mobile menu toggle button
             if (mobileMenuToggle) {
                 mobileMenuToggle.addEventListener('click', function () {
-                    // Toggle mobile menu with animation
                     if (mobileMenu.style.display === 'block') {
-                        // Hide menu with fade-out animation
                         mobileMenu.style.opacity = '0';
                         mobileMenu.style.transform = 'translateY(-10px)';
                         setTimeout(() => {
                             mobileMenu.style.display = 'none';
                         }, 300);
                     } else {
-                        // Show menu with fade-in animation
                         mobileMenu.style.display = 'block';
                         setTimeout(() => {
                             mobileMenu.style.opacity = '1';
@@ -183,12 +218,26 @@
                     }
                 });
             }
+
+            // Profile dropdown toggle
+            const profileBtn = document.getElementById('profileBtn');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+
+            if (profileBtn && dropdownMenu) {
+                profileBtn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    dropdownMenu.classList.toggle('show');
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function (e) {
+                    if (!profileBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                        dropdownMenu.classList.remove('show');
+                    }
+                });
+            }
         });
     </script>
-
-    <!-- Profile Dropdown Script -->
-    <script src="./scripts/profile.js"></script>
-    <script src="./scripts/categories.js"></script>
 </body>
 
 </html>

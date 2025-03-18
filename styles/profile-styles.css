@@ -1,0 +1,230 @@
+/* Main content styles only */
+.main-content {
+    margin-top: 100px;
+    /* Increased margin to match other pages */
+    padding: 40px 24px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Profile page specific styles */
+.profile-settings {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 32px;
+    border: 1px solid var(--card-border);
+    box-shadow: 0 2px 8px var(--shadow-color);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.profile-header {
+    margin-bottom: 32px;
+}
+
+.profile-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.profile-header p {
+    color: var(--text-color-secondary);
+    font-size: 16px;
+}
+
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.form-group input,
+.form-group select {
+    padding: 12px 16px;
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    background: var(--search-bg);
+    color: var(--text-color);
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
+
+.form-group input:disabled,
+.form-group select:disabled {
+    background: var(--card-bg);
+    cursor: not-allowed;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px var(--accent-bg);
+}
+
+/* Categories section */
+.categories-group {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+}
+
+.categories-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.categories-count {
+    font-size: 42px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+}
+
+.categories-label {
+    color: var(--text-color-secondary);
+    font-size: 13px;
+}
+
+/* All main buttons (edit profile, manage categories, save) */
+.save-btn,
+.cancel-btn,
+.edit-profile-btn,
+.edit-btn {
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 15px;
+}
+
+.save-btn,
+.edit-profile-btn,
+.edit-btn {
+    background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+    color: white;
+    border: none;
+}
+
+.save-btn:hover,
+.edit-profile-btn:hover,
+.edit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 114, 255, 0.2);
+}
+
+.cancel-btn {
+    background: var(--search-bg);
+    color: var(--text-color);
+    border: 1px solid var(--card-border);
+}
+
+.cancel-btn:hover {
+    background: var(--hover-bg);
+}
+
+/* Notification styles */
+.notification {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    padding: 16px 24px;
+    border-radius: 12px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text-color);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.notification.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.notification i {
+    font-size: 18px;
+}
+
+.notification.success {
+    background: #10B981;
+    color: white;
+    border: none;
+}
+
+.notification.error {
+    background: #EF4444;
+    color: white;
+    border: none;
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        margin-top: 80px;
+        padding: 24px 16px;
+    }
+
+    .profile-settings {
+        padding: 24px;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .save-btn,
+    .cancel-btn {
+        width: 100%;
+    }
+}
+
+/* Add your other profile-specific content styles here */
+
+.edit-btn {
+    background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 500;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
