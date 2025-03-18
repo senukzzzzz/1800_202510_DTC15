@@ -382,7 +382,7 @@
                     // User is logged in, check if they've seen the popup before
                     const db = firebase.firestore();
 
-                    db.collection('userPreferences').doc(user.uid).get()
+                    db.collection('Users').doc(user.uid).get()
                         .then((doc) => {
                             // If the document doesn't exist or hasSeenCategoryPopup is false or undefined, show popup
                             if (!doc.exists || !doc.data().hasSeenCategoryPopup) {
@@ -458,17 +458,17 @@
                         // User is signed in, get reference to Firestore
                         const db = firebase.firestore();
 
-                        // Save to Firestore in a 'userPreferences' collection
-                        db.collection('userPreferences').doc(user.uid).set({
+                        // Save categories directly to the Users collection
+                        db.collection('Users').doc(user.uid).update({
                             categories: categories,
                             hasSeenCategoryPopup: true, // Mark that user has seen the popup
                             lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
-                        }, { merge: true }) // Using merge to preserve other fields if they exist
+                        })
                             .then(() => {
-                                console.log("User preferences saved to Firebase");
+                                console.log("Categories saved to Users collection");
                             })
                             .catch((error) => {
-                                console.error("Error saving preferences to Firebase:", error);
+                                console.error("Error saving categories:", error);
                             });
                     } else {
                         // User is not signed in, we already saved to localStorage
@@ -485,10 +485,10 @@
                 firebase.auth().onAuthStateChanged(user => {
                     if (user) {
                         const db = firebase.firestore();
-                        db.collection('userPreferences').doc(user.uid).set({
+                        db.collection('Users').doc(user.uid).update({
                             hasSeenCategoryPopup: true,
                             lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
-                        }, { merge: true });
+                        });
                     }
                 });
 
