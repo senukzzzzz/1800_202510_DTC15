@@ -8,41 +8,33 @@ let hasUnsavedChanges = false;
 
 // Define all available categories
 const allCategories = {
-    'technology': {
-        icon: 'fas fa-microchip',
-        description: 'Tech News & Updates'
-    },
     'business': {
         icon: 'fas fa-chart-line',
-        description: 'Business & Finance'
-    },
-    'science': {
-        icon: 'fas fa-flask',
-        description: 'Scientific Discoveries'
-    },
-    'health': {
-        icon: 'fas fa-heartbeat',
-        description: 'Health & Wellness'
+        description: 'Business & Finance News'
     },
     'entertainment': {
         icon: 'fas fa-film',
         description: 'Entertainment News'
     },
+    'general': {
+        icon: 'fas fa-globe',
+        description: 'General News'
+    },
+    'health': {
+        icon: 'fas fa-heartbeat',
+        description: 'Health & Wellness'
+    },
+    'science': {
+        icon: 'fas fa-flask',
+        description: 'Scientific Discoveries'
+    },
     'sports': {
         icon: 'fas fa-trophy',
         description: 'Sports Coverage'
     },
-    'politics': {
-        icon: 'fas fa-landmark',
-        description: 'Political News'
-    },
-    'education': {
-        icon: 'fas fa-graduation-cap',
-        description: 'Educational Content'
-    },
-    'lifestyle': {
-        icon: 'fas fa-coffee',
-        description: 'Lifestyle & Culture'
+    'technology': {
+        icon: 'fas fa-microchip',
+        description: 'Technology News'
     }
 };
 
