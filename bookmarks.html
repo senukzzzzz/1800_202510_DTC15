@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookmarks - Slap News</title>
+
+    <!-- Google Fonts - Inter for body text and Poppins for headings -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@700&display=swap"
+        rel="stylesheet">
+
+    <!-- Application stylesheets -->
+    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/main-styles.css">
+    <link rel="stylesheet" href="styles/bookmarks-styles.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Firebase SDK and Authentication -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="./scripts/firebaseAPI_DTC15.js"></script>
+    <script src="./scripts/authentication.js"></script>
+    <script src="./scripts/theme.js"></script>
+</head>
+
+<body>
+    <!-- Header Section - Contains navigation and search -->
+    <header>
+        <nav class="navbar">
+            <div class="navbar-container">
+                <!-- Logo Section -->
+                <div class="logo-container">
+                    <div class="logo">
+                        <div class="logo-wrapper">
+                            <span class="logo-text">SLAP</span>
+                            <span class="logo-divider"></span>
+                            <span class="logo-news">NEWS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Toggle Button - Only visible on small screens -->
+                <button id="mobileMenuToggle" class="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <!-- Desktop Navigation Links -->
+                <div class="desktop-nav">
+                    <a href="main.html" class="desktop-nav-item">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="categories.html" class="desktop-nav-item">
+                        <i class="fas fa-th-large"></i>
+                        <span>Categories</span>
+                    </a>
+                    <a href="bookmarks.html" class="desktop-nav-item active">
+                        <i class="fas fa-bookmark"></i>
+                        <span>Bookmarks</span>
+                    </a>
+                </div>
+
+                <!-- Navigation Actions (Search and Profile) -->
+                <div class="nav-actions">
+                    <!-- Search Bar -->
+                    <div class="search-bar">
+                        <div class="search-icon-wrapper">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <input type="search" placeholder="Search articles...">
+                        <div class="search-divider"></div>
+                        <button class="filter-btn">
+                            <i class="fas fa-sliders-h"></i>
+                        </button>
+                    </div>
+
+                    <!-- Profile Button and Dropdown -->
+                    <div class="profile-container">
+                        <button class="profile-btn" id="profileBtn">
+                            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop"
+                                alt="Profile" class="profile-img">
+                        </button>
+                        <div class="dropdown-menu" id="dropdownMenu">
+                            <a href="settings.html" class="dropdown-item">
+                                <i class="fas fa-cog"></i>
+                                Settings
+                            </a>
+                            <a href="profile.html" class="dropdown-item">
+                                <i class="fas fa-user"></i>
+                                Profile
+                            </a>
+                            <a href="#" class="dropdown-item" id="signOutBtn">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Sign Out
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Mobile Navigation Menu - Hidden by default -->
+        <div id="mobileMenu" class="mobile-menu">
+            <div class="mobile-nav-items">
+                <a href="main.html" class="mobile-nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="categories.html" class="mobile-nav-item">
+                    <i class="fas fa-th-large"></i>
+                    <span>Categories</span>
+                </a>
+                <a href="bookmarks.html" class="mobile-nav-item active">
+                    <i class="fas fa-bookmark"></i>
+                    <span>Bookmarks</span>
+                </a>
+            </div>
+            <!-- Mobile Search Bar -->
+            <div class="mobile-search">
+                <div class="search-bar-mobile">
+                    <i class="fas fa-search"></i>
+                    <input type="search" placeholder="Search articles...">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="bookmarks-container">
+            <!-- Bookmarks Header -->
+            <div class="bookmarks-header">
+                <h1>Your Bookmarks</h1>
+                <p>Articles you've saved for later</p>
+
+                <div class="bookmarks-actions">
+                    <div class="bookmarks-filter">
+                        <select id="categoryFilter" class="filter-select">
+                            <option value="all">All Categories</option>
+                            <option value="sports">Sports</option>
+                            <option value="tech">Technology</option>
+                            <option value="politics">Politics</option>
+                            <option value="health">Health</option>
+                        </select>
+                        <select id="dateFilter" class="filter-select">
+                            <option value="recent">Most Recent</option>
+                            <option value="oldest">Oldest First</option>
+                        </select>
+                    </div>
+                    <button id="clearBookmarks" class="clear-btn">
+                        <i class="fas fa-trash-alt"></i>
+                        Clear All
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bookmarked Articles -->
+            <div class="bookmarks-content">
+                <div id="bookmarksList" class="bookmarks-list">
+                    <!-- Sample bookmarked articles (will be replaced by dynamic content) -->
+                    <div class="bookmark-item">
+                        <div class="bookmark-image">
+                            <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?w=800&h=600&fit=crop"
+                                alt="Basketball game">
+                            <span class="bookmark-category">Sports</span>
+                        </div>
+                        <div class="bookmark-content">
+                            <h3>Luka Doncic Gets Traded to the Lakers</h3>
+                            <p>In one of the most stunning trades ever reported, the NBA landscape has been altered
+                                mightily in a blink of an eye...</p>
+                            <div class="bookmark-meta">
+                                <span class="bookmark-date">Saved 2 days ago</span>
+                                <div class="bookmark-actions">
+                                    <button class="action-btn read-btn">
+                                        <i class="fas fa-book-open"></i>
+                                        Read
+                                    </button>
+                                    <button class="action-btn remove-btn">
+                                        <i class="fas fa-trash"></i>
+                                        Remove
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bookmark-item">
+                        <div class="bookmark-image">
+                            <img src="https://images.unsplash.com/photo-1535223289827-42f1e9919769?w=800&h=600&fit=crop"
+                                alt="Tech devices">
+                            <span class="bookmark-category">Technology</span>
+                        </div>
+                        <div class="bookmark-content">
+                            <h3>Apple Announces Revolutionary AI Features</h3>
+                            <p>New iOS update brings groundbreaking AI capabilities to all users, transforming how we
+                                interact with our devices...</p>
+                            <div class="bookmark-meta">
+                                <span class="bookmark-date">Saved yesterday</span>
+                                <div class="bookmark-actions">
+                                    <button class="action-btn read-btn">
+                                        <i class="fas fa-book-open"></i>
+                                        Read
+                                    </button>
+                                    <button class="action-btn remove-btn">
+                                        <i class="fas fa-trash"></i>
+                                        Remove
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirm Deletion</h3>
+                <button class="close-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to remove all your bookmarks? This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelDelete" class="cancel-modal-btn">Cancel</button>
+                <button id="confirmDelete" class="confirm-modal-btn">Delete All</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="./scripts/bookmarkUtils.js"></script>
+    <script src="./scripts/profile.js"></script>
+    <script src="./scripts/bookmarks.js"></script>
+</body>
+
+</html>

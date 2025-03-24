@@ -464,6 +464,16 @@ body {
   display: block;
 }
 
+.catagory-number {
+  font-size: 32px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: block;
+}
+
 .stat-label {
   color: var(--text-color-secondary);
   font-size: 14px;
@@ -1294,4 +1304,22 @@ button:hover .icon {
   .stat-card {
     width: 100%;
   }
+}
+
+/* Add these styles to ensure bookmark button stays blue */
+.bookmark-btn {
+  transition: all 0.3s ease;
+}
+
+.bookmark-btn.active .icon {
+  fill: var(--accent-color) !important;
+}
+
+.bookmark-btn.active {
+  color: var(--accent-color) !important;
+}
+
+/* Add a subtle animation when clicking the bookmark button */
+.bookmark-btn:active {
+  transform: scale(0.9);
 }

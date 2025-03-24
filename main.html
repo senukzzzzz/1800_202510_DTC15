@@ -60,7 +60,7 @@
                         <i class="fas fa-th-large"></i>
                         <span>Categories</span>
                     </a>
-                    <a href="#" class="desktop-nav-item">
+                    <a href="bookmarks.html" class="desktop-nav-item">
                         <i class="fas fa-bookmark"></i>
                         <span>Bookmarks</span>
                     </a>
@@ -91,7 +91,7 @@
                                 <i class="fas fa-cog"></i>
                                 Settings
                             </a>
-                            <a href="#" class="dropdown-item">
+                            <a href="profile.html" class="dropdown-item">
                                 <i class="fas fa-user"></i>
                                 Profile
                             </a>
@@ -116,7 +116,7 @@
                     <i class="fas fa-th-large"></i>
                     <span>Categories</span>
                 </a>
-                <a href="#" class="mobile-nav-item">
+                <a href="bookmarks.html" class="mobile-nav-item">
                     <i class="fas fa-bookmark"></i>
                     <span>Bookmarks</span>
                 </a>
@@ -140,7 +140,7 @@
                 <span class="stat-label">Minutes Daily Digest</span>
             </div>
             <div class="stat-card">
-                <span class="stat-number">5</span>
+                <span class="catagory-number">5</span>
                 <span class="stat-label">Your Categories</span>
             </div>
             <div class="stat-card">
@@ -358,7 +358,6 @@
     </div>
 
     <script>
-        // Initialize mobile menu functionality when DOM is loaded
         document.addEventListener('DOMContentLoaded', function () {
             const mobileMenuToggle = document.getElementById('mobileMenuToggle');
             const mobileMenu = document.getElementById('mobileMenu');
@@ -373,61 +372,58 @@
                     e.preventDefault();
                     const checkbox = document.getElementById(this.getAttribute('for'));
                     checkbox.checked = !checkbox.checked;
-                e.stopPropagation();
+                    e.stopPropagation();
                 });
             });
 
-            // Check for previously selected categories on page load
-            const savedCategories = localStorage.getItem('userCategories');
-            if (savedCategories) {
-                updateCategoriesDisplay(JSON.parse(savedCategories));
-            } else {
-                // If no local categories, try to fetch from Firebase
-                fetchCategoriesFromFirebase();
-            }
+            // Check if user is logged in and if they've seen the popup before
+            firebase.auth().onAuthStateChanged(user => {
+                if (user) {
+                    // User is logged in, check if they've seen the popup before
+                    const db = firebase.firestore();
 
-            // Function to fetch categories from Firebase and show popup if needed
-            function fetchCategoriesFromFirebase() {
-                firebase.auth().onAuthStateChanged(user => {
-                    if (user) {
-                        // Get categories from Users collection
-                        db.collection('Users').doc(user.uid).get()
-                            .then((doc) => {
-                                if (doc.exists && doc.data().Categories) {
-                                    const firebaseCategories = doc.data().Categories;
+                    db.collection('Users').doc(user.uid).get()
+                        .then((doc) => {
+                            // If the document doesn't exist or hasSeenCategoryPopup is false or undefined, show popup
+                            if (!doc.exists || !doc.data().hasSeenCategoryPopup) {
+                                // Show the popup
+                                categoryPopup.classList.add('show');
+                                document.body.classList.add('popup-open');
 
-                                    // Save to localStorage for future quick access
-                                    localStorage.setItem('userCategories', JSON.stringify(firebaseCategories));
-
-                                    // Update the UI
-                                    updateCategoriesDisplay(firebaseCategories);
-
-                                    // Pre-select checkboxes in popup
-                                    firebaseCategories.forEach(category => {
+                                // Pre-select checkboxes if user has previously selected categories
+                                if (doc.exists && doc.data().categories) {
+                                    const userCategories = doc.data().categories;
+                                    userCategories.forEach(category => {
                                         const checkbox = document.getElementById(`category-${category}`);
                                         if (checkbox) checkbox.checked = true;
                                     });
-
-                                    // If user has no categories, show the popup
-                                    if (firebaseCategories.length === 0) {
-                                        categoryPopup.classList.add('show');
-                                        document.body.classList.add('popup-open');
-                                    }
-                                } else {
-                                    // If no categories document exists or Categories array is empty, show popup
-                                    categoryPopup.classList.add('show');
-                                    document.body.classList.add('popup-open');
                                 }
-                            })
-                            .catch((error) => {
-                                console.error("Error getting categories from Users collection:", error);
-                            });
-                    }
-                });
-            }
+                            } else {
+                                // User has seen popup before, just load their categories if available
+                                if (doc.data().categories) {
+                                    updateCategoriesDisplay(doc.data().categories);
+                                }
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error checking user preferences:", error);
+                        });
+                } else {
+                    // User is not logged in, check localStorage
+                    const hasVisited = localStorage.getItem('hasVisitedBefore');
 
-            // Remove the initial hasVisited check since we'll handle it in fetchCategoriesFromFirebase
-            fetchCategoriesFromFirebase();
+                    if (!hasVisited) {
+                        categoryPopup.classList.add('show');
+                        document.body.classList.add('popup-open');
+                    } else {
+                        // Load saved categories from localStorage
+                        const savedCategories = localStorage.getItem('userCategories');
+                        if (savedCategories) {
+                            updateCategoriesDisplay(JSON.parse(savedCategories));
+                        }
+                    }
+                }
+            });
 
             // Save category preferences and close popup
             saveCategories.addEventListener('click', function () {
@@ -438,6 +434,7 @@
 
                 // Save the selected categories to local storage
                 localStorage.setItem('userCategories', JSON.stringify(selectedCategories));
+                localStorage.setItem('hasVisitedBefore', 'true');
 
                 // Also save to Firebase if user is authenticated
                 saveCategoriesToFirebase(selectedCategories);
@@ -458,20 +455,24 @@
                 // Check if user is logged in
                 firebase.auth().onAuthStateChanged(user => {
                     if (user) {
-                        // Save to Users collection under the user's document
+                        // User is signed in, get reference to Firestore
+                        const db = firebase.firestore();
+
+                        // Save categories directly to the Users collection
                         db.collection('Users').doc(user.uid).update({
-                            Categories: categories,  // Store categories as an array in the Categories field
+                            categories: categories,
+                            hasSeenCategoryPopup: true, // Mark that user has seen the popup
                             lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
                         })
-                        .then(() => {
-                            console.log("Categories saved to Users collection");
-                        })
-                        .catch((error) => {
-                            console.error("Error saving categories:", error);
-                        });
+                            .then(() => {
+                                console.log("Categories saved to Users collection");
+                            })
+                            .catch((error) => {
+                                console.error("Error saving categories:", error);
+                            });
                     } else {
                         // User is not signed in, we already saved to localStorage
-                        console.log("User not signed in, categories saved only locally");
+                        console.log("User not signed in, preferences saved only locally");
                     }
                 });
             }
@@ -479,6 +480,17 @@
             // Skip category selection for now
             skipCategories.addEventListener('click', function () {
                 localStorage.setItem('hasVisitedBefore', 'true');
+
+                // If user is logged in, mark that they've seen the popup
+                firebase.auth().onAuthStateChanged(user => {
+                    if (user) {
+                        const db = firebase.firestore();
+                        db.collection('Users').doc(user.uid).update({
+                            hasSeenCategoryPopup: true,
+                            lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                    }
+                });
 
                 // Close the popup with animation
                 categoryPopup.classList.add('hide');
@@ -495,7 +507,7 @@
                 console.log('Selected categories:', categories);
 
                 // Update the stat card for categories
-                const categoryCount = document.querySelector('.stat-number');
+                const categoryCount = document.querySelector('.catagory-number');
                 if (categoryCount && categories.length > 0) {
                     categoryCount.textContent = categories.length;
                 }
@@ -743,9 +755,85 @@
                 width: 100%;
             }
         }
+
+        .bookmark-btn.active .icon {
+            fill: #0072ff !important;
+        }
+
+        .bookmark-btn.active {
+            color: #0072ff !important;
+        }
     </style>
 
     <script src="./scripts/profile.js"></script>
+    <script src="./scripts/bookmarkUtils.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Set up bookmark buttons
+            setupBookmarks();
+
+            function setupBookmarks() {
+                // Get all bookmark buttons
+                const buttons = document.querySelectorAll('.bookmark-btn');
+
+                buttons.forEach(btn => {
+                    const article = btn.closest('.news-card');
+                    // Use a consistent ID pattern with the article title as a slug
+                    const title = article.querySelector('h2, h3').textContent;
+                    const id = article.dataset.id || 'article_' + title.toLowerCase().replace(/[^a-z0-9]+/g, '_').slice(0, 30);
+
+                    // Set ID if it doesn't exist
+                    if (!article.dataset.id) {
+                        article.dataset.id = id;
+                    }
+
+                    // IMPORTANT: Check if already bookmarked and set active state
+                    if (bookmarkStore.isBookmarked(id)) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+
+                    // Handle bookmark toggle with improved logic
+                    btn.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        // Get updated article data
+                        const articleData = {
+                            id: id,
+                            title: article.querySelector('h2, h3').textContent,
+                            description: article.querySelector('p').textContent,
+                            image: article.querySelector('img')?.src || '',
+                            category: article.querySelector('.category-tag')?.textContent || 'General'
+                        };
+
+                        // Toggle bookmark state
+                        const result = bookmarkStore.toggleBookmark(articleData);
+
+                        // Update button state based on result
+                        if (result.action === 'added' && result.success) {
+                            btn.classList.add('active');
+                        } else if (result.action === 'removed' && result.success) {
+                            btn.classList.remove('active');
+                        }
+                    });
+                });
+
+                // Update the bookmark count in the stats section
+                updateBookmarkCount();
+            }
+
+            // Update the bookmark count in stats
+            function updateBookmarkCount() {
+                const bookmarkCount = document.querySelector('.stat-number:last-child');
+                if (bookmarkCount) {
+                    const count = bookmarkStore.getBookmarks().length;
+                    bookmarkCount.textContent = count;
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>
