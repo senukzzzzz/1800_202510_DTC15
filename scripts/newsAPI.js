@@ -1,4 +1,4 @@
-const apiKey = 'da66b6f1f9f04fe2b99c359a24d3321b';
+const apiKey = '3c3dfd57b70c40c4a826e3e66a49a4d7';
 let isLoading = false;
 let currentPage = 1;
 let categories = [];
