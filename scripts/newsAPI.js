@@ -27,28 +27,49 @@ async function getUserCategories() {
     }
 }
 
-async function fetchArticlesForCategory(category) {
+async function fetchArticlesForCategory(category, page = 1) {
     try {
-        const response = await fetch(`https://newsapi.org/v2/top-headlines?country=us&category=${category}&pageSize=100&apiKey=${apiKey}`);
+        const url = new URL('https://newsapi.org/v2/top-headlines');
+        const params = {
+            apiKey: apiKey,
+            country: 'us',
+            category: category,
+            pageSize: '50',        // Changed to 50 articles per category
+            page: page.toString()
+        };
+        
+        url.search = new URLSearchParams(params).toString();
+        
+        const response = await fetch(url);
         const data = await response.json();
-        if (data.status === "ok" && data.articles) {
-            return data.articles;
+        
+        if (data.status === "ok") {
+            console.log(`Fetched ${data.articles.length} articles for ${category}. Total results: ${data.totalResults}`);
+            return {
+                articles: data.articles || [],
+                totalResults: data.totalResults || 0
+            };
         }
-        return [];
+        return { articles: [], totalResults: 0 };
     } catch (error) {
         console.error(`Error fetching articles for ${category}:`, error);
-        return [];
+        return { articles: [], totalResults: 0 };
     }
 }
 
 async function initializeArticlePool() {
     articlePool = {};
-    // Fetch 100 articles for each category at once
+    
+    // Fetch first page of articles for each category
     const fetchPromises = categories.map(async category => {
-        articlePool[category] = await fetchArticlesForCategory(category);
-        // Shuffle the articles array for this category
-        articlePool[category] = shuffleArray([...articlePool[category]]);
+        const result = await fetchArticlesForCategory(category, 1);
+        articlePool[category] = {
+            articles: shuffleArray([...result.articles]),
+            totalResults: result.totalResults,
+            currentPage: 1
+        };
     });
+    
     await Promise.all(fetchPromises);
 }
 
@@ -129,24 +150,31 @@ async function loadMoreArticles(container) {
         newsGrid.className = 'news-grid';
 
         // Get available categories that still have articles
-        let availableCategories = categories.filter(cat => articlePool[cat].length > 0);
+        let availableCategories = categories.filter(cat => articlePool[cat]?.articles.length > 0);
         
-        // If any category is running low, fetch new articles
-        if (availableCategories.length < 2) {
-            await initializeArticlePool();
-            availableCategories = categories;
+        // If running low on articles, fetch more for categories that have more pages
+        for (const category of categories) {
+            const pool = articlePool[category];
+            // Changed threshold to fetch more when less than 5 articles remain
+            if (pool.articles.length < 5 && pool.totalResults > (pool.currentPage * 50)) {
+                pool.currentPage++;
+                const newResult = await fetchArticlesForCategory(category, pool.currentPage);
+                pool.articles = [...pool.articles, ...shuffleArray(newResult.articles)];
+            }
         }
+
+        // Refresh available categories after potential fetches
+        availableCategories = categories.filter(cat => articlePool[cat]?.articles.length > 0);
 
         // Select 3 random articles from different categories when possible
         const selectedArticles = [];
         const usedCategories = new Set();
 
         while (selectedArticles.length < 3 && availableCategories.length > 0) {
-            // Get random category that hasn't been used for this row if possible
-            let availableCatsForThis = availableCategories.filter(cat => 
-                !usedCategories.has(cat) || usedCategories.size === availableCategories.length
-            );
+            // Prioritize unused categories for this row
+            let availableCatsForThis = availableCategories.filter(cat => !usedCategories.has(cat));
             
+            // If all categories have been used, allow reuse
             if (availableCatsForThis.length === 0) {
                 availableCatsForThis = availableCategories;
             }
@@ -154,8 +182,8 @@ async function loadMoreArticles(container) {
             const randomCategoryIndex = Math.floor(Math.random() * availableCatsForThis.length);
             const category = availableCatsForThis[randomCategoryIndex];
             
-            if (articlePool[category].length > 0) {
-                const article = articlePool[category].shift();
+            if (articlePool[category].articles.length > 0) {
+                const article = articlePool[category].articles.shift();
                 selectedArticles.push({ article, category });
                 usedCategories.add(category);
             } else {
