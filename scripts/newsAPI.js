@@ -2,6 +2,7 @@ const apiKey = '9cf19d81beff4313aebdc0edf804f449';
 let isLoading = false;
 let currentPage = 1;
 let categories = [];
+let articlePool = {};
 let categoriesListener = null;
 
 async function getUserCategories() {
@@ -24,6 +25,31 @@ async function getUserCategories() {
         console.error("Error getting user categories:", error);
         return ["general"];
     }
+}
+
+async function fetchArticlesForCategory(category) {
+    try {
+        const response = await fetch(`https://newsapi.org/v2/top-headlines?country=us&category=${category}&pageSize=100&apiKey=${apiKey}`);
+        const data = await response.json();
+        if (data.status === "ok" && data.articles) {
+            return data.articles;
+        }
+        return [];
+    } catch (error) {
+        console.error(`Error fetching articles for ${category}:`, error);
+        return [];
+    }
+}
+
+async function initializeArticlePool() {
+    articlePool = {};
+    // Fetch 100 articles for each category at once
+    const fetchPromises = categories.map(async category => {
+        articlePool[category] = await fetchArticlesForCategory(category);
+        // Shuffle the articles array for this category
+        articlePool[category] = shuffleArray([...articlePool[category]]);
+    });
+    await Promise.all(fetchPromises);
 }
 
 // Fisher-Yates shuffle algorithm
@@ -87,7 +113,7 @@ function handleScroll() {
 
 async function loadMoreArticles(container) {
     if (isLoading) return;
-
+    
     try {
         isLoading = true;
 
@@ -101,6 +127,9 @@ async function loadMoreArticles(container) {
         container.appendChild(loadingIndicator);
 
         // Prepare the grid in advance but don't add to DOM yet
+        await new Promise(resolve => setTimeout(resolve, 800));
+
+        // Create grid for this row
         const newsGrid = document.createElement('div');
         newsGrid.className = 'news-grid';
 
@@ -196,6 +225,47 @@ async function loadMoreArticles(container) {
         } else if (selectedArticles.length > 0) {
             // If we still couldn't get 3 articles, use what we have but maintain 3-column grid
             selectedArticles.forEach(({ article, category }) => {
+        // Get available categories that still have articles
+        let availableCategories = categories.filter(cat => articlePool[cat].length > 0);
+        
+        // If any category is running low, fetch new articles
+        if (availableCategories.length < 2) {
+            await initializeArticlePool();
+            availableCategories = categories;
+        }
+
+        // Select 3 random articles from different categories when possible
+        const selectedArticles = [];
+        const usedCategories = new Set();
+
+        while (selectedArticles.length < 3 && availableCategories.length > 0) {
+            // Get random category that hasn't been used for this row if possible
+            let availableCatsForThis = availableCategories.filter(cat => 
+                !usedCategories.has(cat) || usedCategories.size === availableCategories.length
+            );
+            
+            if (availableCatsForThis.length === 0) {
+                availableCatsForThis = availableCategories;
+            }
+
+            const randomCategoryIndex = Math.floor(Math.random() * availableCatsForThis.length);
+            const category = availableCatsForThis[randomCategoryIndex];
+            
+            if (articlePool[category].length > 0) {
+                const article = articlePool[category].shift();
+                selectedArticles.push({ article, category });
+                usedCategories.add(category);
+            } else {
+                availableCategories = availableCategories.filter(cat => cat !== category);
+            }
+        }
+
+        // Remove loading indicator
+        loadingIndicator.remove();
+
+        if (selectedArticles.length > 0) {
+            // Shuffle the selected articles before displaying
+            shuffleArray(selectedArticles).forEach(({article, category}) => {
                 const articleCard = createArticleCard(article, category);
                 newsGrid.appendChild(articleCard);
             });
@@ -213,6 +283,11 @@ async function loadMoreArticles(container) {
         container.appendChild(newsGrid);
         currentPage++;
         return true;
+            container.appendChild(newsGrid);
+            return true;
+        }
+
+        return false;
     } catch (error) {
         console.error("Error loading more articles:", error);
         return false;
