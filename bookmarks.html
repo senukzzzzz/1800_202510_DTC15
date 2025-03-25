@@ -29,7 +29,7 @@
 </head>
 
 <body>
-    <!-- Header Section - Contains navigation and search -->
+    <!-- Header Section -->
     <header>
         <nav class="navbar">
             <div class="navbar-container">
@@ -44,7 +44,7 @@
                     </div>
                 </div>
 
-                <!-- Mobile Menu Toggle Button - Only visible on small screens -->
+                <!-- Mobile Menu Toggle Button -->
                 <button id="mobileMenuToggle" class="mobile-menu-toggle">
                     <i class="fas fa-bars"></i>
                 </button>
@@ -65,20 +65,8 @@
                     </a>
                 </div>
 
-                <!-- Navigation Actions (Search and Profile) -->
+                <!-- Navigation Actions (Profile only) -->
                 <div class="nav-actions">
-                    <!-- Search Bar -->
-                    <div class="search-bar">
-                        <div class="search-icon-wrapper">
-                            <i class="fas fa-search"></i>
-                        </div>
-                        <input type="search" placeholder="Search articles...">
-                        <div class="search-divider"></div>
-                        <button class="filter-btn">
-                            <i class="fas fa-sliders-h"></i>
-                        </button>
-                    </div>
-
                     <!-- Profile Button and Dropdown -->
                     <div class="profile-container">
                         <button class="profile-btn" id="profileBtn">
@@ -104,7 +92,7 @@
             </div>
         </nav>
 
-        <!-- Mobile Navigation Menu - Hidden by default -->
+        <!-- Mobile Navigation Menu -->
         <div id="mobileMenu" class="mobile-menu">
             <div class="mobile-nav-items">
                 <a href="main.html" class="mobile-nav-item">
@@ -120,13 +108,6 @@
                     <span>Bookmarks</span>
                 </a>
             </div>
-            <!-- Mobile Search Bar -->
-            <div class="mobile-search">
-                <div class="search-bar-mobile">
-                    <i class="fas fa-search"></i>
-                    <input type="search" placeholder="Search articles...">
-                </div>
-            </div>
         </div>
     </header>
 
@@ -136,7 +117,7 @@
             <!-- Bookmarks Header -->
             <div class="bookmarks-header">
                 <h1>Your Bookmarks</h1>
-                <p>Articles you've saved for later</p>
+                <p>Articles you've saved for later reading</p>
 
                 <div class="bookmarks-actions">
                     <div class="bookmarks-filter">
@@ -146,11 +127,18 @@
                             <option value="tech">Technology</option>
                             <option value="politics">Politics</option>
                             <option value="health">Health</option>
+                            <option value="entertainment">Entertainment</option>
+                            <option value="business">Business</option>
+                            <option value="science">Science</option>
                         </select>
                         <select id="dateFilter" class="filter-select">
                             <option value="recent">Most Recent</option>
                             <option value="oldest">Oldest First</option>
                         </select>
+                        <button id="resetFilters" class="reset-filters-btn">
+                            <i class="fas fa-sync-alt"></i>
+                            Reset
+                        </button>
                     </div>
                     <button id="clearBookmarks" class="clear-btn">
                         <i class="fas fa-trash-alt"></i>
@@ -162,58 +150,33 @@
             <!-- Bookmarked Articles -->
             <div class="bookmarks-content">
                 <div id="bookmarksList" class="bookmarks-list">
-                    <!-- Sample bookmarked articles (will be replaced by dynamic content) -->
-                    <div class="bookmark-item">
-                        <div class="bookmark-image">
-                            <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?w=800&h=600&fit=crop"
-                                alt="Basketball game">
-                            <span class="bookmark-category">Sports</span>
-                        </div>
-                        <div class="bookmark-content">
-                            <h3>Luka Doncic Gets Traded to the Lakers</h3>
-                            <p>In one of the most stunning trades ever reported, the NBA landscape has been altered
-                                mightily in a blink of an eye...</p>
-                            <div class="bookmark-meta">
-                                <span class="bookmark-date">Saved 2 days ago</span>
-                                <div class="bookmark-actions">
-                                    <button class="action-btn read-btn">
-                                        <i class="fas fa-book-open"></i>
-                                        Read
-                                    </button>
-                                    <button class="action-btn remove-btn">
-                                        <i class="fas fa-trash"></i>
-                                        Remove
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Dynamic bookmarks will be loaded here -->
+                </div>
 
-                    <div class="bookmark-item">
-                        <div class="bookmark-image">
-                            <img src="https://images.unsplash.com/photo-1535223289827-42f1e9919769?w=800&h=600&fit=crop"
-                                alt="Tech devices">
-                            <span class="bookmark-category">Technology</span>
-                        </div>
-                        <div class="bookmark-content">
-                            <h3>Apple Announces Revolutionary AI Features</h3>
-                            <p>New iOS update brings groundbreaking AI capabilities to all users, transforming how we
-                                interact with our devices...</p>
-                            <div class="bookmark-meta">
-                                <span class="bookmark-date">Saved yesterday</span>
-                                <div class="bookmark-actions">
-                                    <button class="action-btn read-btn">
-                                        <i class="fas fa-book-open"></i>
-                                        Read
-                                    </button>
-                                    <button class="action-btn remove-btn">
-                                        <i class="fas fa-trash"></i>
-                                        Remove
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                <!-- Empty state (shown when no bookmarks) -->
+                <div id="emptyState" class="empty-state" style="display: none;">
+                    <div class="empty-icon">
+                        <i class="fas fa-bookmark"></i>
                     </div>
+                    <h3>No bookmarks yet</h3>
+                    <p>Articles you bookmark will appear here for easy access.</p>
+                    <a href="main.html" class="browse-btn">
+                        <i class="fas fa-newspaper"></i>
+                        Browse Articles
+                    </a>
+                </div>
+
+                <!-- Filter empty state (shown when no filter results) -->
+                <div id="filterEmptyState" class="empty-state filter-empty-state" style="display: none;">
+                    <div class="empty-icon">
+                        <i class="fas fa-filter"></i>
+                    </div>
+                    <h3>No matching bookmarks</h3>
+                    <p>Try adjusting your filter criteria to see more results.</p>
+                    <button id="clearFilters" class="reset-filters-btn">
+                        <i class="fas fa-sync-alt"></i>
+                        Reset Filters
+                    </button>
                 </div>
             </div>
         </div>
@@ -236,6 +199,14 @@
                 <button id="confirmDelete" class="confirm-modal-btn">Delete All</button>
             </div>
         </div>
+    </div>
+
+    <!-- Toast notification -->
+    <div id="toast" class="toast">
+        <div class="toast-icon">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="toast-message">Bookmark removed successfully</div>
     </div>
 
     <script src="./scripts/bookmarkUtils.js"></script>

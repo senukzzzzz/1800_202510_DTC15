@@ -1,4 +1,4 @@
-const apiKey = '3c3dfd57b70c40c4a826e3e66a49a4d7';
+const apiKey = '46214b0f9f6b489c9e84c512d96a78ba';
 let isLoading = false;
 let currentPage = 1;
 let categories = [];
@@ -14,7 +14,7 @@ async function getUserCategories() {
         const doc = await db.collection("Users").doc(user.uid).get();
         if (doc.exists && doc.data().categories && doc.data().categories.length > 0) {
             // Filter out any invalid categories
-            const validCategories = doc.data().categories.filter(cat => 
+            const validCategories = doc.data().categories.filter(cat =>
                 ['business', 'entertainment', 'general', 'health', 'science', 'sports', 'technology'].includes(cat.toLowerCase())
             );
             return validCategories.length > 0 ? validCategories : ["general"];
@@ -41,13 +41,13 @@ async function searchEvents() {
         currentPage = 1;
         const newsFeed = document.querySelector('.news-feed');
         if (!newsFeed) return;
-        
+
         newsFeed.innerHTML = ''; // Clear existing content
 
         // Get featured article from first category
         const featuredResponse = await fetch(`https://newsapi.org/v2/top-headlines?country=us&category=${categories[0]}&pageSize=1&apiKey=${apiKey}`);
         const featuredData = await featuredResponse.json();
-        
+
         if (featuredData.status === "ok" && featuredData.articles?.[0]) {
             const featuredArticle = createFeaturedArticle(featuredData.articles[0], categories[0]);
             newsFeed.appendChild(featuredArticle);
@@ -74,7 +74,7 @@ function handleScroll() {
     if (!infiniteScrollContainer) return;
 
     const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-    
+
     // If we're near the bottom (within 100px)
     if (scrollTop + clientHeight >= scrollHeight - 100 && !isLoading) {
         loadMoreArticles(infiniteScrollContainer);
@@ -83,7 +83,7 @@ function handleScroll() {
 
 async function loadMoreArticles(container) {
     if (isLoading) return;
-    
+
     try {
         isLoading = true;
 
@@ -104,13 +104,13 @@ async function loadMoreArticles(container) {
         newsGrid.className = 'news-grid';
 
         // Get articles from all categories
-        const articlePromises = categories.map(category => 
+        const articlePromises = categories.map(category =>
             fetch(`https://newsapi.org/v2/top-headlines?country=us&category=${category}&pageSize=3&page=${currentPage}&apiKey=${apiKey}`)
                 .then(res => res.json())
         );
 
         const results = await Promise.all(articlePromises);
-        
+
         // Remove loading indicator
         loadingIndicator.remove();
 
@@ -135,7 +135,7 @@ async function loadMoreArticles(container) {
         }
 
         if (selectedArticles.length > 0) {
-            selectedArticles.forEach(({article, category}) => {
+            selectedArticles.forEach(({ article, category }) => {
                 const articleCard = createArticleCard(article, category);
                 newsGrid.appendChild(articleCard);
             });
@@ -162,75 +162,144 @@ function displayArticles(grid, articles, category) {
     });
 }
 
-function createFeaturedArticle(article, category) {
-    const featuredArticle = document.createElement('article');
-    featuredArticle.className = 'news-card featured';
-    
-    featuredArticle.innerHTML = `
+/**
+ * Create an article card element - Fixed for mobile display
+ * @param {Object} article The article data from the API
+ * @param {string} category The category this article belongs to
+ * @returns {HTMLElement} The article card DOM element
+ */
+function createArticleCard(article, category) {
+    // Create a unique ID for the article if it doesn't have one
+    if (!article.id) {
+        article.id = generateArticleId(article);
+    }
+
+    // Set category if provided from parameter
+    if (category && !article.category) {
+        article.category = category;
+    }
+
+    const card = document.createElement('div');
+    card.className = 'news-card';
+    card.dataset.id = article.id;
+
+    // Format the time (relying on the publishedAt property from the API)
+    const formattedTime = formatTime(article.publishedAt);
+
+    // Use placeholder image if none is provided by the API
+    const imageUrl = article.urlToImage || 'https://via.placeholder.com/400x200?text=No+Image';
+
+    // Check if article is already bookmarked
+    const isBookmarked = bookmarkStore.isBookmarked(article.id);
+    const bookmarkClass = isBookmarked ? 'bookmark-btn active' : 'bookmark-btn';
+
+    // Important: Keep this structure with image div as the first child for proper mobile display
+    card.innerHTML = `
+        <div class="news-image">
+            <img src="${imageUrl}" alt="${article.title}" loading="lazy">
+            <div class="category-tag">${article.category || category || 'General'}</div>
+        </div>
         <div class="news-content">
-            <span class="category-tag">${category}</span>
-            <h2>${article.title}</h2>
-            <p>${article.description || 'No description available...'}</p>
+            <h3>${article.title}</h3>
+            <p>${article.description || 'No description available.'}</p>
             <div class="news-meta">
-                <span class="time">${new Date(article.publishedAt).toLocaleString()}</span>
+                <span class="time"><i class="far fa-clock"></i> ${formattedTime}</span>
                 <div class="actions">
-                    <button class="bookmark-btn">
-                        <svg class="icon" viewBox="0 0 24 24">
-                            <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z" />
-                        </svg>
+                    <button class="read-btn" data-url="${article.url}" aria-label="Read article">
+                        <i class="fas fa-book-open"></i>
+                        <span class="btn-text">Read</span>
                     </button>
-                    <button class="share-btn">
-                        <svg class="icon" viewBox="0 0 24 24">
-                            <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92z" />
-                        </svg>
+                    <button class="${bookmarkClass}" data-id="${article.id}" aria-label="${isBookmarked ? 'Remove from bookmarks' : 'Save to bookmarks'}">
+                        <i class="fas fa-bookmark"></i>
+                        <span class="btn-text">Save</span>
                     </button>
                 </div>
             </div>
         </div>
-        <div class="news-image">
-            <img src="${article.urlToImage || 'https://via.placeholder.com/800x600'}" alt="${article.title}">
-        </div>
     `;
-    
-    return featuredArticle;
+
+    // Add event listeners
+    const bookmarkBtn = card.querySelector('.bookmark-btn');
+    bookmarkBtn.addEventListener('click', function () {
+        toggleBookmark(article, this);
+    });
+
+    const readBtn = card.querySelector('.read-btn');
+    readBtn.addEventListener('click', function () {
+        openArticle(article.url, card);
+    });
+
+    return card;
 }
 
-function createArticleCard(article, category) {
-    const articleCard = document.createElement('article');
-    articleCard.className = 'news-card';
-    
-    // Calculate if we need to show the image based on content length
-    const title = article.title || '';
-    const description = article.description || 'No description available...';
-    const hasShortContent = (title.length + description.length) < 200; // Adjust this threshold as needed
-    
-    articleCard.innerHTML = `
-        <span class="category-tag">${category}</span>
-        <h3>${title}</h3>
-        <p>${description}</p>
-        ${hasShortContent && article.urlToImage ? `
-            <div class="article-image">
-                <img src="${article.urlToImage}" alt="${title}" onerror="this.style.display='none'">
-            </div>
-        ` : ''}
-        <div class="news-meta">
-            <span class="time">${new Date(article.publishedAt).toLocaleString()}</span>
-            <div class="actions">
-                <button class="bookmark-btn">
-                    <svg class="icon" viewBox="0 0 24 24">
-                        <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z" />
-                    </svg>
-                </button>
-                <button class="share-btn">
-                    <svg class="icon" viewBox="0 0 24 24">
-                        <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92z" />
-                    </svg>
-                </button>
+/**
+ * Create featured article element - Fixed for mobile display
+ * @param {Object} article The article data from the API
+ * @param {string} category The category this article belongs to
+ * @returns {HTMLElement} The featured article card DOM element
+ */
+function createFeaturedArticle(article, category) {
+    // Create a unique ID for the article if it doesn't have one
+    if (!article.id) {
+        article.id = generateArticleId(article);
+    }
+
+    // Set category if provided from parameter
+    if (category && !article.category) {
+        article.category = category;
+    }
+
+    const card = document.createElement('div');
+    card.className = 'news-card featured';
+    card.dataset.id = article.id;
+
+    // Format the time
+    const formattedTime = formatTime(article.publishedAt);
+
+    // Use placeholder image if none is provided
+    const imageUrl = article.urlToImage || 'https://via.placeholder.com/800x400?text=No+Image';
+
+    // Check if article is already bookmarked
+    const isBookmarked = bookmarkStore.isBookmarked(article.id);
+    const bookmarkClass = isBookmarked ? 'bookmark-btn active' : 'bookmark-btn';
+
+    // Important: Keep this structure with image div as the first child for proper mobile display
+    card.innerHTML = `
+        <div class="news-image">
+            <img src="${imageUrl}" alt="${article.title}" loading="eager">
+            <div class="category-tag">${article.category || category || 'General'}</div>
+        </div>
+        <div class="news-content">
+            <h2 class="featured-title">${article.title}</h2>
+            <p>${article.description || 'No description available.'}</p>
+            <div class="news-meta">
+                <span class="time"><i class="far fa-clock"></i> ${formattedTime}</span>
+                <div class="actions">
+                    <button class="read-btn" data-url="${article.url}" aria-label="Read article">
+                        <i class="fas fa-book-open"></i>
+                        <span class="btn-text">Read</span>
+                    </button>
+                    <button class="${bookmarkClass}" data-id="${article.id}" aria-label="${isBookmarked ? 'Remove from bookmarks' : 'Save to bookmarks'}">
+                        <i class="fas fa-bookmark"></i>
+                        <span class="btn-text">Save</span>
+                    </button>
+                </div>
             </div>
         </div>
     `;
 
-    return articleCard;
+    // Add event listeners
+    const bookmarkBtn = card.querySelector('.bookmark-btn');
+    bookmarkBtn.addEventListener('click', function () {
+        toggleBookmark(article, this);
+    });
+
+    const readBtn = card.querySelector('.read-btn');
+    readBtn.addEventListener('click', function () {
+        openArticle(article.url, card);
+    });
+
+    return card;
 }
 
 // Add styles for the new layout
@@ -460,4 +529,109 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-export { searchEvents }; 
+export { searchEvents };
+
+/**
+ * Open article in a new tab with animation
+ * @param {string} url The article URL to open
+ * @param {HTMLElement} card The card element for animation
+ */
+function openArticle(url, card) {
+    // Add reading animation class
+    card.classList.add('reading');
+
+    // Open article in new tab after slight delay for animation
+    setTimeout(() => {
+        window.open(url, '_blank');
+        // Remove animation class
+        card.classList.remove('reading');
+    }, 300);
+}
+
+/**
+ * Toggle bookmark status of an article
+ * @param {Object} article The article object to bookmark
+ * @param {HTMLElement} button The bookmark button element
+ */
+function toggleBookmark(article, button) {
+    const result = bookmarkStore.toggleBookmark(article);
+
+    if (result.success) {
+        // Update button state based on the result
+        if (result.action === 'added') {
+            button.classList.add('active');
+        } else {
+            button.classList.remove('active');
+        }
+
+        // Update bookmark stats if available
+        updateBookmarkStats();
+    }
+}
+
+/**
+ * Update bookmark count in the stats section
+ */
+function updateBookmarkStats() {
+    const bookmarks = bookmarkStore.getBookmarks();
+    const statElement = document.querySelector('.quick-stats .stat-number:nth-child(3)');
+
+    if (statElement) {
+        statElement.textContent = bookmarks.length;
+    }
+}
+
+/**
+ * Generate a unique ID for an article
+ * @param {Object} article The article object
+ * @returns {string} A unique ID
+ */
+function generateArticleId(article) {
+    // Create a simple hash from the title
+    return article.title
+        .replace(/\s+/g, '-')
+        .replace(/[^\w-]/g, '')
+        .toLowerCase()
+        .substring(0, 50) + '-' + Date.now().toString(36);
+}
+
+/**
+ * Format published time to a readable format
+ * @param {string} dateString ISO date string from the API
+ * @returns {string} Formatted time string
+ */
+function formatTime(dateString) {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffSec = Math.floor(diffMs / 1000);
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHour = Math.floor(diffMin / 60);
+    const diffDay = Math.floor(diffHour / 24);
+
+    if (diffDay > 0) {
+        return `${diffDay} day${diffDay > 1 ? 's' : ''} ago`;
+    } else if (diffHour > 0) {
+        return `${diffHour} hour${diffHour > 1 ? 's' : ''} ago`;
+    } else if (diffMin > 0) {
+        return `${diffMin} minute${diffMin > 1 ? 's' : ''} ago`;
+    } else {
+        return 'just now';
+    }
+}
+
+/**
+ * Initialize the news page functionality
+ * Called when the DOM is loaded
+ */
+document.addEventListener('DOMContentLoaded', function () {
+    // Set up UI elements and event listeners
+    setupMobileMenu();
+    setupProfileDropdown();
+
+    // Initialize bookmark stats
+    updateBookmarkStats();
+
+    // Load news content
+    loadNews();
+}); 

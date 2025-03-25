@@ -1,22 +1,44 @@
+/* Settings page specific styles */
+
 .settings-container {
     max-width: 800px;
-    margin: 120px auto 0;
+    margin: 0 auto;
     padding: 20px;
+}
+
+.settings-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.settings-header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.settings-header p {
+    color: var(--text-color-secondary);
+    font-size: 16px;
 }
 
 .settings-section {
     background: var(--card-bg);
-    border: 1px solid var(--card-border);
     border-radius: 16px;
+    border: 1px solid var(--card-border);
     padding: 24px;
     margin-bottom: 24px;
 }
 
 .settings-section h2 {
-    color: var(--text-color);
     font-size: 20px;
+    margin-bottom: 24px;
+    color: var(--text-color);
     font-weight: 600;
-    margin-bottom: 20px;
 }
 
 .setting-item {
@@ -31,17 +53,42 @@
     border-bottom: none;
 }
 
-.setting-item label {
-    color: var(--text-color);
-    font-size: 15px;
-    font-weight: 500;
+.setting-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
 
+.setting-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: var(--search-bg);
+    border-radius: 12px;
+    color: var(--accent-color);
+    font-size: 20px;
+}
+
+.setting-text h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--text-color);
+}
+
+.setting-text p {
+    font-size: 14px;
+    color: var(--text-color-secondary);
+}
+
+/* Toggle Switch */
 .toggle-switch {
     position: relative;
     display: inline-block;
-    width: 48px;
-    height: 24px;
+    width: 52px;
+    height: 28px;
 }
 
 .toggle-switch input {
@@ -50,207 +97,114 @@
     height: 0;
 }
 
-.slider {
+.toggle-slider {
     position: absolute;
     cursor: pointer;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: var(--search-bg);
-    border: 1px solid var(--card-border);
+    background-color: var(--card-border);
     transition: .4s;
-    border-radius: 24px;
+    border-radius: 34px;
 }
 
-.slider:before {
+.toggle-slider:before {
     position: absolute;
     content: "";
-    height: 18px;
-    width: 18px;
-    left: 2px;
-    bottom: 2px;
-    background: var(--text-color-secondary);
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
     transition: .4s;
     border-radius: 50%;
 }
 
-input:checked + .slider {
-    background: var(--accent-color);
+input:checked+.toggle-slider {
+    background-color: var(--accent-color);
 }
 
-input:checked + .slider:before {
+input:checked+.toggle-slider:before {
     transform: translateX(24px);
-    background: white;
 }
 
-select {
-    background: var(--search-bg);
-    border: 1px solid var(--card-border);
-    color: var(--text-color);
-    padding: 8px 12px;
-    border-radius: 8px;
-    font-size: 14px;
-    min-width: 120px;
-    cursor: pointer;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.5)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 8px center;
-    background-size: 16px;
-    padding-right: 32px;
-}
-
-.btn-secondary,
-.btn-danger {
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.btn-secondary {
-    background: var(--search-bg);
-    border: 1px solid var(--card-border);
-    color: var(--text-color);
-}
-
-.btn-danger {
-    background: rgba(255, 69, 58, 0.1);
-    border: 1px solid rgba(255, 69, 58, 0.2);
-    color: #ff453a;
-}
-
-.btn-secondary:hover {
-    background: var(--accent-bg);
-    border-color: var(--accent-color);
-    color: var(--accent-color);
-}
-
-.btn-danger:hover {
-    background: rgba(255, 69, 58, 0.2);
-    border-color: rgba(255, 69, 58, 0.3);
-}
-
-footer {
-    margin-top: 40px;
-    padding: 24px;
-    border-top: 1px solid var(--card-border);
-}
-
-footer nav {
+/* Font size controls */
+.font-size-control {
     display: flex;
-    justify-content: center;
-    gap: 24px;
-    margin-bottom: 16px;
+    gap: 8px;
 }
 
-footer a {
-    color: var(--text-color-secondary);
-    text-decoration: none;
-    font-size: 14px;
-    transition: color 0.3s ease;
-}
-
-footer a:hover {
-    color: var(--accent-color);
-}
-
-.language-copyright {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    color: var(--text-color-tertiary);
-    font-size: 13px;
-}
-
-.language-copyright select {
-    font-size: 13px;
-    padding: 4px 24px 4px 8px;
-    min-width: auto;
-}
-
-/* Light mode specific styles */
-body.light-mode select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgba(0,0,0,0.5)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-}
-
-body.light-mode .btn-danger {
-    background: rgba(255, 69, 58, 0.05);
-    border: 1px solid rgba(255, 69, 58, 0.1);
-    color: #ff3b30;
-}
-
-body.light-mode .btn-danger:hover {
-    background: rgba(255, 69, 58, 0.1);
-    border-color: rgba(255, 69, 58, 0.2);
-}
-
-/* Dropdown Menu Styles */
-.dropdown-menu {
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 120%;
-    background: var(--dropdown-bg);
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--card-border);
-    border-radius: 12px;
-    box-shadow: 0 8px 24px var(--shadow-color);
-    padding: 8px;
-    min-width: 180px;
-    z-index: 1001;
-    transform-origin: top right;
-    transition: all 0.3s ease;
-}
-
-.dropdown-item {
+.font-size-btn {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 12px 16px;
-    color: var(--text-color-secondary);
-    text-decoration: none;
-    font-size: 14px;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
     border-radius: 8px;
+    background: var(--search-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text-color-secondary);
+    cursor: pointer;
     transition: all 0.2s ease;
 }
 
-.dropdown-item:hover {
+.font-size-btn:hover {
     background: var(--hover-bg);
-    transform: translateX(4px);
-    color: var(--text-color);
+    transform: translateY(-2px);
 }
 
-.dropdown-item i {
-    font-size: 14px;
+.font-size-btn.active {
+    background: var(--accent-bg);
     color: var(--accent-color);
-    transition: transform 0.2s ease;
+    border-color: var(--accent-color);
 }
 
-.dropdown-item:hover i {
-    transform: scale(1.1);
+.font-size-btn[data-size="small"] span {
+    font-size: 12px;
 }
 
-.dropdown-item.active {
-    background: var(--active-bg);
-    color: var(--text-color);
+.font-size-btn[data-size="medium"] span {
+    font-size: 16px;
 }
 
-.dropdown-menu.show {
-    animation: dropdown-fade 0.2s ease forwards;
+.font-size-btn[data-size="large"] span {
+    font-size: 20px;
 }
 
-@keyframes dropdown-fade {
-    from {
-        opacity: 0;
-        transform: translateY(-10px) scale(0.95);
+.settings-footer {
+    text-align: center;
+    margin-top: 40px;
+    color: var(--text-color-tertiary);
+    font-size: 14px;
+}
+
+/* Font size implementation */
+body[data-font-size="small"] {
+    --base-font-size: 14px;
+}
+
+body[data-font-size="medium"] {
+    --base-font-size: 16px;
+}
+
+body[data-font-size="large"] {
+    --base-font-size: 18px;
+}
+
+@media (max-width: 768px) {
+    .setting-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
+
+    .setting-control {
+        align-self: flex-start;
+        width: 100%;
+    }
+
+    .font-size-control {
+        justify-content: flex-start;
     }
 }

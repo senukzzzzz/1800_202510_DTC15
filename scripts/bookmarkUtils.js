@@ -1,48 +1,76 @@
 /**
- * Simple bookmark utilities
+ * Bookmark Utilities
+ * Provides functions for managing bookmarks in localStorage
  */
 const bookmarkStore = {
-    // Get bookmarks from localStorage
+    /**
+     * Get all bookmarks from localStorage
+     * @returns {Array} Array of bookmark objects
+     */
     getBookmarks: function () {
-        const bookmarks = localStorage.getItem('bookmarks');
-        return bookmarks ? JSON.parse(bookmarks) : [];
+        try {
+            const bookmarks = localStorage.getItem('bookmarks');
+            return bookmarks ? JSON.parse(bookmarks) : [];
+        } catch (error) {
+            console.error('Error getting bookmarks:', error);
+            return [];
+        }
     },
 
-    // Save an article to bookmarks
+    /**
+     * Save a bookmark
+     * @param {Object} article Article object to save
+     * @returns {boolean} Success status
+     */
     saveBookmark: function (article) {
-        const bookmarks = this.getBookmarks();
+        try {
+            const bookmarks = this.getBookmarks();
 
-        // Check if already bookmarked
-        if (!bookmarks.some(item => item.id === article.id)) {
-            // Add timestamp and save
-            article.bookmarkedAt = new Date().toISOString();
-            bookmarks.push(article);
-            localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
-
-            // Show simple notification
-            this.showToast('Bookmarked!');
-            return true;
-        } else {
-            // Already bookmarked - show message
-            this.showToast('Already bookmarked');
+            // Check if already bookmarked
+            if (!bookmarks.some(item => item.id === article.id)) {
+                // Add timestamp and save
+                article.bookmarkedAt = new Date().toISOString();
+                bookmarks.push(article);
+                localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+                this.showToast('Article bookmarked successfully');
+                return true;
+            } else {
+                this.showToast('Already bookmarked', 'info');
+                return false;
+            }
+        } catch (error) {
+            console.error('Error saving bookmark:', error);
+            this.showToast('Failed to bookmark article', 'error');
             return false;
         }
     },
 
-    // Remove a bookmark
-    removeBookmark: function (articleId) {
-        const bookmarks = this.getBookmarks();
-        const filtered = bookmarks.filter(item => item.id !== articleId);
+    /**
+     * Remove a bookmark
+     * @param {string} id ID of the bookmark to remove
+     * @returns {boolean} Success status
+     */
+    removeBookmark: function (id) {
+        try {
+            const bookmarks = this.getBookmarks();
+            const filtered = bookmarks.filter(item => item.id !== id);
 
-        if (bookmarks.length !== filtered.length) {
-            localStorage.setItem('bookmarks', JSON.stringify(filtered));
-            this.showToast('Removed from bookmarks');
-            return true;
+            if (bookmarks.length !== filtered.length) {
+                localStorage.setItem('bookmarks', JSON.stringify(filtered));
+                return true;
+            }
+            return false;
+        } catch (error) {
+            console.error('Error removing bookmark:', error);
+            return false;
         }
-        return false;
     },
 
-    // Toggle bookmark (add if not exists, remove if exists)
+    /**
+     * Toggle bookmark status (add if not exists, remove if exists)
+     * @param {Object} article Article object to toggle
+     * @returns {Object} Result with action and success status
+     */
     toggleBookmark: function (article) {
         if (this.isBookmarked(article.id)) {
             return {
@@ -57,39 +85,72 @@ const bookmarkStore = {
         }
     },
 
-    // Check if article is bookmarked
-    isBookmarked: function (articleId) {
-        return this.getBookmarks().some(item => item.id === articleId);
+    /**
+     * Check if an article is bookmarked
+     * @param {string} id ID of the article to check
+     * @returns {boolean} Whether the article is bookmarked
+     */
+    isBookmarked: function (id) {
+        return this.getBookmarks().some(item => item.id === id);
     },
 
-    // Clear all bookmarks
+    /**
+     * Clear all bookmarks
+     */
     clearAll: function () {
         localStorage.removeItem('bookmarks');
-        this.showToast('All bookmarks cleared');
     },
 
-    // Simple toast notification
-    showToast: function (message) {
-        const toast = document.createElement('div');
-        toast.textContent = message;
-        toast.style.position = 'fixed';
-        toast.style.bottom = '20px';
-        toast.style.right = '20px';
-        toast.style.background = '#0072ff';
-        toast.style.color = 'white';
-        toast.style.padding = '10px 20px';
-        toast.style.borderRadius = '4px';
-        toast.style.zIndex = '9999';
-        toast.style.opacity = '0';
-        toast.style.transition = 'opacity 0.3s';
+    /**
+     * Show toast notification
+     * This is a simplified version that can be used by other pages
+     * @param {string} message Message to display
+     * @param {string} type Type of notification
+     */
+    showToast: function (message, type = 'success') {
+        // Create a simple toast if it doesn't exist
+        let toast = document.getElementById('toast');
 
-        document.body.appendChild(toast);
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'toast';
+            toast.className = 'toast';
 
-        // Animation
-        setTimeout(() => toast.style.opacity = '1', 10);
+            const icon = document.createElement('div');
+            icon.className = 'toast-icon';
+            icon.innerHTML = '<i class="fas fa-check-circle"></i>';
+
+            const messageEl = document.createElement('div');
+            messageEl.className = 'toast-message';
+
+            toast.appendChild(icon);
+            toast.appendChild(messageEl);
+            document.body.appendChild(toast);
+        }
+
+        // Set message and icon based on type
+        const toastIcon = toast.querySelector('.toast-icon');
+        const toastMessage = toast.querySelector('.toast-message');
+
+        toastMessage.textContent = message;
+
+        if (type === 'error') {
+            toastIcon.innerHTML = '<i class="fas fa-exclamation-circle"></i>';
+            toastIcon.className = 'toast-icon error';
+        } else if (type === 'info') {
+            toastIcon.innerHTML = '<i class="fas fa-info-circle"></i>';
+            toastIcon.className = 'toast-icon info';
+        } else {
+            toastIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
+            toastIcon.className = 'toast-icon';
+        }
+
+        // Show toast
+        toast.classList.add('show');
+
+        // Hide toast after 3 seconds
         setTimeout(() => {
-            toast.style.opacity = '0';
-            setTimeout(() => toast.remove(), 300);
-        }, 2000);
+            toast.classList.remove('show');
+        }, 3000);
     }
 }; 

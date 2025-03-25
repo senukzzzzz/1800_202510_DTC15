@@ -5,15 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Settings - Slap News</title>
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Application stylesheets -->
     <link rel="stylesheet" href="styles/styles.css">
-    <link rel="stylesheet" href="styles/settings-styles.css">
     <link rel="stylesheet" href="styles/main-styles.css">
-    <!-- Firebase App (the core Firebase SDK) -->
+    <link rel="stylesheet" href="styles/settings-styles.css">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Firebase SDK and Authentication -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
@@ -23,11 +30,11 @@
 </head>
 
 <body>
-    <!-- Header -->
+    <!-- Header Section -->
     <header>
         <nav class="navbar">
             <div class="navbar-container">
-                <!-- Logo Section with improved styling -->
+                <!-- Logo Section -->
                 <div class="logo-container">
                     <div class="logo">
                         <div class="logo-wrapper">
@@ -38,12 +45,12 @@
                     </div>
                 </div>
 
-                <!-- Mobile menu toggle button - Only visible on small screens -->
+                <!-- Mobile Menu Toggle Button -->
                 <button id="mobileMenuToggle" class="mobile-menu-toggle">
                     <i class="fas fa-bars"></i>
                 </button>
 
-                <!-- Navigation Section with improved styling -->
+                <!-- Desktop Navigation Links -->
                 <div class="desktop-nav">
                     <a href="main.html" class="desktop-nav-item">
                         <i class="fas fa-home"></i>
@@ -59,21 +66,9 @@
                     </a>
                 </div>
 
-                <!-- Actions Section with improved styling -->
+                <!-- Navigation Actions -->
                 <div class="nav-actions">
-                    <!-- Search Bar with improved styling -->
-                    <div class="search-bar">
-                        <div class="search-icon-wrapper">
-                            <i class="fas fa-search"></i>
-                        </div>
-                        <input type="search" placeholder="Search articles...">
-                        <div class="search-divider"></div>
-                        <button class="filter-btn">
-                            <i class="fas fa-sliders-h"></i>
-                        </button>
-                    </div>
-
-                    <!-- Profile Button with improved styling -->
+                    <!-- Profile Button and Dropdown -->
                     <div class="profile-container">
                         <button class="profile-btn" id="profileBtn">
                             <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop"
@@ -98,7 +93,7 @@
             </div>
         </nav>
 
-        <!-- Mobile Navigation Menu - Hidden by default -->
+        <!-- Mobile Navigation Menu -->
         <div id="mobileMenu" class="mobile-menu">
             <div class="mobile-nav-items">
                 <a href="main.html" class="mobile-nav-item">
@@ -109,89 +104,96 @@
                     <i class="fas fa-th-large"></i>
                     <span>Categories</span>
                 </a>
-                <a href="#" class="mobile-nav-item">
+                <a href="bookmarks.html" class="mobile-nav-item">
                     <i class="fas fa-bookmark"></i>
                     <span>Bookmarks</span>
                 </a>
             </div>
-            <div class="mobile-search">
-                <div class="search-bar-mobile">
-                    <i class="fas fa-search"></i>
-                    <input type="search" placeholder="Search articles...">
-                </div>
-            </div>
         </div>
     </header>
 
-    <div class="settings-container">
-        <div class="settings-section">
-            <h2>Display Settings</h2>
-            <div class="setting-item">
-                <label>Dark Mode</label>
-                <label class="toggle-switch">
-                    <input type="checkbox">
-                    <span class="slider"></span>
-                </label>
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="settings-container">
+            <div class="settings-header">
+                <h1>Settings</h1>
+                <p>Customize your reading experience</p>
             </div>
-            <div class="setting-item">
-                <label>Font Size</label>
-                <select>
-                    <option>Small</option>
-                    <option selected>Medium</option>
-                    <option>Large</option>
-                </select>
-            </div>
-        </div>
 
-        <div class="settings-section">
-            <h2>Notification Settings</h2>
-            <div class="setting-item">
-                <label>Push Notifications</label>
-                <label class="toggle-switch">
-                    <input type="checkbox" checked>
-                    <span class="slider"></span>
-                </label>
-            </div>
-            <div class="setting-item">
-                <label>Email Notifications</label>
-                <label class="toggle-switch">
-                    <input type="checkbox" checked>
-                    <span class="slider"></span>
-                </label>
-            </div>
-        </div>
+            <div class="settings-section">
+                <h2>Appearance</h2>
 
-        <div class="settings-section">
-            <h2>Account Settings</h2>
-            <div class="setting-item">
-                <label>Change Password</label>
-                <button class="btn-secondary">Change</button>
+                <!-- Dark Mode Toggle -->
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-icon">
+                            <i class="fas fa-moon"></i>
+                        </div>
+                        <div class="setting-text">
+                            <h3>Dark Mode</h3>
+                            <p>Switch between light and dark themes</p>
+                        </div>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="darkModeToggle">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
             </div>
-            <div class="setting-item">
-                <label>Delete Account</label>
-                <button class="btn-danger">Delete</button>
-            </div>
-        </div>
-    </div>
 
-    <footer>
-        <nav>
-            <a href="#">About</a>
-            <a href="#">Help</a>
-            <a href="#">Privacy</a>
-            <a href="#">Terms</a>
-            <a href="#">Mobile App</a>
-            <a href="#">Contact</a>
-        </nav>
-        <div class="language-copyright">
-            <select>
-                <option value="en">English</option>
-            </select>
-            <span>© 2024 Slap News</span>
+            <div class="settings-footer">
+                <p>Slap News v1.0.0</p>
+            </div>
         </div>
-    </footer>
+    </main>
+
     <script src="./scripts/profile.js"></script>
-    <script src="./scripts/settings.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Mobile menu toggle
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+
+            if (mobileMenuToggle && mobileMenu) {
+                mobileMenuToggle.addEventListener('click', function () {
+                    if (mobileMenu.style.display === 'block') {
+                        mobileMenu.style.opacity = '0';
+                        mobileMenu.style.transform = 'translateY(-10px)';
+                        setTimeout(() => {
+                            mobileMenu.style.display = 'none';
+                        }, 300);
+                    } else {
+                        mobileMenu.style.display = 'block';
+                        setTimeout(() => {
+                            mobileMenu.style.opacity = '1';
+                            mobileMenu.style.transform = 'translateY(0)';
+                        }, 10);
+                    }
+                });
+            }
+
+            // Dark mode toggle initialization
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            if (darkModeToggle) {
+                // Check if dark mode is active
+                const isDarkMode = document.body.classList.contains('dark-mode');
+                darkModeToggle.checked = isDarkMode;
+
+                // Toggle dark mode
+                darkModeToggle.addEventListener('change', function () {
+                    if (this.checked) {
+                        document.body.classList.add('dark-mode');
+                        localStorage.setItem('theme', 'dark');
+                    } else {
+                        document.body.classList.remove('dark-mode');
+                        localStorage.setItem('theme', 'light');
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>
