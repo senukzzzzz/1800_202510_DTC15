@@ -744,15 +744,57 @@ body {
 /* News grid layout */
 .news-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, 1fr) !important;
   gap: 24px;
   margin-bottom: 32px;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeIn 0.5s cubic-bezier(0.26, 0.86, 0.44, 0.98) forwards;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  60% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+  .news-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 900px) and (min-width: 601px) {
+  .news-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .news-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px;
+  }
 }
 
 @media (max-width: 768px) {
-  .news-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
+  .news-card.featured {
+    grid-column: span 1;
   }
 }
 
@@ -1755,12 +1797,36 @@ button:hover .icon {
 /* Loading optimization for mobile */
 .loading-indicator {
   padding: 1rem;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeInQuick 0.3s ease forwards;
 }
 
-@media (max-width: 768px) {
-  .loading-spinner {
-    width: 30px;
-    height: 30px;
+@keyframes fadeInQuick {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Smooth out the loading spinner */
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--card-border);
+  border-top: 3px solid var(--accent-color);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  will-change: transform;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
   }
 }
 
@@ -1840,4 +1906,151 @@ button:hover .icon {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* Fixed grid layout to ensure 3 articles per row */
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 24px;
+  margin-bottom: 32px;
+  width: 100%;
+}
+
+/* Override any other grid styles */
+@media (min-width: 769px) and (max-width: 1200px) {
+  .news-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 20px;
+  }
+}
+
+/* Only switch to 2-column layout on smaller screens */
+@media (max-width: 900px) and (min-width: 601px) {
+  .news-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px;
+  }
+}
+
+/* Single column for mobile */
+@media (max-width: 600px) {
+  .news-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px;
+  }
+}
+
+/* Make sure featured article spans full width on mobile */
+@media (max-width: 768px) {
+  .news-card.featured {
+    grid-column: span 1;
+  }
+}
+
+/* Fix the floating issues that might occur */
+.infinite-scroll-container {
+  width: 100%;
+}
+
+/* Ensure consistent card sizing */
+.news-card {
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Featured article adjustments */
+.news-card.featured {
+  min-height: 450px;
+}
+
+/* Fix flexbox behavior on cards */
+.news-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Push meta info to bottom */
+.news-meta {
+  margin-top: auto;
+}
+
+/* Handle empty placeholder cards */
+.news-card.placeholder {
+  border: none;
+  box-shadow: none;
+  background: transparent;
+}
+
+/* Ensure image container has fixed height */
+.news-image {
+  height: 200px;
+  overflow: hidden;
+}
+
+/* Make sure grid has proper width */
+.infinite-scroll-container {
+  width: 100%;
+}
+
+.news-feed {
+  width: 100%;
+}
+
+/* Override any dynamic styles */
+.main-content .news-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 24px !important;
+  width: 100% !important;
+}
+
+@media (max-width: 900px) and (min-width: 601px) {
+  .main-content .news-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .main-content .news-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Clean up any existing direct dynamic styles */
+body .main-content style {
+  display: none !important;
+}
+
+/* Hardware acceleration for smoother animations */
+.news-card,
+.news-grid,
+.news-image img,
+.loading-indicator,
+.loading-spinner {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Improve scroll performance with lower-impact animations on mobile */
+@media (max-width: 768px) {
+  .news-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .news-grid {
+    animation-duration: 0.4s;
+  }
+}
+
+/* Add some spacing before new grids load for visual separation */
+.infinite-scroll-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
