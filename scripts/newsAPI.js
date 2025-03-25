@@ -1,7 +1,9 @@
-const apiKey = '46214b0f9f6b489c9e84c512d96a78ba';
+const apiKey = '3c3dfd57b70c40c4a826e3e66a49a4d7';
 let isLoading = false;
 let currentPage = 1;
 let categories = [];
+// Store articles by category
+let articlePool = {};
 let categoriesListener = null;
 
 async function getUserCategories() {
@@ -35,6 +37,27 @@ function shuffleArray(array) {
     return array;
 }
 
+async function fetchArticlesForCategory(category, page = 1) {
+    try {
+        const response = await fetch(`https://newsapi.org/v2/top-headlines?country=us&category=${category}&pageSize=75&page=${page}&apiKey=${apiKey}`);
+        const data = await response.json();
+        if (data.status === "ok" && data.articles) {
+            return data.articles;
+        }
+        return [];
+    } catch (error) {
+        console.error(`Error fetching articles for ${category}:`, error);
+        return [];
+    }
+}
+
+async function initializeArticlePool() {
+    articlePool = {};
+    for (const category of categories) {
+        articlePool[category] = await fetchArticlesForCategory(category);
+    }
+}
+
 async function searchEvents() {
     try {
         categories = await getUserCategories();
@@ -44,13 +67,18 @@ async function searchEvents() {
 
         newsFeed.innerHTML = ''; // Clear existing content
 
+        // Initialize article pool
+        await initializeArticlePool();
+
         // Get featured article from first category
         const featuredResponse = await fetch(`https://newsapi.org/v2/top-headlines?country=us&category=${categories[0]}&pageSize=1&apiKey=${apiKey}`);
         const featuredData = await featuredResponse.json();
-
+        
         if (featuredData.status === "ok" && featuredData.articles?.[0]) {
             const featuredArticle = createFeaturedArticle(featuredData.articles[0], categories[0]);
             newsFeed.appendChild(featuredArticle);
+            // Remove the used article
+            articlePool[categories[0]].shift();
         }
 
         // Create container for infinite scroll content
@@ -104,35 +132,15 @@ async function loadMoreArticles(container) {
         newsGrid.className = 'news-grid';
 
         // Get articles from all categories
-        const articlePromises = categories.map(category =>
+        const articlePromises = categories.map(category => 
             fetch(`https://newsapi.org/v2/top-headlines?country=us&category=${category}&pageSize=3&page=${currentPage}&apiKey=${apiKey}`)
                 .then(res => res.json())
         );
 
         const results = await Promise.all(articlePromises);
-
+        
         // Remove loading indicator
         loadingIndicator.remove();
-
-        // Collect all articles with their categories
-        let allArticles = [];
-        results.forEach((result, index) => {
-            if (result.status === "ok" && result.articles) {
-                result.articles.forEach(article => {
-                    allArticles.push({
-                        article,
-                        category: categories[index]
-                    });
-                });
-            }
-        });
-
-        // Randomly select 3 articles for this row
-        const selectedArticles = [];
-        while (selectedArticles.length < 3 && allArticles.length > 0) {
-            const randomIndex = Math.floor(Math.random() * allArticles.length);
-            selectedArticles.push(allArticles.splice(randomIndex, 1)[0]);
-        }
 
         if (selectedArticles.length > 0) {
             selectedArticles.forEach(({ article, category }) => {
@@ -141,7 +149,6 @@ async function loadMoreArticles(container) {
             });
 
             container.appendChild(newsGrid);
-            currentPage++;
             return true;
         }
 
