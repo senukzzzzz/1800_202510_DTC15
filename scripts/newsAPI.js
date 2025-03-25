@@ -1,7 +1,8 @@
-const apiKey = '46214b0f9f6b489c9e84c512d96a78ba';
+const apiKey = 'da66b6f1f9f04fe2b99c359a24d3321b';
 let isLoading = false;
 let currentPage = 1;
 let categories = [];
+let articlePool = {};
 let categoriesListener = null;
 
 async function getUserCategories() {
@@ -24,6 +25,31 @@ async function getUserCategories() {
         console.error("Error getting user categories:", error);
         return ["general"];
     }
+}
+
+async function fetchArticlesForCategory(category) {
+    try {
+        const response = await fetch(`https://newsapi.org/v2/top-headlines?country=us&category=${category}&pageSize=100&apiKey=${apiKey}`);
+        const data = await response.json();
+        if (data.status === "ok" && data.articles) {
+            return data.articles;
+        }
+        return [];
+    } catch (error) {
+        console.error(`Error fetching articles for ${category}:`, error);
+        return [];
+    }
+}
+
+async function initializeArticlePool() {
+    articlePool = {};
+    // Fetch 100 articles for each category at once
+    const fetchPromises = categories.map(async category => {
+        articlePool[category] = await fetchArticlesForCategory(category);
+        // Shuffle the articles array for this category
+        articlePool[category] = shuffleArray([...articlePool[category]]);
+    });
+    await Promise.all(fetchPromises);
 }
 
 // Fisher-Yates shuffle algorithm
@@ -83,7 +109,7 @@ function handleScroll() {
 
 async function loadMoreArticles(container) {
     if (isLoading) return;
-
+    
     try {
         isLoading = true;
 
@@ -96,52 +122,58 @@ async function loadMoreArticles(container) {
         `;
         container.appendChild(loadingIndicator);
 
-        // Artificial delay for better UX (remove if not wanted)
         await new Promise(resolve => setTimeout(resolve, 800));
 
         // Create grid for this row
         const newsGrid = document.createElement('div');
         newsGrid.className = 'news-grid';
 
-        // Get articles from all categories
-        const articlePromises = categories.map(category =>
-            fetch(`https://newsapi.org/v2/top-headlines?country=us&category=${category}&pageSize=3&page=${currentPage}&apiKey=${apiKey}`)
-                .then(res => res.json())
-        );
+        // Get available categories that still have articles
+        let availableCategories = categories.filter(cat => articlePool[cat].length > 0);
+        
+        // If any category is running low, fetch new articles
+        if (availableCategories.length < 2) {
+            await initializeArticlePool();
+            availableCategories = categories;
+        }
 
-        const results = await Promise.all(articlePromises);
+        // Select 3 random articles from different categories when possible
+        const selectedArticles = [];
+        const usedCategories = new Set();
+
+        while (selectedArticles.length < 3 && availableCategories.length > 0) {
+            // Get random category that hasn't been used for this row if possible
+            let availableCatsForThis = availableCategories.filter(cat => 
+                !usedCategories.has(cat) || usedCategories.size === availableCategories.length
+            );
+            
+            if (availableCatsForThis.length === 0) {
+                availableCatsForThis = availableCategories;
+            }
+
+            const randomCategoryIndex = Math.floor(Math.random() * availableCatsForThis.length);
+            const category = availableCatsForThis[randomCategoryIndex];
+            
+            if (articlePool[category].length > 0) {
+                const article = articlePool[category].shift();
+                selectedArticles.push({ article, category });
+                usedCategories.add(category);
+            } else {
+                availableCategories = availableCategories.filter(cat => cat !== category);
+            }
+        }
 
         // Remove loading indicator
         loadingIndicator.remove();
 
-        // Collect all articles with their categories
-        let allArticles = [];
-        results.forEach((result, index) => {
-            if (result.status === "ok" && result.articles) {
-                result.articles.forEach(article => {
-                    allArticles.push({
-                        article,
-                        category: categories[index]
-                    });
-                });
-            }
-        });
-
-        // Randomly select 3 articles for this row
-        const selectedArticles = [];
-        while (selectedArticles.length < 3 && allArticles.length > 0) {
-            const randomIndex = Math.floor(Math.random() * allArticles.length);
-            selectedArticles.push(allArticles.splice(randomIndex, 1)[0]);
-        }
-
         if (selectedArticles.length > 0) {
-            selectedArticles.forEach(({ article, category }) => {
+            // Shuffle the selected articles before displaying
+            shuffleArray(selectedArticles).forEach(({article, category}) => {
                 const articleCard = createArticleCard(article, category);
                 newsGrid.appendChild(articleCard);
             });
 
             container.appendChild(newsGrid);
-            currentPage++;
             return true;
         }
 
