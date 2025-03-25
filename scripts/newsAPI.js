@@ -1,4 +1,4 @@
-const apiKey = 'da66b6f1f9f04fe2b99c359a24d3321b';
+const apiKey = '9cf19d81beff4313aebdc0edf804f449';
 let isLoading = false;
 let currentPage = 1;
 let categories = [];
@@ -108,7 +108,10 @@ async function searchEvents() {
         // Load initial set of articles
         await loadMoreArticles(infiniteScrollContainer);
 
-        // Add scroll event listener
+        // Set up intersection observer for infinite scroll
+        setupInfiniteScroll(infiniteScrollContainer);
+
+        // Keep scroll event as fallback
         window.addEventListener('scroll', handleScroll);
 
     } catch (error) {
@@ -122,8 +125,9 @@ function handleScroll() {
 
     const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
 
-    // If we're near the bottom (within 100px)
-    if (scrollTop + clientHeight >= scrollHeight - 100 && !isLoading) {
+    // Load earlier - when we're within 300px of the bottom
+    // This gives more time for content to load before the user reaches the bottom
+    if (scrollTop + clientHeight >= scrollHeight - 300 && !isLoading) {
         loadMoreArticles(infiniteScrollContainer);
     }
 }
@@ -134,7 +138,7 @@ async function loadMoreArticles(container) {
     try {
         isLoading = true;
 
-        // Add loading indicator
+        // Add loading indicator with fade in
         const loadingIndicator = document.createElement('div');
         loadingIndicator.className = 'loading-indicator';
         loadingIndicator.innerHTML = `
@@ -143,12 +147,105 @@ async function loadMoreArticles(container) {
         `;
         container.appendChild(loadingIndicator);
 
+        // Prepare the grid in advance but don't add to DOM yet
         await new Promise(resolve => setTimeout(resolve, 800));
 
         // Create grid for this row
         const newsGrid = document.createElement('div');
         newsGrid.className = 'news-grid';
 
+        // Optimize the loading delay - keep it short but noticeable
+        await new Promise(resolve => setTimeout(resolve, 600));
+
+        // Get articles from all categories
+        const articlePromises = categories.map(category =>
+            fetch(`https://newsapi.org/v2/top-headlines?country=us&category=${category}&pageSize=4&page=${currentPage}&apiKey=${apiKey}`)
+                .then(res => res.json())
+        );
+
+        const results = await Promise.all(articlePromises);
+
+        // Collect all articles with their categories
+        let allArticles = [];
+        results.forEach((result, index) => {
+            if (result.status === "ok" && result.articles) {
+                result.articles.forEach(article => {
+                    allArticles.push({
+                        article,
+                        category: categories[index]
+                    });
+                });
+            }
+        });
+
+        // Shuffle articles for diversity
+        allArticles = shuffleArray(allArticles);
+
+        // Get exactly 3 articles or fetch more if needed
+        if (allArticles.length < 3) {
+            currentPage++;
+            const moreArticlePromises = categories.map(category =>
+                fetch(`https://newsapi.org/v2/top-headlines?country=us&category=${category}&pageSize=6&page=${currentPage}&apiKey=${apiKey}`)
+                    .then(res => res.json())
+            );
+
+            const moreResults = await Promise.all(moreArticlePromises);
+
+            moreResults.forEach((result, index) => {
+                if (result.status === "ok" && result.articles) {
+                    result.articles.forEach(article => {
+                        allArticles.push({
+                            article,
+                            category: categories[index]
+                        });
+                    });
+                }
+            });
+
+            allArticles = shuffleArray(allArticles);
+        }
+
+        // Select exactly 3 articles
+        const selectedArticles = allArticles.slice(0, 3);
+
+        // Preload all images before showing the articles
+        const imagePreloadPromises = selectedArticles.map(({ article }) => {
+            return new Promise((resolve) => {
+                if (!article.urlToImage) {
+                    resolve(); // No image to preload
+                    return;
+                }
+
+                const img = new Image();
+                img.onload = () => resolve();
+                img.onerror = () => resolve();
+                img.src = article.urlToImage;
+            });
+        });
+
+        // Wait for images to preload (with a timeout to prevent hanging)
+        await Promise.race([
+            Promise.all(imagePreloadPromises),
+            new Promise(resolve => setTimeout(resolve, 1000))
+        ]);
+
+        // Only now remove the loading indicator
+        loadingIndicator.style.opacity = '0';
+        loadingIndicator.style.transform = 'translateY(-10px)';
+
+        // Wait for fade out animation
+        await new Promise(resolve => setTimeout(resolve, 200));
+        loadingIndicator.remove();
+
+        // Add articles to the grid
+        if (selectedArticles.length === 3) {
+            selectedArticles.forEach(({ article, category }) => {
+                const articleCard = createArticleCard(article, category);
+                newsGrid.appendChild(articleCard);
+            });
+        } else if (selectedArticles.length > 0) {
+            // If we still couldn't get 3 articles, use what we have but maintain 3-column grid
+            selectedArticles.forEach(({ article, category }) => {
         // Get available categories that still have articles
         let availableCategories = categories.filter(cat => articlePool[cat]?.articles.length > 0);
         
@@ -201,6 +298,19 @@ async function loadMoreArticles(container) {
                 newsGrid.appendChild(articleCard);
             });
 
+            // Add empty placeholders for missing articles to maintain grid
+            for (let i = selectedArticles.length; i < 3; i++) {
+                const placeholderCard = document.createElement('div');
+                placeholderCard.className = 'news-card placeholder';
+                placeholderCard.style.visibility = 'hidden';
+                newsGrid.appendChild(placeholderCard);
+            }
+        }
+
+        // Add the grid to container
+        container.appendChild(newsGrid);
+        currentPage++;
+        return true;
             container.appendChild(newsGrid);
             return true;
         }
@@ -210,7 +320,10 @@ async function loadMoreArticles(container) {
         console.error("Error loading more articles:", error);
         return false;
     } finally {
-        isLoading = false;
+        // Small delay before setting isLoading to false to prevent double-loading
+        setTimeout(() => {
+            isLoading = false;
+        }, 300);
     }
 }
 
@@ -694,4 +807,36 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Load news content
     loadNews();
-}); 
+});
+
+// Add after searchEvents function
+function setupInfiniteScroll(container) {
+    // Create a sentinel element that will trigger loading more content
+    const sentinel = document.createElement('div');
+    sentinel.className = 'load-sentinel';
+    sentinel.style.height = '10px';
+    sentinel.style.width = '100%';
+    sentinel.style.visibility = 'hidden';
+    container.appendChild(sentinel);
+
+    // Create intersection observer
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !isLoading) {
+                loadMoreArticles(container);
+
+                // Move the sentinel to the end after loading
+                setTimeout(() => {
+                    container.appendChild(sentinel);
+                }, 1000);
+            }
+        });
+    }, {
+        rootMargin: '200px 0px', // Start loading before the sentinel is visible
+    });
+
+    // Start observing
+    observer.observe(sentinel);
+
+    return observer;
+} 
