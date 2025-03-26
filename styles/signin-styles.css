@@ -70,6 +70,124 @@
     color: rgba(255, 255, 255, 0.4) !important;
 }
 
+/* Fix for the country select field - COMPLETE OVERHAUL */
+.firebaseui-phone-number .mdl-textfield__input {
+    background: transparent !important;
+}
+
+/* Hide ONLY country selector labels, not all labels */
+.firebaseui-country-selector .mdl-textfield__label,
+.mdl-textfield--floating-label select + .mdl-textfield__label,
+select[name="country"] + .mdl-textfield__label,
+.mdl-textfield:has(select) .mdl-textfield__label {
+    display: none !important;
+}
+
+/* Restore email and password field labels */
+.mdl-textfield.mdl-js-textfield .mdl-textfield__label {
+    display: block !important;
+    color: rgba(255, 255, 255, 0.4) !important;
+    background: transparent !important;
+}
+
+/* Only hide labels in wrappers that contain selects */
+.mdl-textfield:has(select) .mdl-textfield__label {
+    display: none !important;
+}
+
+/* Styling for custom label added via JS */
+.custom-select-label {
+    display: block !important;
+    position: absolute !important;
+    top: -20px !important;
+    left: 0 !important;
+    font-size: 12px !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+    pointer-events: none !important;
+}
+
+/* Complete country selector overhaul */
+.firebaseui-country-selector {
+    position: relative !important;
+    background: transparent !important;
+    color: transparent !important; /* Hide any text in the container */
+    overflow: visible !important;
+}
+
+/* Remove any pseudoelements that might contain text */
+.firebaseui-country-selector::before,
+.firebaseui-country-selector::after {
+    content: none !important;
+    display: none !important;
+}
+
+/* Make select clean and visible, without any overlapping text */
+.firebaseui-country-selector select,
+select.firebaseui-input,
+select[name="country"] {
+    color: rgba(255, 255, 255, 0.9) !important;
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    position: relative !important;
+    z-index: 5 !important;
+    font-size: 15px !important;
+    padding: 12px 16px !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    /* Add custom dropdown arrow */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.5)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 12px center !important;
+    background-size: 16px !important;
+    padding-right: 40px !important;
+}
+
+/* Style for light mode */
+body.light-mode .firebaseui-country-selector select,
+body.light-mode select.firebaseui-input,
+body.light-mode select[name="country"] {
+    color: rgba(0, 0, 0, 0.9) !important;
+    background-color: rgba(0, 0, 0, 0.05) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgba(0,0,0,0.5)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") !important;
+}
+
+/* Style for dropdown options */
+.firebaseui-country-selector select option,
+select.firebaseui-input option,
+select[name="country"] option {
+    background-color: #1a1a1a !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    padding: 8px !important;
+}
+
+/* Style for light mode dropdown options */
+body.light-mode .firebaseui-country-selector select option,
+body.light-mode select.firebaseui-input option,
+body.light-mode select[name="country"] option {
+    background-color: #ffffff !important;
+    color: rgba(0, 0, 0, 0.9) !important;
+}
+
+/* Ensure Firebase UI components have proper coloring */
+.mdl-textfield__label {
+    color: rgba(255, 255, 255, 0.4) !important;
+    background: transparent !important;
+}
+
+.mdl-textfield--floating-label.is-focused .mdl-textfield__label, 
+.mdl-textfield--floating-label.is-dirty .mdl-textfield__label {
+    color: #00c6ff !important;
+    background: transparent !important;
+}
+
+.mdl-textfield.is-focused .mdl-textfield__label:after {
+    background-color: #00c6ff !important;
+}
+
 /* Update footer styles for dark mode */
 footer {
     background: rgba(18, 18, 24, 0.7);

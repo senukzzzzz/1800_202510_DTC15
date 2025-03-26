@@ -84,32 +84,6 @@ body.light-mode {
   flex-wrap: wrap;
 }
 
-.phone-mockup {
-  display: none;
-}
-
-@media (min-width: 876px) {
-  .phone-mockup {
-    display: block;
-    width: 280px;
-    height: auto;
-    position: relative;
-    transform: perspective(1000px) rotateY(-5deg);
-    transition: transform 0.3s ease;
-  }
-
-  .phone-mockup:hover {
-    transform: perspective(1000px) rotateY(0deg);
-  }
-
-  .mockup-image {
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-    border-radius: 32px;
-  }
-}
-
 .login-container {
   max-width: 350px;
   width: 100%;
@@ -703,4 +677,33 @@ button.firebaseui-input-toggle-visibility[data-toggle-type="toggle"] {
 /* Additional specificity to ensure it's hidden */
 a.firebaseui-input-toggle-on.firebaseui-input-toggle-blur {
   display: none !important;
+}
+
+/* Fix for country select placeholder text overlap */
+.firebaseui-country-selector select {
+  color: rgba(255, 255, 255, 0.9) !important;
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.firebaseui-country-selector select option {
+  background-color: #1a1a1a !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.firebaseui-country-selector select:focus {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+body.light-mode .firebaseui-country-selector select {
+  color: rgba(0, 0, 0, 0.9) !important;
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+body.light-mode .firebaseui-country-selector select option {
+  background-color: #ffffff !important;
+  color: rgba(0, 0, 0, 0.9) !important;
+}
+
+body.light-mode .firebaseui-country-selector select:focus {
+  background-color: rgba(0, 0, 0, 0.08) !important;
 }

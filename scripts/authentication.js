@@ -56,6 +56,9 @@ var uiConfig = {
             // Hide loading indicator
             document.getElementById('loader').style.display = 'none';
             
+            // Fix for the country selector display bug
+            setTimeout(fixCountrySelector, 100);
+            
             // Set up mutation observer to add country selector
             const observer = new MutationObserver((mutations, obs) => {
                 const nameInput = document.querySelector('input[name="name"]');
@@ -109,6 +112,9 @@ var uiConfig = {
                     countryDiv.appendChild(label);
                     nameInput.parentElement.parentElement.insertAdjacentElement('afterend', countryDiv);
                     
+                    // Fix display of select
+                    setTimeout(fixCountrySelector, 100);
+                    
                     // Stop observing once country selector is added
                     obs.disconnect();
                 }
@@ -130,5 +136,84 @@ var uiConfig = {
     privacyPolicyUrl: '<your-privacy-policy-url>'
 };
 
+/**
+ * Fix for country selector display bug
+ * Removes problematic label elements and fixes styling on select elements
+ */
+function fixCountrySelector() {
+    // Target all country selectors
+    const countrySelectors = document.querySelectorAll('.firebaseui-country-selector select, select.firebaseui-input, select[name="country"]');
+    
+    countrySelectors.forEach(select => {
+        // Force background transparency
+        select.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+        select.style.color = 'rgba(255, 255, 255, 0.9)';
+        
+        // Find and fix parent elements
+        const textfieldWrapper = select.closest('.mdl-textfield');
+        if (textfieldWrapper) {
+            // ONLY remove labels within country select wrappers
+            const labels = textfieldWrapper.querySelectorAll('.mdl-textfield__label');
+            labels.forEach(label => {
+                label.remove();
+            });
+            
+            // Remove any placeholder attribute
+            select.removeAttribute('placeholder');
+            
+            // Ensure select has higher z-index than any remaining elements
+            select.style.position = 'relative';
+            select.style.zIndex = '5';
+            
+            // Set text styles directly to improve visibility
+            select.style.fontSize = '15px';
+            select.style.fontWeight = '400';
+            
+            // Remove any floating label class that might cause issues
+            textfieldWrapper.classList.remove('mdl-textfield--floating-label');
+            
+            // Add custom non-interfering label if needed
+            if (!textfieldWrapper.querySelector('.custom-select-label')) {
+                const customLabel = document.createElement('div');
+                customLabel.className = 'custom-select-label';
+                customLabel.textContent = 'Country';
+                customLabel.style.position = 'absolute';
+                customLabel.style.top = '-20px';
+                customLabel.style.left = '0';
+                customLabel.style.fontSize = '12px';
+                customLabel.style.color = 'rgba(255, 255, 255, 0.7)';
+                customLabel.style.pointerEvents = 'none';
+                textfieldWrapper.appendChild(customLabel);
+            }
+        }
+    });
+    
+    // Also fix any elements with the country-selector class
+    const countrySelectionElements = document.querySelectorAll('.firebaseui-country-selector');
+    countrySelectionElements.forEach(element => {
+        // Clear any text nodes directly in the element
+        Array.from(element.childNodes).forEach(node => {
+            if (node.nodeType === Node.TEXT_NODE) {
+                node.textContent = '';
+            }
+        });
+        
+        // Force a clean background
+        element.style.background = 'transparent';
+    });
+}
+
 // Initialize the Firebase UI Auth widget
 ui.start('#firebaseui-auth-container', uiConfig);
+
+// Add event listener to fix country selector whenever the DOM changes
+document.addEventListener('DOMNodeInserted', function(e) {
+    // Only run the fix for country selector elements or containers
+    if (e.target.classList && (
+        e.target.classList.contains('firebaseui-country-selector') ||
+        e.target.tagName === 'SELECT' ||
+        (e.target.classList.contains('mdl-textfield') && e.target.querySelector('select'))
+    )) {
+        setTimeout(fixCountrySelector, 100);
+    }
+});

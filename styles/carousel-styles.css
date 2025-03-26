@@ -1,0 +1,186 @@
+/* 
+ * Carousel Styles for Login Page
+ * Styling for the automatic image carousel in the phone mockup
+ */
+
+.phone-mockup {
+    display: block;
+    width: 280px;
+    height: 560px;
+    position: relative;
+    perspective: 1000px;
+    z-index: 10;
+}
+
+.carousel {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 32px;
+    box-shadow: none;
+    background: transparent;
+    backdrop-filter: none;
+    transform-style: preserve-3d;
+    border: none;
+}
+
+.carousel::before {
+    display: none;
+}
+
+.carousel-slides {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.carousel-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 32px;
+    transform: scale(1.05);
+    overflow: hidden;
+}
+
+.carousel-slide.active {
+    opacity: 1;
+    z-index: 1;
+    transform: scale(1);
+}
+
+.carousel-slide img {
+    /* Fixed dimensions for all images */
+    width: 240px;
+    height: 480px;
+    object-fit: cover;
+    border-radius: 32px;
+    filter: none;
+    /* Center the image exactly */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Carousel Indicators */
+.carousel-indicators {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    z-index: 10;
+}
+
+.carousel-indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.carousel-indicator::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.3s ease;
+}
+
+.carousel-indicator.active::before {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.carousel-indicator.active {
+    background-color: rgba(0, 198, 255, 0.9);
+    width: 20px;
+    border-radius: 4px;
+    box-shadow: 0 0 8px rgba(0, 198, 255, 0.6);
+}
+
+/* Animation for slide transition */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(1.05) translateY(5px);
+        filter: brightness(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: brightness(1);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: brightness(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.95) translateY(-5px);
+        filter: brightness(0.8);
+    }
+}
+
+/* Add a subtle floating animation to the phone mockup */
+@keyframes float {
+    0% {
+        transform: perspective(1000px) rotateY(-3deg) translateY(0);
+    }
+    50% {
+        transform: perspective(1000px) rotateY(-2deg) translateY(-5px);
+    }
+    100% {
+        transform: perspective(1000px) rotateY(-3deg) translateY(0);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 876px) {
+    .phone-mockup {
+        width: 280px;
+        margin: 0 auto;
+    }
+}
+
+/* Make sure phone-mockup only hides at smaller viewport */
+@media (min-width: 876px) {
+    .phone-mockup {
+        display: block;
+        transform: perspective(1000px) rotateY(-3deg);
+        transition: transform 0.5s ease;
+        animation: float 6s ease-in-out infinite;
+    }
+    
+    .phone-mockup:hover {
+        transform: perspective(1000px) rotateY(0deg) translateY(-5px);
+        animation-play-state: paused;
+    }
+} 
