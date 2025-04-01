@@ -153,6 +153,9 @@ async function loadMoreArticles(container) {
         `;
         container.appendChild(loadingIndicator);
 
+        // Add artificial delay for better UX
+        await new Promise(resolve => setTimeout(resolve, 800));
+
         // Create grid for this row
         const newsGrid = document.createElement('div');
         newsGrid.className = 'news-grid';
@@ -204,7 +207,10 @@ async function loadMoreArticles(container) {
             selectedArticles.push({ article, category: randomCategory });
         }
 
-        // Remove loading indicator
+        // Remove loading indicator with fade out
+        loadingIndicator.style.opacity = '0';
+        loadingIndicator.style.transform = 'translateY(-10px)';
+        await new Promise(resolve => setTimeout(resolve, 200));
         loadingIndicator.remove();
 
         // Add articles to the grid
@@ -267,6 +273,14 @@ function createArticleCard(article, category) {
     const card = document.createElement('div');
     card.className = 'news-card';
     card.dataset.id = article.id;
+    // Add cursor pointer and click handler to entire card
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', (e) => {
+        // Don't trigger if clicking the bookmark button
+        if (!e.target.closest('.bookmark-btn')) {
+            openArticle(article.url, card);
+        }
+    });
 
     // Format the time (relying on the publishedAt property from the API)
     const formattedTime = formatTime(article.publishedAt);
@@ -303,15 +317,11 @@ function createArticleCard(article, category) {
         </div>
     `;
 
-    // Add event listeners
+    // Add event listeners for bookmark button only
     const bookmarkBtn = card.querySelector('.bookmark-btn');
-    bookmarkBtn.addEventListener('click', function () {
+    bookmarkBtn.addEventListener('click', function (e) {
+        e.stopPropagation(); // Prevent card click when clicking bookmark
         toggleBookmark(article, this);
-    });
-
-    const readBtn = card.querySelector('.read-btn');
-    readBtn.addEventListener('click', function () {
-        openArticle(article.url, card);
     });
 
     return card;
@@ -337,6 +347,14 @@ function createFeaturedArticle(article, category) {
     const card = document.createElement('div');
     card.className = 'news-card featured';
     card.dataset.id = article.id;
+    // Add cursor pointer and click handler to entire card
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', (e) => {
+        // Don't trigger if clicking the bookmark button
+        if (!e.target.closest('.bookmark-btn')) {
+            openArticle(article.url, card);
+        }
+    });
 
     // Format the time
     const formattedTime = formatTime(article.publishedAt);
@@ -373,15 +391,11 @@ function createFeaturedArticle(article, category) {
         </div>
     `;
 
-    // Add event listeners
+    // Add event listener for bookmark button only
     const bookmarkBtn = card.querySelector('.bookmark-btn');
-    bookmarkBtn.addEventListener('click', function () {
+    bookmarkBtn.addEventListener('click', function (e) {
+        e.stopPropagation(); // Prevent card click when clicking bookmark
         toggleBookmark(article, this);
-    });
-
-    const readBtn = card.querySelector('.read-btn');
-    readBtn.addEventListener('click', function () {
-        openArticle(article.url, card);
     });
 
     return card;

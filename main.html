@@ -117,10 +117,6 @@
         <!-- Quick Stats Section - Shows user activity summary -->
         <div class="quick-stats">
             <div class="stat-card">
-                <span class="stat-number">10</span>
-                <span class="stat-label">Minutes Daily Digest</span>
-            </div>
-            <div class="stat-card">
                 <span class="catagory-number">5</span>
                 <span class="stat-label">Your Categories</span>
             </div>
@@ -176,7 +172,7 @@
                     <label for="category-health" class="category-label">
                         <div class="category-icon">
                             <i class="fas fa-heartbeat"></i>
-                        </div>
+                    </div>
                         <span>Health</span>
                     </label>
                 </div>
@@ -197,7 +193,7 @@
                         </div>
                         <span>Sports</span>
                     </label>
-                </div>
+                    </div>
                 <div class="category-item">
                     <input type="checkbox" id="category-technology" class="category-checkbox">
                     <label for="category-technology" class="category-label">
@@ -206,8 +202,8 @@
                         </div>
                         <span>Technology</span>
                     </label>
-                </div>
-            </div>
+                        </div>
+                    </div>
             <div class="category-popup-footer">
                 <button id="skipCategories" class="skip-button">Remind Me Later</button>
                 <button id="saveCategories" class="save-button">Get Started</button>
@@ -230,7 +226,7 @@
                     e.preventDefault();
                     const checkbox = document.getElementById(this.getAttribute('for'));
                     checkbox.checked = !checkbox.checked;
-                    e.stopPropagation();
+                e.stopPropagation();
                 });
             });
 
