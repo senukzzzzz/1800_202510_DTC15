@@ -4,6 +4,9 @@ let currentPage = 1;
 let categories = [];
 let articlePool = {};
 let categoriesListener = null;
+let lastFetchTime = null;
+const CACHE_DURATION = 30 * 60 * 1000; // 30 minutes in milliseconds
+const MIN_ARTICLES_THRESHOLD = 10; // Minimum articles before refreshing
 
 async function getUserCategories() {
     try {
@@ -58,19 +61,44 @@ async function fetchArticlesForCategory(category, page = 1) {
 }
 
 async function initializeArticlePool() {
+    // Check if we have recent articles and enough of them
+    if (lastFetchTime && (Date.now() - lastFetchTime < CACHE_DURATION)) {
+        let hasEnoughArticles = true;
+        for (const category of categories) {
+            if (!articlePool[category] || articlePool[category].articles.length < MIN_ARTICLES_THRESHOLD) {
+                hasEnoughArticles = false;
+                break;
+            }
+        }
+        if (hasEnoughArticles) {
+            console.log('Using cached articles - Next refresh in:', 
+                Math.round((CACHE_DURATION - (Date.now() - lastFetchTime)) / 1000 / 60), 'minutes');
+            return;
+        }
+    }
+
+    console.log('Fetching fresh articles from API');
     articlePool = {};
     
-    // Fetch first page of articles for each category
+    // Fetch articles for each category
     const fetchPromises = categories.map(async category => {
         const result = await fetchArticlesForCategory(category, 1);
         articlePool[category] = {
             articles: shuffleArray([...result.articles]),
             totalResults: result.totalResults,
-            currentPage: 1
+            currentPage: 1,
+            lastFetchTime: Date.now()
         };
     });
     
     await Promise.all(fetchPromises);
+    lastFetchTime = Date.now();
+    
+    // Log the article counts
+    console.log('Article Pool Status After Fetch:');
+    for (const category of categories) {
+        console.log(`${category}: ${articlePool[category]?.articles.length || 0} articles available`);
+    }
 }
 
 // Fisher-Yates shuffle algorithm
@@ -153,9 +181,6 @@ async function loadMoreArticles(container) {
         `;
         container.appendChild(loadingIndicator);
 
-        // Add artificial delay for better UX
-        await new Promise(resolve => setTimeout(resolve, 800));
-
         // Create grid for this row
         const newsGrid = document.createElement('div');
         newsGrid.className = 'news-grid';
@@ -163,26 +188,22 @@ async function loadMoreArticles(container) {
         // Check if we need to fetch more articles
         let needsRefresh = false;
         for (const category of categories) {
-            if (!articlePool[category] || articlePool[category].articles.length < 5) {
+            if (!articlePool[category] || articlePool[category].articles.length < MIN_ARTICLES_THRESHOLD) {
                 needsRefresh = true;
-                console.log(`Fetching new articles: ${category} pool is running low (${articlePool[category]?.articles.length || 0} articles remaining)`);
+                console.log(`Pool running low: ${category} has ${articlePool[category]?.articles.length || 0} articles`);
                 break;
             }
         }
 
-        if (needsRefresh) {
-            currentPage++;
-            console.log(`Making API call - Page ${currentPage}`);
-            await initializeArticlePool(); // Fetch new batch of articles
-            
-            // Log new pool status after refresh
-            console.log('Article Pool Status After Refresh:');
-            for (const category of categories) {
-                console.log(`${category}: ${articlePool[category]?.articles.length || 0} articles remaining`);
-            }
+        // Only fetch new articles if we're running low AND cache has expired
+        if (needsRefresh && (!lastFetchTime || Date.now() - lastFetchTime >= CACHE_DURATION)) {
+            console.log('Refreshing article pool from API');
+            await initializeArticlePool();
+        } else if (needsRefresh) {
+            console.log('Pool is low but cache duration hasn\'t expired yet');
         }
 
-        // Select 3 random articles from different categories when possible
+        // Select articles for display
         const selectedArticles = [];
         const usedCategories = new Set();
 
