@@ -72,16 +72,21 @@ const bookmarkStore = {
      * @returns {Object} Result with action and success status
      */
     toggleBookmark: function (article) {
-        if (this.isBookmarked(article.id)) {
-            return {
-                action: 'removed',
-                success: this.removeBookmark(article.id)
-            };
+        const bookmarks = this.getBookmarks();
+        const index = bookmarks.findIndex(b => b.id === article.id);
+        
+        if (index === -1) {
+            // Add bookmark
+            bookmarks.push(article);
+            localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+            this.syncBookmarksToFirebase(article); // Sync to Firebase when adding
+            return { success: true, action: 'added' };
         } else {
-            return {
-                action: 'added',
-                success: this.saveBookmark(article)
-            };
+            // Remove bookmark
+            bookmarks.splice(index, 1);
+            localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+            this.removeBookmarkFromFirebase(article.id); // Remove from Firebase when removing locally
+            return { success: true, action: 'removed' };
         }
     },
 
@@ -152,5 +157,82 @@ const bookmarkStore = {
         setTimeout(() => {
             toast.classList.remove('show');
         }, 3000);
+    },
+
+    async syncBookmarksToFirebase(article) {
+        try {
+            const user = firebase.auth().currentUser;
+            if (!user) return; // Don't sync if no user is logged in
+
+            const userBookmarksRef = db.collection('Users').doc(user.uid).collection('bookmarks');
+            
+            // Create a bookmark document with all necessary info
+            const bookmarkData = {
+                id: article.id,
+                title: article.title,
+                description: article.description || '',
+                url: article.url,
+                urlToImage: article.urlToImage || '',
+                publishedAt: article.publishedAt,
+                category: article.category || 'general',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            // Add to Firebase
+            await userBookmarksRef.doc(article.id).set(bookmarkData);
+            console.log('Bookmark synced to Firebase');
+        } catch (error) {
+            console.error('Error syncing bookmark to Firebase:', error);
+        }
+    },
+
+    async removeBookmarkFromFirebase(articleId) {
+        try {
+            const user = firebase.auth().currentUser;
+            if (!user) return;
+
+            const userBookmarksRef = db.collection('Users').doc(user.uid).collection('bookmarks');
+            await userBookmarksRef.doc(articleId).delete();
+            console.log('Bookmark removed from Firebase');
+        } catch (error) {
+            console.error('Error removing bookmark from Firebase:', error);
+        }
+    },
+
+    async loadBookmarksFromFirebase() {
+        try {
+            const user = firebase.auth().currentUser;
+            if (!user) return;
+
+            const userBookmarksRef = db.collection('Users').doc(user.uid).collection('bookmarks');
+            const snapshot = await userBookmarksRef.get();
+            
+            // Get existing local bookmarks
+            const localBookmarks = this.getBookmarks();
+            const localBookmarkIds = new Set(localBookmarks.map(b => b.id));
+            
+            // Add Firebase bookmarks that aren't in localStorage
+            snapshot.forEach(doc => {
+                const bookmarkData = doc.data();
+                if (!localBookmarkIds.has(bookmarkData.id)) {
+                    localBookmarks.push(bookmarkData);
+                }
+            });
+            
+            // Update localStorage with merged bookmarks
+            localStorage.setItem('bookmarks', JSON.stringify(localBookmarks));
+            console.log('Bookmarks synced from Firebase');
+        } catch (error) {
+            console.error('Error loading bookmarks from Firebase:', error);
+        }
     }
-}; 
+};
+
+// Add this to your authentication listener
+document.addEventListener('DOMContentLoaded', () => {
+    firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+            bookmarkStore.loadBookmarksFromFirebase(); // Load Firebase bookmarks when user logs in
+        }
+    });
+}); 
