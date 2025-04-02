@@ -1,4 +1,4 @@
-const apiKey = 'e2340a80eb924c38b096e6ce48b90780';
+const apiKey = 'da66b6f1f9f04fe2b99c359a24d3321b';
 let isLoading = false;
 let currentPage = 1;
 let categories = [];
@@ -32,13 +32,16 @@ async function getUserCategories() {
 
 async function fetchArticlesForCategory(category, page = 1) {
     try {
-        const url = new URL('https://newsapi.org/v2/top-headlines');
+        // Use the deployed proxy server URL
+        const proxyUrl = window.location.hostname === 'localhost' 
+            ? 'http://localhost:3000/api/news'
+            : 'https://slapnews-server.onrender.com/api/news';
+            
+        const url = new URL(proxyUrl);
         const params = {
-            apiKey: apiKey,
-            country: 'us',
             category: category,
-            pageSize: '50',        // Changed to 50 articles per category
-            page: page.toString()
+            page: page.toString(),
+            pageSize: '50'
         };
         
         url.search = new URLSearchParams(params).toString();

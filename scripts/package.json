@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "newsapi": "^2.4.1"
-  },
-  "type": "module"
-}
