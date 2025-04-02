@@ -1,62 +1,76 @@
-# Project Name
+# Slap News
 
 ## Overview
 
-Summarize your project's purpose, problem solved, key features, user benefits, development context, and main technologies used.
+This client-side JavaScript web application provides personalized news updates through an intuitive, modern interface. It allows users to customize their news feed by selecting categories of interest, bookmark articles for later reading, and switch between light and dark themes for comfortable reading.
 
-Example:
-
-This client-side JavaScript web application provides real-time weather updates for cities worldwide. It simplifies accessing weather information through an intuitive mobile-first interface, allowing users to input a city name and receive data on temperature, humidity, and conditions.
-
-Developed for the [Course Name] course, applying User-Centred Design practices, agile project management processes, integrating a weather API, and Firebase backend services.
+Developed for the BCIT COMP 1800 course, applying modern web development practices, integrating the News API for real-time news content, and Firebase for user authentication and data persistence.
 
 ---
 
 ## Features
 
-Example:
-
-- Real-time weather updates for any city.
-- Responsive design for desktop and mobile.
-- Displays temperature, humidity, and weather conditions.
+- Personalized news feed based on user-selected categories
+- Infinite scroll with dynamic article loading
+- Bookmark system for saving articles
+- Dark/Light theme toggle
+- Responsive design for desktop and mobile
+- User authentication with Firebase
+- Category-based news filtering
+- Real-time news updates from multiple sources
 
 ---
 
 ## Technologies Used
 
-Example:
-
 - **Frontend**: HTML, CSS, JavaScript
-- **Backend**: Firebase for hosting
-- **Database**: Firestore
-- **API**: OpenWeatherMap API
+- **Backend**: 
+  - Firebase for authentication and data storage
+  - Custom Node.js proxy server (deployed on Render) for News API integration
+- **Database**: Firebase Firestore
+- **APIs**: 
+  - News API for article content
+  - Firebase Authentication
+  - Firebase Firestore
 
 ---
 
 ## Usage
 
-Example:
-
-1. Open your browser and visit `http://localhost:3000`.
-2. Enter the name of the city in the search bar and press enter.
-3. View the weather information displayed on the screen.
+1. Visit the deployed application at [Netlify URL]
+2. Sign in using your Google account or email
+3. Select your preferred news categories
+4. Browse articles and bookmark your favorites
+5. Customize your experience through settings
 
 ---
 
 ## Project Structure
 
-Example:
-
 ```
-project-name/
-├── src/
-│   ├── index.html
-│   ├── style.css
-│   ├── app.js
-│   └── components/
-├── package.json
-├── README.md
-└── .gitignore
+slap-news/
+├── index.html
+├── main.html
+├── categories.html
+├── bookmarks.html
+├── profile.html
+├── settings.html
+├── styles/
+│   ├── styles.css
+│   ├── main-styles.css
+│   ├── categories-styles.css
+│   ├── bookmarks-styles.css
+│   ├── profile-styles.css
+│   ├── settings-styles.css
+│   └── signin-styles.css
+└── scripts/
+    ├── newsAPI.js
+    ├── authentication.js
+    ├── categories.js
+    ├── bookmarks.js
+    ├── profile.js
+    ├── settings.js
+    └── theme.js
 ```
 
 ---
@@ -72,11 +86,11 @@ project-name/
 
 ## Acknowledgments
 
-Example:
-
-- Weather data sourced from [OpenWeatherMap](https://openweathermap.org/).
-- Code snippets for \_\_\_ algoirthm were adapted from resources such as [Stack Overflow](https://stackoverflow.com/) and [MDN Web Docs](https://developer.mozilla.org/).
-- Icons sourced from [FontAwesome](https://fontawesome.com/) and images from [Unsplash](https://unsplash.com/).
+- News data sourced from [News API](https://newsapi.org/)
+- Icons from [Font Awesome](https://fontawesome.com/)
+- Profile images from [Unsplash](https://unsplash.com/)
+- Firebase documentation and examples
+- Course materials and guidance from BCIT COMP 1800
 
 ---
 
@@ -84,24 +98,25 @@ Example:
 
 ### Limitations
 
-Example:
-
-- Currently, the app only supports city-based weather searches.
-- Limited to basic weather parameters like temperature, humidity, and conditions.
-- The user interface can be further enhanced for accessibility.
+- News API free tier has a daily request limit
+- Limited to news from selected countries
+- No offline support for saved articles
+- No social sharing features
+- No comment system for articles
 
 ### Future Work
 
-Example:
-
-- Add support for location-based weather detection using GPS.
-- Implement additional weather parameters like wind speed and UV index.
-- Create a dark mode for better usability in low-light conditions.
-- Integrate user accounts for saving favorite locations.
+- Implement offline support for bookmarked articles
+- Add social sharing capabilities
+- Create a comment system for articles
+- Add user preferences for news sources
+- Implement push notifications for breaking news
+- Add article search functionality
+- Create a mobile app version
 
 ---
 
 ## License
 
-Example:
+
 This project is licensed under the MIT License. See the LICENSE file for details.
