@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
         
         if (user) {
             // Set display name from auth if available
-            if (user.displayName) {
+            if (user.displayName && displayNameInput) {
                 displayNameInput.value = user.displayName;
                 originalDisplayName = user.displayName;
             }
@@ -50,19 +50,19 @@ document.addEventListener('DOMContentLoaded', function () {
                         const userData = doc.data();
                         
                         // Set display name from Firestore if available and not set from auth
-                        if (userData.displayName && !displayNameInput.value) {
+                        if (userData.displayName && !displayNameInput?.value && displayNameInput) {
                             displayNameInput.value = userData.displayName;
                             originalDisplayName = userData.displayName;
                         }
                         
                         // Set country if available
-                        if (userData.country) {
+                        if (userData.country && countrySelect) {
                             countrySelect.value = userData.country;
                             originalCountry = userData.country;
                         }
                         
                         // Update categories count
-                        if (userData.categories && Array.isArray(userData.categories)) {
+                        if (userData.categories && Array.isArray(userData.categories) && categoriesCountElement) {
                             categoriesCountElement.textContent = userData.categories.length;
                         }
                     } else {

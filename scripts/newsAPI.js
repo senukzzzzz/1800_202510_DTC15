@@ -730,21 +730,6 @@ function formatTime(dateString) {
     }
 }
 
-/**
- * Initialize the news page functionality
- * Called when the DOM is loaded
- */
-document.addEventListener('DOMContentLoaded', function () {
-    // Set up UI elements and event listeners
-    setupProfileDropdown();
-
-    // Initialize bookmark stats
-    updateBookmarkStats();
-
-    // Load news content
-    loadNews();
-});
-
 // Add after searchEvents function
 function setupInfiniteScroll(container) {
     // Create a sentinel element that will trigger loading more content
