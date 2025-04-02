@@ -277,4 +277,75 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.removeItem('bookmarks');
         }
     });
+});
+
+// Add this function at the top of the file
+function getBookmarks() {
+    try {
+        const bookmarksJSON = localStorage.getItem('bookmarks');
+        return bookmarksJSON ? JSON.parse(bookmarksJSON) : [];
+    } catch (error) {
+        console.error('❌ Error getting bookmarks:', error);
+        return [];
+    }
+}
+
+// Update the bookmark count function
+async function updateBookmarkCount() {
+    try {
+        const user = firebase.auth().currentUser;
+        if (user) {
+            // Get count from Firebase
+            const snapshot = await db.collection('Users')
+                .doc(user.uid)
+                .collection('bookmarks')
+                .get();
+            
+            const count = snapshot.size;
+            console.log('📚 Bookmark count from Firebase:', count);
+            
+            // Update the stat number in the UI
+            const statNumber = document.querySelector('.stat-number');
+            if (statNumber) {
+                statNumber.textContent = count;
+                console.log('✅ Updated bookmark count in UI');
+            }
+        } else {
+            // If user is not logged in, use localStorage count
+            const localBookmarks = getBookmarks();
+            const count = localBookmarks.length;
+            console.log('📚 Bookmark count from localStorage:', count);
+            
+            const statNumber = document.querySelector('.stat-number');
+            if (statNumber) {
+                statNumber.textContent = count;
+                console.log('✅ Updated bookmark count in UI');
+            }
+        }
+    } catch (error) {
+        console.error('❌ Error updating bookmark count:', error);
+    }
+}
+
+// Add auth state listener to update count when auth state changes
+firebase.auth().onAuthStateChanged((user) => {
+    updateBookmarkCount();
+    
+    if (user) {
+        // Set up real-time listener for bookmark changes
+        db.collection('Users')
+            .doc(user.uid)
+            .collection('bookmarks')
+            .onSnapshot(() => {
+                updateBookmarkCount();
+                console.log('🔄 Bookmark count updated due to Firebase change');
+            }, (error) => {
+                console.error('❌ Error in bookmark listener:', error);
+            });
+    }
+});
+
+// Update count when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    updateBookmarkCount();
 }); 
