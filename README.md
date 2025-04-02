@@ -37,7 +37,7 @@ Developed for the BCIT COMP 1800 course, applying modern web development practic
 
 ## Usage
 
-1. Visit the deployed application at [Netlify URL]
+1. Visit the deployed application at https://sunny-creponne-c8a03c.netlify.app/main
 2. Sign in using your Google account or email
 3. Select your preferred news categories
 4. Browse articles and bookmark your favorites
@@ -99,8 +99,8 @@ slap-news/
 ### Limitations
 
 - News API free tier has a daily request limit
+- Render request may cause errors on first request due to free server limitations
 - Limited to news from selected countries
-- No offline support for saved articles
 - No social sharing features
 - No comment system for articles
 
