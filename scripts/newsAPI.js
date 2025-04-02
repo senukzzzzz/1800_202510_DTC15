@@ -303,7 +303,7 @@ function createArticleCard(article, category) {
         }
     });
 
-    // Format the time (relying on the publishedAt property from the API)
+    // Format the time
     const formattedTime = formatTime(article.publishedAt);
 
     // Use placeholder image if none is provided by the API
@@ -313,7 +313,6 @@ function createArticleCard(article, category) {
     const isBookmarked = bookmarkStore.isBookmarked(article.id);
     const bookmarkClass = isBookmarked ? 'bookmark-btn active' : 'bookmark-btn';
 
-    // Important: Keep this structure with image div as the first child for proper mobile display
     card.innerHTML = `
         <div class="news-image">
             <img src="${imageUrl}" alt="${article.title}" loading="lazy">
@@ -325,11 +324,7 @@ function createArticleCard(article, category) {
             <div class="news-meta">
                 <span class="time"><i class="far fa-clock"></i> ${formattedTime}</span>
                 <div class="actions">
-                    <button class="read-btn" data-url="${article.url}" aria-label="Read article">
-                        <i class="fas fa-book-open"></i>
-                        <span class="btn-text">Read</span>
-                    </button>
-                    <button class="${bookmarkClass}" data-id="${article.id}" aria-label="${isBookmarked ? 'Remove from bookmarks' : 'Save to bookmarks'}">
+                    <button class="bookmark-btn ${isBookmarked ? 'active' : ''}" data-id="${article.id}" aria-label="${isBookmarked ? 'Remove from bookmarks' : 'Save to bookmarks'}">
                         <i class="fas fa-bookmark"></i>
                         <span class="btn-text">Save</span>
                     </button>
@@ -338,9 +333,9 @@ function createArticleCard(article, category) {
         </div>
     `;
 
-    // Add event listeners for bookmark button only
+    // Add event listener for bookmark button only
     const bookmarkBtn = card.querySelector('.bookmark-btn');
-    bookmarkBtn.addEventListener('click', function (e) {
+    bookmarkBtn.addEventListener('click', function(e) {
         e.stopPropagation(); // Prevent card click when clicking bookmark
         toggleBookmark(article, this);
     });
@@ -387,7 +382,6 @@ function createFeaturedArticle(article, category) {
     const isBookmarked = bookmarkStore.isBookmarked(article.id);
     const bookmarkClass = isBookmarked ? 'bookmark-btn active' : 'bookmark-btn';
 
-    // Important: Keep this structure with image div as the first child for proper mobile display
     card.innerHTML = `
         <div class="news-image">
             <img src="${imageUrl}" alt="${article.title}" loading="eager">
@@ -399,11 +393,7 @@ function createFeaturedArticle(article, category) {
             <div class="news-meta">
                 <span class="time"><i class="far fa-clock"></i> ${formattedTime}</span>
                 <div class="actions">
-                    <button class="read-btn" data-url="${article.url}" aria-label="Read article">
-                        <i class="fas fa-book-open"></i>
-                        <span class="btn-text">Read</span>
-                    </button>
-                    <button class="${bookmarkClass}" data-id="${article.id}" aria-label="${isBookmarked ? 'Remove from bookmarks' : 'Save to bookmarks'}">
+                    <button class="bookmark-btn ${isBookmarked ? 'active' : ''}" data-id="${article.id}" aria-label="${isBookmarked ? 'Remove from bookmarks' : 'Save to bookmarks'}">
                         <i class="fas fa-bookmark"></i>
                         <span class="btn-text">Save</span>
                     </button>
@@ -414,7 +404,7 @@ function createFeaturedArticle(article, category) {
 
     // Add event listener for bookmark button only
     const bookmarkBtn = card.querySelector('.bookmark-btn');
-    bookmarkBtn.addEventListener('click', function (e) {
+    bookmarkBtn.addEventListener('click', function(e) {
         e.stopPropagation(); // Prevent card click when clicking bookmark
         toggleBookmark(article, this);
     });
@@ -746,7 +736,6 @@ function formatTime(dateString) {
  */
 document.addEventListener('DOMContentLoaded', function () {
     // Set up UI elements and event listeners
-    setupMobileMenu();
     setupProfileDropdown();
 
     // Initialize bookmark stats

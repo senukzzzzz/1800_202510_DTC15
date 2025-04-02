@@ -45,11 +45,6 @@
                     </div>
                 </div>
 
-                <!-- Mobile Menu Toggle Button - Only visible on small screens -->
-                <button id="mobileMenuToggle" class="mobile-menu-toggle">
-                    <i class="fas fa-bars"></i>
-                </button>
-
                 <!-- Desktop Navigation Links -->
                 <div class="desktop-nav">
                     <a href="#" class="desktop-nav-item active">
@@ -93,23 +88,25 @@
             </div>
         </nav>
 
-        <!-- Mobile Navigation Menu - Hidden by default -->
-        <div id="mobileMenu" class="mobile-menu">
-            <div class="mobile-nav-items">
-                <a href="main.html" class="mobile-nav-item active">
-                    <i class="fas fa-home"></i>
-                    <span>Home</span>
-                </a>
-                <a href="categories.html" class="mobile-nav-item">
-                    <i class="fas fa-th-large"></i>
-                    <span>Categories</span>
-                </a>
-                <a href="bookmarks.html" class="mobile-nav-item">
-                    <i class="fas fa-bookmark"></i>
-                    <span>Bookmarks</span>
-                </a>
-            </div>
-        </div>
+        <!-- Remove mobile menu div and add bottom navigation -->
+        <nav class="bottom-nav">
+            <a href="#" class="nav-item active">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="categories.html" class="nav-item">
+                <i class="fas fa-th-large"></i>
+                <span>Categories</span>
+            </a>
+            <a href="bookmarks.html" class="nav-item">
+                <i class="fas fa-bookmark"></i>
+                <span>Bookmarks</span>
+            </a>
+            <a href="profile.html" class="nav-item">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
+        </nav>
     </header>
 
     <!-- Main Content Section -->

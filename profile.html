@@ -44,11 +44,6 @@
                     </div>
                 </div>
 
-                <!-- Mobile Menu Toggle Button - Only visible on small screens -->
-                <button id="mobileMenuToggle" class="mobile-menu-toggle">
-                    <i class="fas fa-bars"></i>
-                </button>
-
                 <!-- Desktop Navigation Links -->
                 <div class="desktop-nav">
                     <a href="main.html" class="desktop-nav-item">
@@ -65,10 +60,8 @@
                     </a>
                 </div>
 
-                <!-- Navigation Actions (Profile only) -->
+                <!-- Navigation Actions -->
                 <div class="nav-actions">
-                    <!-- Search Bar Removed -->
-
                     <!-- Profile Button and Dropdown -->
                     <div class="profile-container">
                         <button class="profile-btn" id="profileBtn">
@@ -94,24 +87,25 @@
             </div>
         </nav>
 
-        <!-- Mobile Navigation Menu - Hidden by default -->
-        <div id="mobileMenu" class="mobile-menu">
-            <div class="mobile-nav-items">
-                <a href="main.html" class="mobile-nav-item">
-                    <i class="fas fa-home"></i>
-                    <span>Home</span>
-                </a>
-                <a href="categories.html" class="mobile-nav-item">
-                    <i class="fas fa-th-large"></i>
-                    <span>Categories</span>
-                </a>
-                <a href="bookmarks.html" class="mobile-nav-item">
-                    <i class="fas fa-bookmark"></i>
-                    <span>Bookmarks</span>
-                </a>
-            </div>
-            <!-- Mobile Search Bar Removed -->
-        </div>
+        <!-- Remove mobile menu div and add bottom navigation -->
+        <nav class="bottom-nav">
+            <a href="main.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="categories.html" class="nav-item">
+                <i class="fas fa-th-large"></i>
+                <span>Categories</span>
+            </a>
+            <a href="bookmarks.html" class="nav-item">
+                <i class="fas fa-bookmark"></i>
+                <span>Bookmarks</span>
+            </a>
+            <a href="profile.html" class="nav-item active">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
+        </nav>
     </header>
 
     <!-- Main Content -->
@@ -191,28 +185,6 @@
     <script src="./scripts/profile.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Mobile menu toggle
-            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-            const mobileMenu = document.getElementById('mobileMenu');
-
-            if (mobileMenuToggle) {
-                mobileMenuToggle.addEventListener('click', function () {
-                    if (mobileMenu.style.display === 'block') {
-                        mobileMenu.style.opacity = '0';
-                        mobileMenu.style.transform = 'translateY(-10px)';
-                        setTimeout(() => {
-                            mobileMenu.style.display = 'none';
-                        }, 300);
-                    } else {
-                        mobileMenu.style.display = 'block';
-                        setTimeout(() => {
-                            mobileMenu.style.opacity = '1';
-                            mobileMenu.style.transform = 'translateY(0)';
-                        }, 10);
-                    }
-                });
-            }
-
             // Profile dropdown toggle
             const profileBtn = document.getElementById('profileBtn');
             const dropdownMenu = document.getElementById('dropdownMenu');

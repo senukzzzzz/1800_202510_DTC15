@@ -1,6 +1,6 @@
 /**
  * Settings page JavaScript - Handles user interface interactions
- * Including profile dropdown, mobile menu, and sign out functionality
+ * Including profile dropdown and sign out functionality
  */
 
 // Wait for DOM to be fully loaded before attaching event listeners
@@ -9,8 +9,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const profileBtn = document.getElementById('profileBtn');
     const dropdownMenu = document.getElementById('dropdownMenu');
     const signOutBtn = document.getElementById('signOutBtn');
-    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-    const mobileMenu = document.getElementById('mobileMenu');
 
     /**
      * Profile Dropdown Toggle
@@ -23,51 +21,13 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     /**
-     * Mobile Menu Animation
-     * Handles the mobile menu toggle with smooth animations
-     * Uses setTimeout for proper transition timing
-     */
-    if (mobileMenuToggle) {
-        mobileMenuToggle.addEventListener('click', function () {
-            if (mobileMenu.style.display === 'block') {
-                // Hide menu with fade-out and slide-up animation
-                mobileMenu.style.opacity = '0';
-                mobileMenu.style.transform = 'translateY(-10px)';
-                setTimeout(() => {
-                    mobileMenu.style.display = 'none';
-                }, 300); // Wait for animation to complete
-            } else {
-                // Show menu with fade-in and slide-down animation
-                mobileMenu.style.display = 'block';
-                setTimeout(() => {
-                    mobileMenu.style.opacity = '1';
-                    mobileMenu.style.transform = 'translateY(0)';
-                }, 10); // Small delay for display:block to take effect
-            }
-        });
-    }
-
-    /**
      * Close Dropdowns on Outside Click
-     * Closes both profile dropdown and mobile menu when clicking outside
-     * Includes animation for mobile menu closing
+     * Closes profile dropdown when clicking outside
      */
     document.addEventListener('click', function (e) {
         // Close profile dropdown if clicking outside
         if (!dropdownMenu.contains(e.target) && !profileBtn.contains(e.target)) {
             dropdownMenu.classList.remove('show');
-        }
-        
-        // Close mobile menu if clicking outside
-        if (!mobileMenu.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
-            if (mobileMenu.style.display === 'block') {
-                // Apply same closing animation as toggle
-                mobileMenu.style.opacity = '0';
-                mobileMenu.style.transform = 'translateY(-10px)';
-                setTimeout(() => {
-                    mobileMenu.style.display = 'none';
-                }, 300);
-            }
         }
     });
 

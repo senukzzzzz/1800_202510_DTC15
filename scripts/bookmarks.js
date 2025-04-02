@@ -147,6 +147,9 @@ function createBookmarkItem(bookmark) {
     item.className = 'bookmark-item';
     item.dataset.id = bookmark.id;
     item.dataset.category = bookmark.category || 'uncategorized';
+    item.dataset.url = bookmark.url;
+    // Add cursor pointer to indicate clickability
+    item.style.cursor = 'pointer';
 
     // Set default image if not available
     const imgSrc = bookmark.urlToImage || 'https://via.placeholder.com/300x200?text=No+Image';
@@ -165,10 +168,6 @@ function createBookmarkItem(bookmark) {
             <div class="bookmark-meta">
                 <span class="bookmark-date">Saved ${bookmarkDate}</span>
                 <div class="bookmark-actions">
-                    <button class="action-btn read-btn" data-url="${bookmark.url}">
-                        <i class="fas fa-book-open"></i>
-                        Read
-                    </button>
                     <button class="action-btn remove-btn" data-id="${bookmark.id}">
                         <i class="fas fa-trash"></i>
                         Remove
@@ -239,30 +238,14 @@ function setupBookmarkActions() {
 
     // Individual bookmark removal
     bookmarksList.addEventListener('click', (e) => {
-        // Handle Read button click
-        if (e.target.closest('.read-btn')) {
-            const readBtn = e.target.closest('.read-btn');
-            const url = readBtn.dataset.url;
-            if (url) {
-                // Add reading animation
-                const bookmarkItem = readBtn.closest('.bookmark-item');
-                bookmarkItem.classList.add('reading');
-
-                // Open article in new tab after short delay
-                setTimeout(() => {
-                    window.open(url, '_blank');
-                    bookmarkItem.classList.remove('reading');
-                }, 300);
-            }
-        }
-
+        const bookmarkItem = e.target.closest('.bookmark-item');
+        
         // Handle Remove button click
         if (e.target.closest('.remove-btn')) {
+            e.stopPropagation(); // Prevent card click when clicking remove
             const removeBtn = e.target.closest('.remove-btn');
             const id = removeBtn.dataset.id;
             if (id) {
-                const bookmarkItem = removeBtn.closest('.bookmark-item');
-
                 // Add removal animation
                 bookmarkItem.classList.add('removing');
 
@@ -284,6 +267,20 @@ function setupBookmarkActions() {
                         // Update stats
                         updateBookmarkStats(remainingBookmarks.length);
                     }
+                }, 300);
+            }
+        } 
+        // Handle click on bookmark item (to open article)
+        else if (bookmarkItem) {
+            const url = bookmarkItem.dataset.url;
+            if (url) {
+                // Add reading animation
+                bookmarkItem.classList.add('reading');
+
+                // Open article in new tab after short delay
+                setTimeout(() => {
+                    window.open(url, '_blank');
+                    bookmarkItem.classList.remove('reading');
                 }, 300);
             }
         }
