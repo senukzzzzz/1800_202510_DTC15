@@ -216,27 +216,121 @@
 }
 
 @media (max-width: 768px) {
+  .main-content {
+    padding: 20px 0;
+    margin-top: 80px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    width: 100%;
+  }
+
+  .profile-container {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 16px;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
   .profile-card {
-    padding: 24px;
+    padding: 24px 16px;
     border-radius: 16px;
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+    max-width: 90%;
   }
 
   .profile-header {
     flex-direction: column;
     gap: 16px;
+    align-items: center;
+    text-align: center;
+    padding: 0;
+    margin-bottom: 32px;
+    width: 100%;
+  }
+
+  .profile-info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .profile-info h1 {
     font-size: 28px;
+    text-align: center;
   }
 
-  .action-buttons {
+  .profile-info p {
+    text-align: center;
+  }
+
+  .profile-form {
+    width: 100%;
+  }
+
+  .form-section {
+    width: 100%;
+  }
+
+  /* Ensure form elements are properly centered */
+  .form-group {
+    padding: 0;
+    width: 100%;
+    margin-bottom: 16px;
+  }
+
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .categories-section {
+    width: 100%;
+  }
+
+  .categories-header {
     flex-direction: column;
+    gap: 8px;
+  }
+
+  .categories-group {
+    padding: 20px;
+    text-align: center;
+  }
+
+  .edit-btn {
+    margin: 0 auto;
+    display: flex;
   }
 
   .edit-profile-btn {
+    margin: 0 auto;
+  }
+
+  .action-buttons {
+    padding: 0;
     width: 100%;
+  }
+
+  /* Adjust notification position in mobile */
+  .notification {
+    bottom: 90px;
+    left: 50%;
+    right: auto;
+    transform: translate(-50%, 100px);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
     justify-content: center;
+  }
+
+  .notification.show {
+    transform: translate(-50%, 0);
   }
 }
 
